@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <Button
+            android:id="@+id/objectbox_insert"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Insert"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_delete"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Delete"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_delete_all"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Delete-All"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_update"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Update"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_select"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Select"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testAddToOne"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Add-To-One"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testGetToOne"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Get-To-One"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testDelToOne"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Del-To-One"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testAddOneToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Add-One-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testGetOneToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Get-One-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testDelOneToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Del-One-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testAddManyToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Add-Many-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testGetManyToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Get-Many-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testDelManyToMany"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Del-Many-To-Many"
+            android:textSize="15sp"/>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LineBreakLayout">
+        <!--标签之间左右距离-->
+        <attr name="leftAndRightSpace" format="dimension"/>
+        <!--标签行距-->
+        <attr name="rowSpace" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="AdParallelImageView">
+        <!--图片宽高比-->
+        <attr name="whRatio" format="float"/>
+        <attr name="layoutLevel" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="ScrollLayout">
+        <attr name="minOffset" format="dimension"/>
+        <attr name="maxOffset" format="dimension"/>
+        <attr name="exitOffset" format="dimension"/>
+        <attr name="mode">
+            <flag name="open" value="0x0"/>
+            <flag name="close" value="0x1"/>
+            <flag name="exit" value="0x2"/>
+        </attr>
+        <attr name="allowHorizontalScroll" format="boolean"/>
+        <attr name="isSupportExit" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="ExpandableTextView">
+        <attr name="evlUnExpandedEndSymbol" format="string"/>
+        <attr name="evlUnExpandedEndText" format="string"/>
+        <attr name="evlExpandedEndText" format="string"/>
+        <attr name="evlExpandable" format="boolean"/>
+        <attr name="evlMaxLines" format="integer"/>
+    </declare-styleable>
+</resources>

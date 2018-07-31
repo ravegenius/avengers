@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+def cfg = rootProject.ext.android
+def libs = rootProject.ext.libraries
+
+android {
+    // dataBinding 打开
+    dataBinding {
+
+        enabled = true
+    }
+
+    compileSdkVersion cfg.compileSdk
+    buildToolsVersion cfg.buildTools
+
+    defaultConfig {
+        applicationId "com.jason.avengers"
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.versionCode
+        versionName cfg.versionName
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ['objectbox.debug': 'true']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // 开发需要可以使用源码编辑
+    implementation 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
+    implementation 'jp.wasabeef:richeditor-android:1.2.2'
+    //compile 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
+    implementation project(':business')
+    // 数据库
+    // greendao
+    // compile 'org.greenrobot:greendao:3.2.2'
+    // objectbox
+    debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
+    releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
+}
+
+// apply the plugin after the dependencies block
+apply plugin: 'io.objectbox'

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:text="平行广告图片"
+        android:textSize="15sp"/>
+
+    <com.jason.avengers.widgets.AdParallelImageView
+        android:id="@+id/adParallelImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="5dp"
+        app:layoutLevel="1"
+        app:whRatio="2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adParallelImageView"
+        android:layout_marginTop="5dp"
+        android:text="广告"
+        android:textSize="11sp"/>
+</RelativeLayout>

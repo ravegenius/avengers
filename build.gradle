@@ -1,0 +1,34 @@
+apply from: 'gradle/configuration.gradle'
+
+buildscript {
+    ext.objectboxVersion = '1.5.0'
+
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+
+        // objectbox 插件
+        classpath "io.objectbox:objectbox-gradle-plugin:${objectboxVersion}"
+
+        // add plugin greendao
+        // classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+    }
+}
+
+allprojects {
+
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

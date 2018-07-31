@@ -1,0 +1,15 @@
+ext {
+
+    android = [
+            buildTools      : '27.0.3',
+            minSdk          : 16,
+            targetSdk       : 26,
+            compileSdk      : 26,
+            versionCode     : 1,
+            versionName     : '1.0'
+    ]
+
+    libraries = [
+            supportVersion  : '27.0.2'
+    ]
+}
