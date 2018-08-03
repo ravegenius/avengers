@@ -1,5 +1,7 @@
 package com.jason.avengers.database.simple;
 
+import java.io.Serializable;
+
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -11,7 +13,7 @@ import io.objectbox.relation.ToMany;
  */
 
 @Entity
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     @NameInDb("ID")

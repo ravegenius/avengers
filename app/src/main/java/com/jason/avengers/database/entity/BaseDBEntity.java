@@ -1,5 +1,7 @@
 package com.jason.avengers.database.entity;
 
+import java.io.Serializable;
+
 import io.objectbox.annotation.BaseEntity;
 import io.objectbox.annotation.Id;
 import io.objectbox.annotation.NameInDb;
@@ -23,7 +25,7 @@ import io.objectbox.annotation.NameInDb;
  */
 
 @BaseEntity
-public class BaseDBEntity {
+public class BaseDBEntity implements Serializable {
 
     @Id
     @NameInDb("_ID")

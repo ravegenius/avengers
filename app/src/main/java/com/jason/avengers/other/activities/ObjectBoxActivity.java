@@ -7,17 +7,24 @@ import com.jason.avengers.R;
 import com.jason.avengers.base.BaseActivity;
 import com.jason.avengers.database.TestDB;
 
+import io.objectbox.reactive.DataSubscription;
+
 /**
  * Created by jason on 2018/7/25.
  */
 
 public class ObjectBoxActivity extends BaseActivity implements View.OnClickListener {
 
+    private DataSubscription mDataSubscription0, mDataSubscription1, mDataSubscription2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_objectbox);
         initView();
+        mDataSubscription0 = TestDB.testWithObserver0();
+        mDataSubscription1 = TestDB.testWithObserver1();
+        mDataSubscription2 = TestDB.testWithObserver2();
     }
 
     private void initView() {
@@ -35,6 +42,8 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
         findViewById(R.id.objectbox_testAddManyToMany).setOnClickListener(this);
         findViewById(R.id.objectbox_testGetManyToMany).setOnClickListener(this);
         findViewById(R.id.objectbox_testDelManyToMany).setOnClickListener(this);
+        findViewById(R.id.objectbox_testDropAllData).setOnClickListener(this);
+        findViewById(R.id.objectbox_testDelAllFiles).setOnClickListener(this);
     }
 
     @Override
@@ -43,14 +52,14 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
             case R.id.objectbox_insert:
                 TestDB.testUserInsert();
                 break;
+            case R.id.objectbox_update:
+                TestDB.testUserUpdate();
+                break;
             case R.id.objectbox_delete:
                 TestDB.testUserDelete();
                 break;
             case R.id.objectbox_delete_all:
                 TestDB.testUserDeleteAll();
-                break;
-            case R.id.objectbox_update:
-                TestDB.testUserUpdate();
                 break;
             case R.id.objectbox_select:
                 TestDB.testUserSelect();
@@ -82,6 +91,20 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
             case R.id.objectbox_testDelManyToMany:
                 TestDB.testDelManyToMany();
                 break;
+            case R.id.objectbox_testDropAllData:
+                TestDB.testDropAllData();
+                break;
+            case R.id.objectbox_testDelAllFiles:
+                TestDB.testDelAllFiles();
+                break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mDataSubscription0 != null) mDataSubscription0.cancel();
+        if (mDataSubscription1 != null) mDataSubscription1.cancel();
+        if (mDataSubscription2 != null) mDataSubscription2.cancel();
+        super.onDestroy();
     }
 }

@@ -22,6 +22,15 @@
             android:textSize="15sp"/>
 
         <Button
+            android:id="@+id/objectbox_update"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Update"
+            android:textSize="15sp"/>
+
+        <Button
             android:id="@+id/objectbox_delete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -37,15 +46,6 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:text="Delete-All"
-            android:textSize="15sp"/>
-
-        <Button
-            android:id="@+id/objectbox_update"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:text="Update"
             android:textSize="15sp"/>
 
         <Button
@@ -136,6 +136,24 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:text="Test-Del-Many-To-Many"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testDropAllData"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Drop-All-Data"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/objectbox_testDelAllFiles"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Test-Del-All-Files"
             android:textSize="15sp"/>
     </LinearLayout>
 </ScrollView>

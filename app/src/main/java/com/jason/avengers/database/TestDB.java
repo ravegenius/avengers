@@ -1,5 +1,11 @@
 package com.jason.avengers.database;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.jason.avengers.BuildConfig;
+import com.jason.avengers.base.BaseApplication;
 import com.jason.avengers.database.entity.ResumeDBEntity;
 import com.jason.avengers.database.entity.UserDBEntity;
 import com.jason.avengers.database.entity.UserDBEntity_;
@@ -20,7 +26,7 @@ import io.objectbox.query.LazyList;
 import io.objectbox.query.Query;
 import io.objectbox.reactive.DataObserver;
 import io.objectbox.reactive.DataSubscription;
-import io.objectbox.reactive.DataTransformer;
+import io.objectbox.reactive.DataSubscriptionList;
 import io.objectbox.reactive.ErrorObserver;
 
 
@@ -29,6 +35,8 @@ import io.objectbox.reactive.ErrorObserver;
  */
 
 public class TestDB {
+
+    public static final String TAG = "TestDB";
 
     public static void testUserInsert() {
         UserBean userBean = TestUtils.initUserTestData();
@@ -45,21 +53,12 @@ public class TestDB {
         ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).put(userDBEntity);
     }
 
-
-    public static void testUserDelete() {
-        ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).remove(1);
-    }
-
-    public static void testUserDeleteAll() {
-        ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).removeAll();
-    }
-
     public static void testUserUpdate() {
         UserBean userBean = TestUtils.initUserTestData();
         UserDBEntity userDBEntity = new UserDBEntity();
         userDBEntity.setId(1L);
         userDBEntity.setUserId(userBean.getUserId());
-        userDBEntity.setUsername("Jack");
+        userDBEntity.setUsername("Jackson");
         userDBEntity.setSex(userBean.getSex());
         userDBEntity.setAge(userBean.getAge());
         userDBEntity.setWorkAge(userBean.getWorkAge());
@@ -70,98 +69,182 @@ public class TestDB {
         ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).put(userDBEntity);
     }
 
+    public static void testUserDelete() {
+        ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).remove(1);
+    }
+
+    public static void testUserDeleteAll() {
+        ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class).removeAll();
+    }
+
     public static void testUserSelect() {
         Box<UserDBEntity> box = ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class);
         Query<UserDBEntity> userDBEntityQuery = box.query().equal(UserDBEntity_.username, "Jason").build();
+
+        testUserSelectFind(userDBEntityQuery);
+//        testUserSelectFindFirst(userDBEntityQuery);
+//        testUserSelectFindUnique(userDBEntityQuery);
+//
+//        testUserSelectFindSetParameter(userDBEntityQuery, "Jason");
+//        testUserSelectFindSetParameter(userDBEntityQuery, "Jackson");
+//
+//        testUserSelectFindWithOffsetLimit(userDBEntityQuery, 10, 5);
+//
+//        testUserSelectFindLazy(userDBEntityQuery);
+//        testUserSelectFindLazyCached(userDBEntityQuery);
+//
+//        testUserSelectPropertyQuery(userDBEntityQuery, "min");
+//        testUserSelectPropertyQuery(userDBEntityQuery, "max");
+//        testUserSelectPropertyQuery(userDBEntityQuery, "sum");
+//        testUserSelectPropertyQuery(userDBEntityQuery, "avg");
+//
+//        testUserSelectRemove(userDBEntityQuery);
+    }
+
+    private static void testUserSelectFind(Query<UserDBEntity> userDBEntityQuery) {
         // return all entities matching the query
-        userDBEntityQuery.find();
+        List<UserDBEntity> userDBEntities = userDBEntityQuery.find();
+        for (UserDBEntity userDBEntity : userDBEntities) {
+            Log.d(TAG, "Func.testUserSelectFind userDBEntity.id==>>" + userDBEntity.getId());
+        }
+    }
+
+    private static void testUserSelectFindFirst(Query<UserDBEntity> userDBEntityQuery) {
         // return only the first result or null if none
-        userDBEntityQuery.findFirst();
+        UserDBEntity userDBEntity = userDBEntityQuery.findFirst();
+        if (userDBEntity == null) return;
+        Log.d(TAG, "Func.testUserSelectFindFirst userDBEntity.id==>>" + userDBEntity.getId());
+    }
+
+    private static void testUserSelectFindUnique(Query<UserDBEntity> userDBEntityQuery) {
         // return the only result or null if none, throw if more than one result
-        userDBEntityQuery.findUnique();
+        UserDBEntity userDBEntity = userDBEntityQuery.findUnique();
+        if (userDBEntity == null) return;
+        Log.d(TAG, "Func.testUserSelectFindUnique userDBEntity.id==>>" + userDBEntity.getId());
+    }
+
+    private static void testUserSelectFindSetParameter(Query<UserDBEntity> userDBEntityQuery, String username) {
         // query parameter reset
-        userDBEntityQuery.setParameter(UserDBEntity_.username, "Jason").find();
-        userDBEntityQuery.setParameter(UserDBEntity_.username, "Jackson").find();
+        List<UserDBEntity> userDBEntities = userDBEntityQuery.setParameter(UserDBEntity_.username, username).find();
+        for (UserDBEntity userDBEntity : userDBEntities) {
+            Log.d(TAG, "Func.testUserSelectFind userDBEntity.id==>>" + userDBEntity.getId());
+        }
+    }
+
+    private static void testUserSelectFindWithOffsetLimit(Query<UserDBEntity> userDBEntityQuery, int offset, int limit) {
         // offset and limit
-        userDBEntityQuery.find(10, 5);
+        List<UserDBEntity> userDBEntities = userDBEntityQuery.find(offset, limit);
+        for (UserDBEntity userDBEntity : userDBEntities) {
+            Log.d(TAG, "Func.testUserSelectFindWithOffsetLimit userDBEntity.id==>>" + userDBEntity.getId());
+        }
+    }
+
+    private static void testUserSelectFindLazy(Query<UserDBEntity> userDBEntityQuery) {
         // lazy loading results
         LazyList<UserDBEntity> lazyList = userDBEntityQuery.findLazy();
         lazyList.get(0);
         lazyList.subList(0, 1);
+    }
 
+    private static void testUserSelectFindLazyCached(Query<UserDBEntity> userDBEntityQuery) {
+        // lazy loading results with cache
         LazyList<UserDBEntity> lazyListCached = userDBEntityQuery.findLazyCached();
         lazyListCached.get(0);
         lazyListCached.subList(0, 1);
-        // min max sum avg ......
-        userDBEntityQuery.property(UserDBEntity_.sex).min();
-        userDBEntityQuery.property(UserDBEntity_.sex).max();
-        userDBEntityQuery.property(UserDBEntity_.sex).sum();
-        userDBEntityQuery.property(UserDBEntity_.sex).avg();
+    }
+
+    private static void testUserSelectPropertyQuery(Query<UserDBEntity> userDBEntityQuery, String action) {
+        if (TextUtils.equals("min", action)) {
+            long min = userDBEntityQuery.property(UserDBEntity_.sex).min();
+            Log.d(TAG, "Func.testUserSelectPropertyQuery min(sex)==>>" + min);
+        } else if (TextUtils.equals("max", action)) {
+            long max = userDBEntityQuery.property(UserDBEntity_.sex).max();
+            Log.d(TAG, "Func.testUserSelectPropertyQuery max(sex)==>>" + max);
+        } else if (TextUtils.equals("sum", action)) {
+            long sum = userDBEntityQuery.property(UserDBEntity_.sex).sum();
+            Log.d(TAG, "Func.testUserSelectPropertyQuery sum(sex)==>>" + sum);
+        } else if (TextUtils.equals("avg", action)) {
+            double avg = userDBEntityQuery.property(UserDBEntity_.sex).avg();
+            Log.d(TAG, "Func.testUserSelectPropertyQuery avg(sex)==>>" + avg);
+        }
+    }
+
+    private static void testUserSelectRemove(Query<UserDBEntity> userDBEntityQuery) {
         // query and remove
         userDBEntityQuery.remove();
     }
 
-    public static void testWithObserver() {
+    public static DataSubscription testWithObserver0() {
         DataSubscription dataSubscription = ObjectBoxBuilder.getInstance().getBoxStore()
                 .subscribe()
                 // ObjectBox - rx
-                .transform(new DataTransformer<Class, Class>() {
-                    @Override
-                    public Class transform(Class source) throws Exception {
-                        return source;
-                    }
-                })
-                .weak()
-                .single()
-                .onlyChanges()
+//                .transform(new DataTransformer<Class, Class>() {
+//                    @Override
+//                    public Class transform(Class source) throws Exception {
+//                        return source;
+//                    }
+//                })
+//                .weak()
+//                .single()
+//                .onlyChanges()
                 .onError(new ErrorObserver() {
                     @Override
                     public void onError(Throwable th) {
+                        Log.e(TAG, "Func.testWithObserver0 " + th.getMessage());
                     }
                 })
                 .observer(new DataObserver<Class>() {
                     @Override
                     public void onData(Class data) {
+                        Log.i(TAG, "Func.testWithObserver0 " + data);
                     }
                 });
 
-        dataSubscription.cancel();
+        return dataSubscription;
+        // dataSubscription.cancel();
     }
 
-    public static void testWithObserver1() {
+    public static DataSubscription testWithObserver1() {
         DataSubscription dataSubscription = ObjectBoxBuilder.getInstance().getBoxStore()
                 .subscribe(UserDBEntity.class)
                 .onError(new ErrorObserver() {
                     @Override
                     public void onError(Throwable th) {
+                        Log.e(TAG, "Func.testWithObserver1 " + th.getMessage());
                     }
                 })
                 .observer(new DataObserver<Class<UserDBEntity>>() {
                     @Override
                     public void onData(Class<UserDBEntity> data) {
+                        Log.i(TAG, "Func.testWithObserver1 " + data);
                     }
                 });
 
-        dataSubscription.cancel();
+        return dataSubscription;
+        // dataSubscription.cancel();
     }
 
-    public static void testWithObserver2() {
-        Box<UserDBEntity> box = ObjectBoxBuilder.getInstance().getBoxStore().boxFor(UserDBEntity.class);
-        Query<UserDBEntity> userDBEntityQuery = box.query().build();
-        DataSubscription dataSubscription = userDBEntityQuery
-                .subscribe()
+    public static DataSubscription testWithObserver2() {
+        DataSubscriptionList subscriptions = new DataSubscriptionList();
+        DataSubscription dataSubscription = ObjectBoxBuilder.getInstance().getBoxStore()
+                .boxFor(UserDBEntity.class)
+                .query().build()
+                .subscribe(subscriptions)
                 .onError(new ErrorObserver() {
                     @Override
                     public void onError(Throwable th) {
+                        Log.e(TAG, "Func.testWithObserver2 " + th.getMessage());
                     }
                 })
                 .observer(new DataObserver<List<UserDBEntity>>() {
                     @Override
                     public void onData(List<UserDBEntity> data) {
+                        Log.i(TAG, "Func.testWithObserver2 " + new Gson().toJson(data));
                     }
                 });
 
-        dataSubscription.cancel();
+        return dataSubscription;
+        // dataSubscription.cancel();
     }
 
     public static void testUserWithResumeInsert() {
@@ -214,6 +297,7 @@ public class TestDB {
         long orderId = 1L;
         Order order = boxStore.boxFor(Order.class).get(orderId);
         Customer customer = order.customer.getTarget();
+        Log.d(TAG, "Func.testGetToOne customer.id==>>" + customer.id);
     }
 
     public static void testDelToOne() {
@@ -244,6 +328,7 @@ public class TestDB {
         long customerId = 1L;
         Customer customer = boxStore.boxFor(Customer.class).get(customerId);
         for (Order order : customer.orders) {
+            Log.d(TAG, "Func.testGetOneToMany order.id==>>" + order.id);
         }
     }
 
@@ -278,6 +363,7 @@ public class TestDB {
         long studentId = 1L;
         Student student = boxStore.boxFor(Student.class).get(studentId);
         for (Teacher teacher : student.teachers) {
+            Log.d(TAG, "Func.testGetManyToMany teacher.id==>>" + teacher.id);
         }
     }
 
@@ -289,5 +375,20 @@ public class TestDB {
         // boxStore.boxFor(Student.class).put(student);
         // more efficient than using put:
         student.teachers.applyChangesToDb();
+    }
+
+    public static void testDropAllData() {
+        BoxStore boxStore = ObjectBoxBuilder.getInstance().getBoxStore();
+        for (Class clazz : boxStore.getAllEntityClasses()) {
+            boxStore.boxFor(clazz).removeAll();
+        }
+    }
+
+    public static void testDelAllFiles() {
+        BoxStore boxStore = ObjectBoxBuilder.getInstance().getBoxStore();
+        boxStore.close();
+        boxStore.deleteAllFiles();
+        // 重新创建
+        ObjectBoxBuilder.getInstance().build(BaseApplication.getInstance(), BuildConfig.DEBUG);
     }
 }
