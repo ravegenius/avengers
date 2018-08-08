@@ -1,6 +1,8 @@
 package com.jason.avengers.database.simple;
 
-import java.io.Serializable;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.jason.avengers.database.json.JsonDBEntity;
 
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
@@ -13,7 +15,7 @@ import io.objectbox.relation.ToMany;
  */
 
 @Entity
-public class Customer implements Serializable {
+public class Customer extends JsonDBEntity {
 
     @Id
     @NameInDb("ID")
@@ -23,4 +25,8 @@ public class Customer implements Serializable {
     @Backlink(to = "customer")
     public ToMany<Order> orders;
 
+    @Override
+    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
+        filling(orders, Order.class, jsonObject.get("orders"), context);
+    }
 }

@@ -58,6 +58,15 @@
             android:textSize="15sp"/>
 
         <Button
+            android:id="@+id/objectbox_insert_many"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="Insert-Many"
+            android:textSize="15sp"/>
+
+        <Button
             android:id="@+id/objectbox_testAddToOne"
             android:layout_width="match_parent"
             android:layout_height="50dp"

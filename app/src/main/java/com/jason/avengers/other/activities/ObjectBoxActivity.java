@@ -33,6 +33,7 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
         findViewById(R.id.objectbox_delete_all).setOnClickListener(this);
         findViewById(R.id.objectbox_update).setOnClickListener(this);
         findViewById(R.id.objectbox_select).setOnClickListener(this);
+        findViewById(R.id.objectbox_insert_many).setOnClickListener(this);
         findViewById(R.id.objectbox_testAddToOne).setOnClickListener(this);
         findViewById(R.id.objectbox_testGetToOne).setOnClickListener(this);
         findViewById(R.id.objectbox_testDelToOne).setOnClickListener(this);
@@ -63,6 +64,9 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.objectbox_select:
                 TestDB.testUserSelect();
+                break;
+            case R.id.objectbox_insert_many:
+                TestDB.testUserWithResumeInsert();
                 break;
             case R.id.objectbox_testAddToOne:
                 TestDB.testAddToOne();

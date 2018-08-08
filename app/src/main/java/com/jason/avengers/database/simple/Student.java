@@ -1,6 +1,8 @@
 package com.jason.avengers.database.simple;
 
-import java.io.Serializable;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.jason.avengers.database.json.JsonDBEntity;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -12,11 +14,16 @@ import io.objectbox.relation.ToMany;
  */
 
 @Entity
-public class Student implements Serializable {
+public class Student extends JsonDBEntity {
 
     @Id
     @NameInDb("ID")
     public long id;
 
     public ToMany<Teacher> teachers;
+
+    @Override
+    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
+        filling(teachers, Teacher.class, jsonObject.get("teachers"), context);
+    }
 }

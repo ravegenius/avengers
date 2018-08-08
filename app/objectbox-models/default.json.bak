@@ -153,15 +153,23 @@
           "name": "ID"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "5:2046287604358696501",
+          "name": "students"
+        }
+      ]
     }
   ],
   "lastEntityId": "12:2104211571468028751",
   "lastIndexId": "17:2975585427045950009",
-  "lastRelationId": "4:7943425662386932233",
+  "lastRelationId": "5:2046287604358696501",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
+  "newUidPool": [
+    8312016557935287349
+  ],
   "retiredEntityUids": [
     4091632473820874273,
     1487437005473158799,

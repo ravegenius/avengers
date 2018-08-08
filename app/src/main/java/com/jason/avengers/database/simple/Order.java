@@ -1,6 +1,8 @@
 package com.jason.avengers.database.simple;
 
-import java.io.Serializable;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.jason.avengers.database.json.JsonDBEntity;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -13,7 +15,7 @@ import io.objectbox.relation.ToOne;
  */
 
 @Entity
-public class Order implements Serializable {
+public class Order extends JsonDBEntity {
 
     @Id
     @NameInDb("ID")
@@ -22,4 +24,8 @@ public class Order implements Serializable {
     @TargetIdProperty("CUSTOMERID")
     public ToOne<Customer> customer;
 
+    @Override
+    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
+        filling(customer, Customer.class, jsonObject.get("customer"), context);
+    }
 }

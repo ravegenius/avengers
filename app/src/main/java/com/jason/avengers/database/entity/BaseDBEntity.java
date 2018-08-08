@@ -1,6 +1,6 @@
 package com.jason.avengers.database.entity;
 
-import java.io.Serializable;
+import com.jason.avengers.database.json.JsonDBEntity;
 
 import io.objectbox.annotation.BaseEntity;
 import io.objectbox.annotation.Id;
@@ -25,7 +25,7 @@ import io.objectbox.annotation.NameInDb;
  */
 
 @BaseEntity
-public class BaseDBEntity implements Serializable {
+public abstract class BaseDBEntity extends JsonDBEntity {
 
     @Id
     @NameInDb("_ID")

@@ -3,7 +3,6 @@ package com.jason.avengers.database;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.jason.avengers.BuildConfig;
 import com.jason.avengers.base.BaseApplication;
 import com.jason.avengers.database.entity.ResumeDBEntity;
@@ -26,7 +25,6 @@ import io.objectbox.query.LazyList;
 import io.objectbox.query.Query;
 import io.objectbox.reactive.DataObserver;
 import io.objectbox.reactive.DataSubscription;
-import io.objectbox.reactive.DataSubscriptionList;
 import io.objectbox.reactive.ErrorObserver;
 
 
@@ -225,11 +223,10 @@ public class TestDB {
     }
 
     public static DataSubscription testWithObserver2() {
-        DataSubscriptionList subscriptions = new DataSubscriptionList();
         DataSubscription dataSubscription = ObjectBoxBuilder.getInstance().getBoxStore()
                 .boxFor(UserDBEntity.class)
                 .query().build()
-                .subscribe(subscriptions)
+                .subscribe()
                 .onError(new ErrorObserver() {
                     @Override
                     public void onError(Throwable th) {
@@ -239,7 +236,7 @@ public class TestDB {
                 .observer(new DataObserver<List<UserDBEntity>>() {
                     @Override
                     public void onData(List<UserDBEntity> data) {
-                        Log.i(TAG, "Func.testWithObserver2 " + new Gson().toJson(data));
+                        Log.i(TAG, "Func.testWithObserver2 " + data);
                     }
                 });
 
