@@ -12,6 +12,6 @@ public class JsonToOneSerializer implements JsonSerializer<ToOne> {
 
     @Override
     public JsonElement serialize(ToOne src, Type typeOfSrc, JsonSerializationContext context) {
-        return context.serialize(src.getTarget());
+        return null;
     }
 }

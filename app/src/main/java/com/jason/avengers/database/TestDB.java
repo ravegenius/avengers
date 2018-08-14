@@ -199,7 +199,6 @@ public class TestDB {
                 });
 
         return dataSubscription;
-        // dataSubscription.cancel();
     }
 
     public static DataSubscription testWithObserver1() {
@@ -219,7 +218,6 @@ public class TestDB {
                 });
 
         return dataSubscription;
-        // dataSubscription.cancel();
     }
 
     public static DataSubscription testWithObserver2() {
@@ -241,7 +239,6 @@ public class TestDB {
                 });
 
         return dataSubscription;
-        // dataSubscription.cancel();
     }
 
     public static void testUserWithResumeInsert() {

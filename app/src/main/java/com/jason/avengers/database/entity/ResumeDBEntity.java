@@ -1,8 +1,5 @@
 package com.jason.avengers.database.entity;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Index;
 import io.objectbox.annotation.NameInDb;
@@ -103,10 +100,5 @@ public class ResumeDBEntity extends BaseDBEntity {
 
     public void setUser(ToOne<UserDBEntity> user) {
         this.user = user;
-    }
-
-    @Override
-    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
-        filling(user, UserDBEntity.class, jsonObject.get("user"), context);
     }
 }

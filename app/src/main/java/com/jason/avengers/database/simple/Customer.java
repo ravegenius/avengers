@@ -26,7 +26,8 @@ public class Customer extends JsonDBEntity {
     public ToMany<Order> orders;
 
     @Override
-    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
-        filling(orders, Order.class, jsonObject.get("orders"), context);
+    protected void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
+        fromJsonToMany(orders, Order.class, jsonObject.get("orders"), context);
+        id = jsonObject.get("id").getAsLong();
     }
 }

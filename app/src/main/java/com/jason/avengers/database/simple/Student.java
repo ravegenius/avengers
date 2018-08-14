@@ -23,7 +23,8 @@ public class Student extends JsonDBEntity {
     public ToMany<Teacher> teachers;
 
     @Override
-    public void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
-        filling(teachers, Teacher.class, jsonObject.get("teachers"), context);
+    protected void fromJson(JsonObject jsonObject, JsonDeserializationContext context) {
+        fromJsonToMany(teachers, Teacher.class, jsonObject.get("teachers"), context);
+        id = jsonObject.get("id").getAsLong();
     }
 }

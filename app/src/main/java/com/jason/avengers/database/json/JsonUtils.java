@@ -19,7 +19,7 @@ public class JsonUtils {
         return gson.toJson(object);
     }
 
-    public static <T extends JsonDBEntity> T fromJson(String json, Class<T> clazz) {
+    public static <T> T fromJson(String json, Class<T> clazz) {
         Gson gson = new GsonBuilder()
                 .registerTypeHierarchyAdapter(JsonDBEntity.class, new JsonBoxDeserializer<>())
                 .registerTypeAdapter(ToOne.class, new JsonToOneSerializer())

@@ -8,10 +8,11 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 public class JsonBoxDeserializer<T extends JsonDBEntity> implements JsonDeserializer<T> {
+
     @Override
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public T deserialize(JsonElement json, Type typeOfSrc, JsonDeserializationContext context) throws JsonParseException {
         try {
-            T var = ((Class<T>) typeOfT).newInstance();
+            T var = ((Class<T>) typeOfSrc).newInstance();
             var.fromJson(json.getAsJsonObject(), context);
             return var;
         } catch (InstantiationException e) {

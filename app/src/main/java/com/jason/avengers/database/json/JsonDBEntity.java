@@ -16,10 +16,10 @@ import io.objectbox.relation.ToOne;
 
 public abstract class JsonDBEntity {
 
-    abstract public void fromJson(JsonObject jsonObject, JsonDeserializationContext context);
+    protected abstract void fromJson(JsonObject jsonObject, JsonDeserializationContext context);
 
-    protected <T extends JsonDBEntity> void filling(ToMany<T> toMany, Class<T> type,
-                                                    JsonElement jsonElement, JsonDeserializationContext context) {
+    protected <T extends JsonDBEntity> void fromJsonToMany(ToMany<T> toMany, Class<T> type,
+                                                           JsonElement jsonElement, JsonDeserializationContext context) {
         if (toMany == null)
             return;
         toMany.clear();
@@ -33,8 +33,8 @@ public abstract class JsonDBEntity {
         }
     }
 
-    protected <T extends JsonDBEntity> void filling(ToOne<T> toOne, Type typeOfT,
-                                                    JsonElement jsonElement, JsonDeserializationContext context) {
+    protected <T extends JsonDBEntity> void fromJsonToOne(ToOne<T> toOne, Type typeOfT,
+                                                          JsonElement jsonElement, JsonDeserializationContext context) {
         if (toOne == null)
             return;
         try {

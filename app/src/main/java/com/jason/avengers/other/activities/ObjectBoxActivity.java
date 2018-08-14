@@ -25,6 +25,7 @@ public class ObjectBoxActivity extends BaseActivity implements View.OnClickListe
         mDataSubscription0 = TestDB.testWithObserver0();
         mDataSubscription1 = TestDB.testWithObserver1();
         mDataSubscription2 = TestDB.testWithObserver2();
+        TestDB.testJsonToMany();
     }
 
     private void initView() {
