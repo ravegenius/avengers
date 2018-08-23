@@ -1,4 +1,6 @@
 apply from: 'gradle/configuration.gradle'
+apply plugin: 'com.alibaba.arouter'
+
 
 buildscript {
     ext.objectboxVersion = '1.5.0'
@@ -17,6 +19,8 @@ buildscript {
 
         // add plugin greendao
         // classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath "com.alibaba:arouter-register:1.0.2"
+
     }
 }
 

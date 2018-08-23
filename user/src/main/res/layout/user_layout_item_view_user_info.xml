@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    tools:ignore="RtlCompat">
+
+    <TextView
+        android:id="@+id/user_info_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="贾嵩"/>
+
+    <ImageView
+        android:id="@+id/user_info_sex"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/user_info_age"
+        app:layout_constraintStart_toEndOf="@+id/user_info_name"/>
+
+    <TextView
+        android:id="@+id/user_info_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/user_info_name"
+        app:layout_constraintStart_toEndOf="@+id/user_info_sex"
+        tools:text="年龄:32"/>
+
+    <TextView
+        android:id="@+id/user_info_work_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textSize="15sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/user_info_name"
+        app:layout_constraintStart_toEndOf="@+id/user_info_age"
+        tools:text="工作年龄:8"/>
+
+    <TextView
+        android:id="@+id/user_info_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/color_3F51B5"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/user_info_name"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_name"
+        tools:text="13401073452"/>
+
+    <TextView
+        android:id="@+id/user_info_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/color_3F51B5"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/user_info_name"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_phone"
+        tools:text="ravegenius1985@126.com"/>
+
+    <ImageView
+        android:id="@+id/user_info_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</android.support.constraint.ConstraintLayout>

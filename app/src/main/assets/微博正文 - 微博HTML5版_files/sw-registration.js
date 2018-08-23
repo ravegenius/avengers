@@ -1,7 +1,0 @@
-!function(){const e=!("localhost"!==window.location.hostname&&"[::1]"!==window.location.hostname&&!window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/))
-window.addEventListener("load",function(){if("serviceWorker"in window.navigator&&("https:"===window.location.protocol||e)&&!/; wv(;|\)).+ Chrome\/.+ Mobile/g.test(window.navigator.userAgent)){const n=+window.config.version.split(".")[1]>=20,o="https://m.weibo.cn/sw.js"
-n?(navigator.serviceWorker.register(o).then(function(e){e.onupdatefound=function(){if(navigator.serviceWorker.controller){const n=e.installing
-n.onstatechange=function(){switch(n.state){case"installed":window.__wb_performance_data.sw=1,console.log("[SW]: New content is available; please refresh.")
-break
-case"redundant":window.__wb_performance_data.sw="redundant",console.error("[SW]: The installing service worker became redundant")}}}}})["catch"](function(e){window.__wb_performance_data.sw=e.msg,console.error("[SW]: Error during service worker registration:",e)}),navigator.serviceWorker.onmessage=function(e){const n=e.data
-"UPDATE_FOUND"===n.command&&console.log("[SW]: New cache is available; please refresh.")}):navigator.serviceWorker.getRegistration(o).then(function(e){e&&e.unregister&&e.unregister().then(function(e){e?console.log("[SW]: UnRegistration  succeeded."):console.error("[SW]: UnRegistration failed.")})})["catch"](function(e){window.__wb_performance_data.sw=e.msg,console.error("[SW]: UnRegistration failed with. "+e)})}})}()

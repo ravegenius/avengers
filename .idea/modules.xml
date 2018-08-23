@@ -4,8 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Avengers.iml" filepath="$PROJECT_DIR$/Avengers.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/business/business.iml" filepath="$PROJECT_DIR$/business/business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/main/main.iml" filepath="$PROJECT_DIR$/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/other/other.iml" filepath="$PROJECT_DIR$/other/other.iml" />
+      <module fileurl="file://$PROJECT_DIR$/resume/resume.iml" filepath="$PROJECT_DIR$/resume/resume.iml" />
+      <module fileurl="file://$PROJECT_DIR$/skill/skill.iml" filepath="$PROJECT_DIR$/skill/skill.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user/user.iml" filepath="$PROJECT_DIR$/user/user.iml" />
     </modules>
   </component>
 </project>

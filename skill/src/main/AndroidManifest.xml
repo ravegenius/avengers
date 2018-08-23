@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jason.avengers.skill">
+
+    <application>
+        <activity
+            android:name=".activities.SkillTabActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|mcc|mnc"
+            android:theme="@style/AppTheme.NoActionBar"/>
+    </application>
+</manifest>

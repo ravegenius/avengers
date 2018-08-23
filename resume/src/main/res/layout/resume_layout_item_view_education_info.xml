@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    tools:ignore="RtlCompat">
+
+    <TextView
+        android:id="@+id/education_info_serial"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/common_drawable_bg_filleted_corner_pink"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/education_info_date"
+        app:layout_constraintTop_toTopOf="@+id/education_info_date"
+        tools:text="1"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/education_info_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="30dp"/>
+
+    <TextView
+        android:id="@+id/education_info_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/education_info_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2017-01 - 2017-01"/>
+
+    <TextView
+        android:id="@+id/education_info_school"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/education_info_degree"
+        app:layout_constraintStart_toStartOf="@+id/education_info_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/education_info_date"
+        tools:text="东北大学"/>
+
+    <TextView
+        android:id="@+id/education_info_degree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/education_info_date"
+        tools:text="学士"/>
+</android.support.constraint.ConstraintLayout>

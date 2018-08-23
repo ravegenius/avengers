@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.jason.avengers.other">
+
+    <application>
+        <activity
+            android:name=".activities.RichEditorActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.drawer.DrawerActivity"
+            android:theme="@style/AppTheme.NoActionBar.Transparent"/>
+        <activity
+            android:name=".activities.ParallelAdActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.ObjectBoxActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+    </application>
+</manifest>

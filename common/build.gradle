@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+
+def cfg = rootProject.ext.android
+def libs = rootProject.ext.libraries
+
+android {
+    compileSdkVersion cfg.compileSdk
+
+    defaultConfig {
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ['objectbox.debug': 'true',
+                             AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            postprocessing {
+                removeUnusedCode false
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'proguard-rules.pro'
+            }
+        }
+    }
+
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.android.support:appcompat-v7:${libs.supportVersion}"
+    api "com.android.support:support-v4:${libs.supportVersion}"
+    api "com.android.support:support-annotations:${libs.supportVersion}"
+    api "com.android.support:design:${libs.supportVersion}"
+    api "com.android.support:support-vector-drawable:${libs.supportVersion}"
+    api "com.android.support.constraint:constraint-layout:1.0.2"
+    // 开发需要可以使用源码编辑
+    api 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
+    api 'com.alibaba:arouter-api:1.4.0'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
+    // objectbox
+    debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
+    releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
+
+    api project(':core')
+}
+
+// apply the plugin after the dependencies block
+apply plugin: 'io.objectbox'

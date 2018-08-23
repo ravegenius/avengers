@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">user</string>
+    <string name="user_age">年龄:%d</string>
+    <string name="user_work_age">工作年龄:%d</string>
+</resources>

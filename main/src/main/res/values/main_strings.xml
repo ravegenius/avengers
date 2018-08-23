@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">main</string>
+
+    <string name="author_name">Jason</string>
+    <string name="author_desc">这个人真的懒 懒得写东西~</string>
+    <string name="author_email">ravegenius1985@126.com</string>
+
+    <string name="bottom_nav_resume">简历</string>
+    <string name="bottom_nav_skill">技能</string>
+    <string name="bottom_nav_other">其他</string>
+
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
+
+    <string name="menu_action_search">新增</string>
+    <string name="menu_action_notifications">编辑</string>
+    <string name="menu_action_settings">删除</string>
+</resources>

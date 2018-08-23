@@ -1,0 +1,112 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8708035479269845591",
+      "lastPropertyId": "9:6579224288703125614",
+      "name": "USER",
+      "properties": [
+        {
+          "id": "1:1101225878481059548",
+          "name": "_ID"
+        },
+        {
+          "id": "2:2494806678561887266",
+          "indexId": "1:4931373991817760475",
+          "name": "USERID"
+        },
+        {
+          "id": "3:4082278788952140664",
+          "indexId": "2:8027667815968362182",
+          "name": "USERNAME"
+        },
+        {
+          "id": "4:3970288426600942422",
+          "name": "SEX"
+        },
+        {
+          "id": "5:3675031384644137274",
+          "name": "AGE"
+        },
+        {
+          "id": "6:6624695373222822403",
+          "name": "WORKAGE"
+        },
+        {
+          "id": "7:8270731862970254498",
+          "name": "AVATAR"
+        },
+        {
+          "id": "8:6263666284047805186",
+          "indexId": "3:161224205652550650",
+          "name": "EMAIL"
+        },
+        {
+          "id": "9:6579224288703125614",
+          "indexId": "4:2102254878526217728",
+          "name": "PHONE"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:3900600919523698707",
+      "lastPropertyId": "9:5982225294744149337",
+      "name": "RESUME",
+      "properties": [
+        {
+          "id": "1:2725356631072890068",
+          "name": "_ID"
+        },
+        {
+          "id": "2:5779851076113572621",
+          "indexId": "5:3187328380347860737",
+          "name": "COMPANY"
+        },
+        {
+          "id": "3:1909734750960951495",
+          "name": "STARTDATE"
+        },
+        {
+          "id": "4:5323715181758305809",
+          "name": "ENDDATE"
+        },
+        {
+          "id": "5:98004088311772382",
+          "name": "POSITION"
+        },
+        {
+          "id": "6:1988837060820052793",
+          "name": "JOBCONTENT"
+        },
+        {
+          "id": "7:3899589936953304332",
+          "name": "JOBDESCRIPTION"
+        },
+        {
+          "id": "8:546224000375346431",
+          "name": "SERIAL"
+        },
+        {
+          "id": "9:5982225294744149337",
+          "indexId": "6:3530490121138929110",
+          "name": "USERID"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:3900600919523698707",
+  "lastIndexId": "6:3530490121138929110",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

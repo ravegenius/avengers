@@ -23,7 +23,8 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ['objectbox.debug': 'true']
+                arguments = ['objectbox.debug': 'true',
+                             AROUTER_MODULE_NAME: project.getName()]
             }
         }
     }
@@ -38,18 +39,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    // 开发需要可以使用源码编辑
-    implementation 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
-    implementation 'jp.wasabeef:richeditor-android:1.2.2'
-    //compile 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
-    implementation project(':business')
-    // 数据库
-    // greendao
-    // compile 'org.greenrobot:greendao:3.2.2'
-    // objectbox
-    debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
-    releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
-}
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
 
-// apply the plugin after the dependencies block
-apply plugin: 'io.objectbox'
+    implementation project(':common')
+    implementation project(':user')
+    implementation project(':main')
+    implementation project(':resume')
+    implementation project(':skill')
+    implementation project(':other')
+}
