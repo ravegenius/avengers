@@ -4,6 +4,7 @@ import com.jason.avengers.common.base.BaseApplication;
 import com.jason.avengers.common.database.ObjectBoxBuilder;
 import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.core.stetho.StethoUtils;
+import com.jason.core.utils.SharedPrefUtils;
 import com.jason.core.utils.Utils;
 
 /**
@@ -21,6 +22,7 @@ public class Application extends BaseApplication {
     protected void initAfterCreate(android.app.Application application) {
         // First must init Utils context
         Utils.init(application);
+        SharedPrefUtils.init(application);
 
         StethoUtils.init(application);
         ObjectBoxBuilder.INSTANCE.build(application, BuildConfig.DEBUG);

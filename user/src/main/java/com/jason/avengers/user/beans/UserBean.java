@@ -22,6 +22,9 @@ public class UserBean extends BaseItemBean {
     @SerializedName("id")
     private long userId;
 
+    @SerializedName("token")
+    private String token;
+
     @SerializedName("name")
     private String username;
 
@@ -52,6 +55,14 @@ public class UserBean extends BaseItemBean {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUsername() {

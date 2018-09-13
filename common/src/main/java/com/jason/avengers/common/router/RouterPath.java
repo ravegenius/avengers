@@ -6,12 +6,14 @@ package com.jason.avengers.common.router;
 
 public class RouterPath {
 
-    public static final String COMMON_SPLASH = "/common/splash";
-    public static final String COMMON_MAIN = "/common/main";
+    public static final String MAIN_SPLASH = "/main/splash";
+    public static final String MAIN_MAIN = "/main/main";
 
     public static final String OTHER_DRAWER = "/other/drawer";
     public static final String OTHER_OBJECTBOX = "/other/objectbox";
     public static final String OTHER_PARALLELAD = "/other/parallelad";
     public static final String OTHER_RICHEDITOR = "/other/richeditor";
     public static final String OTHER_SKILLTAB = "/other/skilltab";
+
+    public static final String USER_LOGIN = "/user/login";
 }

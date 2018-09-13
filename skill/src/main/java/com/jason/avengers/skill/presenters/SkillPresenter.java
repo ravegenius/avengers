@@ -19,7 +19,7 @@ import io.reactivex.functions.Consumer;
  * Created by jason on 2018/3/28.
  */
 
-public class SkillPresenter implements BasePresenter<SkillView> {
+public class SkillPresenter extends BasePresenter<SkillView> {
 
     private SkillView mView;
 

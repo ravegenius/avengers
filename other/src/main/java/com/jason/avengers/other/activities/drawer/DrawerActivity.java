@@ -7,11 +7,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.jason.avengers.common.base.BaseNoMVPActivity;
 import com.jason.avengers.common.router.RouterPath;
-import com.jason.avengers.other.R;
-import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.common.widgets.scrolllayout.ScrollLayout;
 import com.jason.avengers.common.widgets.viewpager.CustomViewPager;
+import com.jason.avengers.other.R;
 import com.jason.core.utils.Utils;
 
 /**
@@ -19,7 +19,7 @@ import com.jason.core.utils.Utils;
  */
 
 @Route(path = RouterPath.OTHER_DRAWER)
-public class DrawerActivity extends BaseActivity {
+public class DrawerActivity extends BaseNoMVPActivity {
 
     private ScrollLayout mScrollLayout;
     private TextView mFootBtn;

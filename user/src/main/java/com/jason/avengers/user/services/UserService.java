@@ -12,6 +12,15 @@ import retrofit2.http.GET;
 
 public interface UserService {
 
-    @GET("user")
-    Observable<NetworkResult<UserBean>> getUser();
+    @GET("getToken")
+    Observable<NetworkResult<UserBean>> login2GetToken(String un, String pwd, String phone, String email, String code);
+
+    @GET("getToken")
+    Observable<NetworkResult<UserBean>> bind2GetToken(String snsToken, String snsType);
+
+    @GET("getUser")
+    Observable<NetworkResult<UserBean>> getUser(String token);
+
+    @GET("logout")
+    Observable<NetworkResult> logout(String token);
 }

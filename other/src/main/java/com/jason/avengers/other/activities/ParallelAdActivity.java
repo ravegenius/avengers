@@ -5,23 +5,26 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
-import com.jason.avengers.common.router.RouterPath;
-import com.jason.avengers.other.R;
-import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.common.base.BaseAdapter;
 import com.jason.avengers.common.base.BaseItemViewHolder;
+import com.jason.avengers.common.base.BaseNoMVPActivity;
+import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.common.widgets.AdParallelImageView;
-import com.jason.avengers.common.widgets.ExpandableTextView;
+import com.jason.avengers.common.widgets.FoldTextView;
+import com.jason.avengers.other.R;
 
 /**
  * Created by jason on 2018/5/10.
  */
 
 @Route(path = RouterPath.OTHER_PARALLELAD)
-public class ParallelAdActivity extends BaseActivity {
+public class ParallelAdActivity extends BaseNoMVPActivity {
+
+    private BaseAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class ParallelAdActivity extends BaseActivity {
     private void initView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new BaseAdapter() {
+        mAdapter = new BaseAdapter() {
 
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,15 +59,20 @@ public class ParallelAdActivity extends BaseActivity {
                         break;
                     default:
                         if (position % 3 == 0) {
-                            ((ExpandableTextView) holder.getView(R.id.title)).setExpandedText(position + ">>>>>>>>>>>标题标题");
+                            ((FoldTextView) holder.getView(R.id.title)).setExpanded(true).setText(position + ">>>>>>>>>>>标题标题");
                         } else {
-                            ((ExpandableTextView) holder.getView(R.id.title)).setExpandedText(position + ">>>>>>>>>>>标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题");
+                            ((FoldTextView) holder.getView(R.id.title)).setExpanded(true).setText(position + ">>>>>>>>>>>标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题");
                         }
 
                         if (position % 3 == 0) {
-                            ((ExpandableTextView) holder.getView(R.id.content)).setExpandedText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
+                            ((TextView) holder.getView(R.id.content)).setText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
                         } else {
-                            ((ExpandableTextView) holder.getView(R.id.content)).setExpandedText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
+                            ((TextView) holder.getView(R.id.content)).setText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
+                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
+                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
+                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
+                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
+                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
                         }
                         break;
                 }
@@ -80,7 +88,8 @@ public class ParallelAdActivity extends BaseActivity {
             public int getItemCount() {
                 return 30;
             }
-        });
+        };
+        recyclerView.setAdapter(mAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

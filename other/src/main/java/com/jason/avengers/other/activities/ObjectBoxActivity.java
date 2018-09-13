@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.jason.avengers.common.base.BaseNoMVPActivity;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.common.base.BaseActivity;
 // import com.jason.avengers.common.database.TestDB;
 
 // import io.objectbox.reactive.DataSubscription;
@@ -16,7 +16,7 @@ import com.jason.avengers.common.base.BaseActivity;
  */
 
 @Route(path = RouterPath.OTHER_OBJECTBOX)
-public class ObjectBoxActivity extends BaseActivity implements View.OnClickListener {
+public class ObjectBoxActivity extends BaseNoMVPActivity implements View.OnClickListener {
 
 //     private DataSubscription mDataSubscription0, mDataSubscription1, mDataSubscription2;
 

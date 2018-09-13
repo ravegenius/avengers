@@ -45,10 +45,12 @@ dependencies {
     // 开发需要可以使用源码编辑
     api 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
     api 'com.alibaba:arouter-api:1.4.0'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
     // objectbox
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
     releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
+
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    api 'com.sina.weibo.sdk:core:4.3.0:openDefaultRelease@aar'
 
     api project(':core')
 }

@@ -18,6 +18,10 @@ public class NetworkTools {
         return result != null && result.getCode() == CODE_SUCCESS;
     }
 
+    public static boolean checkDataSuccess(NetworkResult result) {
+        return checkNetworkSuccess(result) && result.getData() != null;
+    }
+
     public static String parseNetworkThrowable(NetworkResult result) {
         return result != null ? result.getMsg() : MSG_DEFAULT;
     }

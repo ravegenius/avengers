@@ -1,2 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.jason.avengers.user"/>
+          package="com.jason.avengers.user">
+
+    <application>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+    </application>
+</manifest>

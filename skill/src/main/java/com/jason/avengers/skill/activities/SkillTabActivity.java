@@ -11,9 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.jason.avengers.common.base.BaseNoMVPActivity;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.skill.R;
-import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.skill.beans.SkillInfoBean;
 import com.jason.avengers.skill.fragments.SkillDetailFragment;
 
@@ -25,7 +25,7 @@ import java.util.List;
  */
 
 @Route(path = RouterPath.OTHER_SKILLTAB)
-public class SkillTabActivity extends BaseActivity {
+public class SkillTabActivity extends BaseNoMVPActivity {
 
     public static final String PARAM_SKILL = "param_skill";
     private SkillInfoBean mSkillInfoBean;

@@ -18,7 +18,7 @@ import io.reactivex.functions.Consumer;
  * Created by jason on 2018/3/28.
  */
 
-public class ResumePresenter implements BasePresenter<ResumeView> {
+public class ResumePresenter extends BasePresenter<ResumeView> {
 
     private ResumeView mView;
 
@@ -43,7 +43,7 @@ public class ResumePresenter implements BasePresenter<ResumeView> {
                                 if (NetworkTools.checkNetworkSuccess(result)) {
                                     List<BaseItemBean> beans = null;
                                     if (result.getData() != null) {
-//                                        UserBean userBean = result.getData();
+//                                        UserBean userBean = onSMSResult.getData();
 //                                        List<ResumeBean> resumeBeans = userBean.getResumes();
 //                                        beans = new ArrayList<>();
 //                                        beans.add(userBean);

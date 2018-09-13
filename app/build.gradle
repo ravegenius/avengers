@@ -6,7 +6,6 @@ def libs = rootProject.ext.libraries
 android {
     // dataBinding 打开
     dataBinding {
-
         enabled = true
     }
 
@@ -39,7 +38,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
 
     implementation project(':common')
     implementation project(':user')

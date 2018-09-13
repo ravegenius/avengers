@@ -10,10 +10,12 @@ import android.view.MenuItem;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jason.avengers.common.base.BaseActivity;
+import com.jason.avengers.common.base.BasePresenter;
+import com.jason.avengers.common.base.BaseView;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.main.R;
 
-@Route(path = RouterPath.COMMON_MAIN)
+@Route(path = RouterPath.MAIN_MAIN)
 public class MainActivity extends BaseActivity implements
         BottomNavigationView.OnNavigationItemSelectedListener,
         NavigationView.OnNavigationItemSelectedListener,
@@ -25,6 +27,16 @@ public class MainActivity extends BaseActivity implements
     private ViewPager mViewPager;
 
 //    private UserPresenter mPresenter;
+
+    @Override
+    protected BasePresenter initPresenter() {
+        return null;
+    }
+
+    @Override
+    protected BaseView initAttachView() {
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

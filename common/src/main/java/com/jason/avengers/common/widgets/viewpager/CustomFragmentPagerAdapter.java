@@ -34,7 +34,7 @@ import android.view.ViewGroup;
  * <p>This version of the pager is best for use when there are a handful of
  * typically more static fragments to be paged through, such as a set of tabs.
  * The fragment of each page the user visits will be kept in memory, though its
- * view hierarchy may be destroyed when not visible.  This can result in using
+ * view hierarchy may be destroyed when not visible.  This can onSMSResult in using
  * a significant amount of memory since fragment instances can hold on to an
  * arbitrary amount of state.  For larger sets of pages, consider
  * {@link FragmentStatePagerAdapter}.

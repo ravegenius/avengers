@@ -9,7 +9,7 @@ import io.objectbox.relation.ToOne;
  * Created by jason on 2018/8/3.
  */
 
-public class JsonUtils {
+public class JsonOBUtils {
 
     public static String toJson(Object object) {
         Gson gson = new GsonBuilder()

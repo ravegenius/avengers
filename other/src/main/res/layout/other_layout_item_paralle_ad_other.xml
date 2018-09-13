@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
-    <com.jason.avengers.common.widgets.ExpandableTextView
+    <com.jason.avengers.common.widgets.FoldTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,10 +17,10 @@
         android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
         android:textColor="#333333"
         android:textSize="17sp"
-        app:evlUnExpandedEndText="全文"
-        app:evlMaxLines="2"/>
+        app:ftvFoldable="true"
+        app:ftvMaxLine="2"/>
 
-    <com.jason.avengers.common.widgets.ExpandableTextView
+    <com.jason.avengers.common.widgets.FoldTextView
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,8 +32,8 @@
         android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
         android:textColor="#666666"
         android:textSize="14sp"
-        app:evlUnExpandedEndText="展开"
-        app:evlMaxLines="3"/>
+        app:ftvFoldShow="false"
+        app:ftvMaxLine="5"/>
 
     <TextView
         android:id="@+id/origin"

@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.jason.avengers.common.base.BaseNoMVPActivity;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.common.base.BaseActivity;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -17,7 +17,7 @@ import jp.wasabeef.richeditor.RichEditor;
  */
 
 @Route(path = RouterPath.OTHER_RICHEDITOR)
-public class RichEditorActivity extends BaseActivity {
+public class RichEditorActivity extends BaseNoMVPActivity {
 
     private RichEditor mEditor;
     private TextView mPreview;
