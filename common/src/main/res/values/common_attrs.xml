@@ -26,6 +26,7 @@
     </declare-styleable>
     <declare-styleable name="FoldTextView">
         <attr name="ftvMaxLine" format="integer"/>
+        <attr name="ftvRangeMaxLine" format="integer"/>
 
         <attr name="ftvExpandText" format="string"/>
         <attr name="ftvExpandColor" format="color"/>

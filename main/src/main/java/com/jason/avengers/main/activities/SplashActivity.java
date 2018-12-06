@@ -65,14 +65,7 @@ public class SplashActivity extends BaseNoMVPActivity {
     }
 
     private void gotoLogin() {
-//        RouterBuilder.INSTANCE.build(RouterPath.USER_LOGIN).navigation(this,
-//                new NavCallback() {
-//                    @Override
-//                    public void onArrival(Postcard postcard) {
-//                        finish();
-//                    }
-//                });
-        RouterBuilder.INSTANCE.build(RouterPath.OTHER_PARALLELAD).navigation(this,
+        RouterBuilder.INSTANCE.build(RouterPath.USER_LOGIN).navigation(this,
                 new NavCallback() {
                     @Override
                     public void onArrival(Postcard postcard) {

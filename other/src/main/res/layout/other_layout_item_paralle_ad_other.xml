@@ -17,6 +17,10 @@
         android:text="标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题"
         android:textColor="#333333"
         android:textSize="17sp"
+        app:ftvExpandColor="@color/color_3F51B5"
+        app:ftvExpandable="true"
+        app:ftvFoldColor="@color/color_FF4081"
+        app:ftvFoldShow="true"
         app:ftvFoldable="true"
         app:ftvMaxLine="2"/>
 
@@ -32,7 +36,11 @@
         android:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"
         android:textColor="#666666"
         android:textSize="14sp"
-        app:ftvFoldShow="false"
+        app:ftvExpandColor="@color/color_3F51B5"
+        app:ftvExpandable="true"
+        app:ftvFoldColor="@color/color_FF4081"
+        app:ftvFoldShow="true"
+        app:ftvFoldable="true"
         app:ftvMaxLine="5"/>
 
     <TextView

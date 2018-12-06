@@ -16,8 +16,6 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
-import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
 import com.tencent.mm.opensdk.modelmsg.WXEmojiObject;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -39,13 +37,16 @@ public class WXSns extends Sns {
 
     private static final String TAG = "WXSns";
     private static WXSns sInstance;
-    private WeakReference<SNSShareCallback> mShareCallbackRef;
-    private WeakReference<SNSAuthCallback> mAuthCallbackRef;
-    private IWXAPI api;
+    private WeakReference<IWXAPI> mWxApi;
 
     private WXSns() {
-        api = WXAPIFactory.createWXAPI(BaseApplication.getInstance(), Constants.WX_APP_ID, false);
+        initWxApi();
+    }
+
+    private void initWxApi() {
+        IWXAPI api = WXAPIFactory.createWXAPI(BaseApplication.getInstance(), Constants.WX_APP_ID, false);
         api.registerApp(Constants.WX_APP_ID);
+        mWxApi = new WeakReference<>(api);
     }
 
     public static synchronized WXSns getInstance() {
@@ -65,12 +66,17 @@ public class WXSns extends Sns {
             return;
         }
 
+        if (mAuthCallbackRef != null) {
+            mAuthCallbackRef.clear();
+        }
         mAuthCallbackRef = new WeakReference<>(authCallback);
-
         SendAuth.Req req = new SendAuth.Req();
         req.scope = Constants.WX_AUTH_SCOPE;
         req.state = Constants.WX_AUTH_STATE;
-        api.sendReq(req);
+        if (mWxApi == null || mWxApi.get() == null) {
+            initWxApi();
+        }
+        mWxApi.get().sendReq(req);
     }
 
     @Override
@@ -78,14 +84,15 @@ public class WXSns extends Sns {
         if (type == null || args == null || shareCallback == null) {
             return;
         }
-
         int paramsType = args.getInt(Params.PARAMS_TYPE, ParamsType.NONE.ordinal());
         if (paramsType == ParamsType.NONE.ordinal()) {
             return;
         }
 
+        if (mShareCallbackRef != null) {
+            mShareCallbackRef.clear();
+        }
         mShareCallbackRef = new WeakReference<>(shareCallback);
-
         WXMediaMessage message = null;
         if (paramsType == ParamsType.TXT.ordinal()) {
             message = buildTxtMessage(args);
@@ -98,27 +105,29 @@ public class WXSns extends Sns {
         } else if (paramsType == ParamsType.MINIAPP.ordinal()) {
             message = buildMiniappMessage(args);
         }
-
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());
         req.message = message;
         req.scene = Type.WX.equals(type) ? SendMessageToWX.Req.WXSceneSession : SendMessageToWX.Req.WXSceneTimeline;
-        api.sendReq(req);
+        if (mWxApi == null || mWxApi.get() == null) {
+            initWxApi();
+        }
+        mWxApi.get().sendReq(req);
     }
 
     private WXMediaMessage buildTxtMessage(Bundle args) {
         String title = args.getString(Params.PARAMS_TITLE);
         String desc = args.getString(Params.PARAMS_DESC);
-        String thumb = args.getString(Params.PARAMS_THUMB);
+        String thumbPath = args.getString(Params.PARAMS_THUMB_PATH);
 
         WXMediaMessage message = new WXMediaMessage();
         message.mediaObject = new WXTextObject(desc);
         message.title = title;
         message.description = desc;
-        if (StringUtils.isEmpty(thumb)) {
-            // 使用默认缩略图
+        if (StringUtils.isEmpty(thumbPath)) {
+            // TODO 使用默认缩略图
         } else {
-            // 根据thumb路径生成缩略图
+            // TODO 根据thumb路径生成缩略图
         }
         return message;
     }
@@ -126,17 +135,17 @@ public class WXSns extends Sns {
     private WXMediaMessage buildWebMessage(Bundle args) {
         String title = args.getString(Params.PARAMS_TITLE);
         String desc = args.getString(Params.PARAMS_DESC);
-        String thumb = args.getString(Params.PARAMS_THUMB);
+        String thumbPath = args.getString(Params.PARAMS_THUMB_PATH);
         String webUrl = args.getString(Params.PARAMS_WEB_URL);
 
         WXMediaMessage message = new WXMediaMessage();
         message.mediaObject = new WXWebpageObject(webUrl);
         message.title = title;
         message.description = desc;
-        if (StringUtils.isEmpty(thumb)) {
-            // 使用默认缩略图
+        if (StringUtils.isEmpty(thumbPath)) {
+            // TODO 使用默认缩略图
         } else {
-            // 根据thumb路径生成缩略图
+            // TODO 根据thumb路径生成缩略图
         }
         return message;
     }
@@ -144,23 +153,23 @@ public class WXSns extends Sns {
     private WXMediaMessage buildImgMessage(Bundle args) {
         String title = args.getString(Params.PARAMS_TITLE);
         String desc = args.getString(Params.PARAMS_DESC);
-        String thumb = args.getString(Params.PARAMS_THUMB);
-        String imgUrl = args.getString(Params.PARAMS_IMG_URL);
+        String thumbPath = args.getString(Params.PARAMS_THUMB_PATH);
+        String imgPath = args.getString(Params.PARAMS_IMG_PATH);
 
         WXMediaMessage message = new WXMediaMessage();
-        if (GifUtils.isGif(imgUrl)) {
-            message.mediaObject = new WXEmojiObject(imgUrl);
+        if (GifUtils.isGif(imgPath)) {
+            message.mediaObject = new WXEmojiObject(imgPath);
         } else {
             WXImageObject wxImageObject = new WXImageObject();
-            wxImageObject.imagePath = imgUrl;
+            wxImageObject.imagePath = imgPath;
             message.mediaObject = wxImageObject;
         }
         message.title = title;
         message.description = desc;
-        if (StringUtils.isEmpty(thumb)) {
-            // 使用默认缩略图
+        if (StringUtils.isEmpty(thumbPath)) {
+            // TODO 使用默认缩略图
         } else {
-            // 根据thumb路径生成缩略图
+            // TODO 根据thumb路径生成缩略图
         }
         return message;
     }
@@ -168,7 +177,7 @@ public class WXSns extends Sns {
     private WXMediaMessage buildVidMessage(Bundle args) {
         String title = args.getString(Params.PARAMS_TITLE);
         String desc = args.getString(Params.PARAMS_DESC);
-        String thumb = args.getString(Params.PARAMS_THUMB);
+        String thumbPath = args.getString(Params.PARAMS_THUMB_PATH);
         String vidUrl = args.getString(Params.PARAMS_VID_URL);
 
         WXMediaMessage message = new WXMediaMessage();
@@ -177,10 +186,10 @@ public class WXSns extends Sns {
         message.mediaObject = wxVideoObject;
         message.title = title;
         message.description = desc;
-        if (StringUtils.isEmpty(thumb)) {
-            // 使用默认缩略图
+        if (StringUtils.isEmpty(thumbPath)) {
+            // TODO 使用默认缩略图
         } else {
-            // 根据thumb路径生成缩略图
+            // TODO 根据thumb路径生成缩略图
         }
         return message;
     }
@@ -188,7 +197,7 @@ public class WXSns extends Sns {
     private WXMediaMessage buildMiniappMessage(Bundle args) {
         String title = args.getString(Params.PARAMS_TITLE);
         String desc = args.getString(Params.PARAMS_DESC);
-        String thumb = args.getString(Params.PARAMS_THUMB);
+        String thumbPath = args.getString(Params.PARAMS_THUMB_PATH);
         String mintappUrl = args.getString(Params.PARAMS_MINIAPP_URL);
         String mintappPath = args.getString(Params.PARAMS_MINIAPP_PATH);
 
@@ -201,17 +210,19 @@ public class WXSns extends Sns {
         message.mediaObject = wxMiniProgramObject;
         message.title = title;
         message.description = desc;
-        if (StringUtils.isEmpty(thumb)) {
-            // 使用默认缩略图
+        if (StringUtils.isEmpty(thumbPath)) {
+            // TODO 使用默认缩略图
         } else {
-            // 根据thumb路径生成缩略图
+            // TODO 根据thumb路径生成缩略图
         }
         return message;
     }
 
-
     protected void handleIntent(Intent intent, IWXAPIEventHandler handler) {
-        api.handleIntent(intent, handler);
+        if (mWxApi == null || mWxApi.get() == null) {
+            initWxApi();
+        }
+        mWxApi.get().handleIntent(intent, handler);
     }
 
     protected void onReq(BaseReq req) {
@@ -220,17 +231,16 @@ public class WXSns extends Sns {
         }
 
         switch (req.getType()) {
-            case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
-                printShowMsg((ShowMessageFromWX.Req) req);
+            case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
+                printShowMsg((SendMessageToWX.Req) req);
                 break;
             default:
                 break;
         }
     }
 
-    private void printShowMsg(ShowMessageFromWX.Req req) {
+    private void printShowMsg(SendMessageToWX.Req req) {
         WXMediaMessage wxMsg = req.message;
-        WXAppExtendObject obj = (WXAppExtendObject) wxMsg.mediaObject;
 
         StringBuffer msg = new StringBuffer();
         msg.append("title: ");
@@ -239,11 +249,38 @@ public class WXSns extends Sns {
         msg.append("description: ");
         msg.append(wxMsg.description);
         msg.append("\n");
-        msg.append("extInfo: ");
-        msg.append(obj.extInfo);
-        msg.append("\n");
-        msg.append("filePath: ");
-        msg.append(obj.filePath);
+
+        if (wxMsg.mediaObject instanceof WXTextObject) {
+            WXTextObject obj = (WXTextObject) wxMsg.mediaObject;
+            msg.append("[WXTextObject]obj.text: ");
+            msg.append(obj.text);
+        } else if (wxMsg.mediaObject instanceof WXWebpageObject) {
+            WXWebpageObject obj = (WXWebpageObject) wxMsg.mediaObject;
+            msg.append("[WXWebpageObject]obj.webpageUrl: ");
+            msg.append(obj.webpageUrl);
+        } else if (wxMsg.mediaObject instanceof WXEmojiObject) {
+            WXEmojiObject obj = (WXEmojiObject) wxMsg.mediaObject;
+            msg.append("[WXEmojiObject]obj.emojiPath: ");
+            msg.append(obj.emojiPath);
+        } else if (wxMsg.mediaObject instanceof WXImageObject) {
+            WXImageObject obj = (WXImageObject) wxMsg.mediaObject;
+            msg.append("[WXImageObject]obj.imagePath: ");
+            msg.append(obj.imagePath);
+        } else if (wxMsg.mediaObject instanceof WXVideoObject) {
+            WXVideoObject obj = (WXVideoObject) wxMsg.mediaObject;
+            msg.append("[WXVideoObject]obj.videoUrl: ");
+            msg.append(obj.videoUrl);
+        } else if (wxMsg.mediaObject instanceof WXMiniProgramObject) {
+            WXMiniProgramObject obj = (WXMiniProgramObject) wxMsg.mediaObject;
+            msg.append("[WXMiniProgramObject]obj.webpageUrl: ");
+            msg.append(obj.webpageUrl);
+            msg.append("\n");
+            msg.append("obj.userName: ");
+            msg.append(obj.userName);
+            msg.append("\n");
+            msg.append("obj.path: ");
+            msg.append(obj.path);
+        }
 
         Log.d(TAG, msg.toString());
     }

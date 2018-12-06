@@ -20,6 +20,9 @@ android {
         versionName cfg.versionName
         vectorDrawables.useSupportLibrary = true
 
+        // Enabling multidex support.
+        multiDexEnabled true
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['objectbox.debug': 'true',

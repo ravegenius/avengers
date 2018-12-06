@@ -59,19 +59,15 @@ public class ParallelAdActivity extends BaseNoMVPActivity {
                         break;
                     default:
                         if (position % 3 == 0) {
-                            ((FoldTextView) holder.getView(R.id.title)).setExpanded(true).setText(position + ">>>>>>>>>>>标题标题");
+                            ((FoldTextView) holder.getView(R.id.title)).setText(position + ">>>>>>>>>>>标题标题");
                         } else {
-                            ((FoldTextView) holder.getView(R.id.title)).setExpanded(true).setText(position + ">>>>>>>>>>>标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题");
+                            ((FoldTextView) holder.getView(R.id.title)).setText(position + ">>>>>>>>>>>标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题");
                         }
 
                         if (position % 3 == 0) {
                             ((TextView) holder.getView(R.id.content)).setText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
                         } else {
                             ((TextView) holder.getView(R.id.content)).setText(position + ">>>>>>>>>>>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
-                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
-                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
-                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
-                                    "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" +
                                     "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容");
                         }
                         break;
