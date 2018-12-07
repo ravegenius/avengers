@@ -48,7 +48,7 @@ public class SplashActivity extends BaseNoMVPActivity {
                         if (isLogin) {
                             gotoMain();
                         } else {
-                            gotoLogin();
+                            gotoMain();
                         }
                     }
                 }));

@@ -3,13 +3,19 @@ package com.jason.avengers.skill.fragments;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jason.avengers.common.base.BaseFragment;
 import com.jason.avengers.common.base.BaseItemBean;
 import com.jason.avengers.common.base.BaseItemViewHolder;
+import com.jason.avengers.common.router.RouterBuilder;
+import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.skill.R;
+import com.jason.avengers.skill.activities.SkillTabActivity;
 import com.jason.avengers.skill.adapters.SkillAdapter;
+import com.jason.avengers.skill.beans.SkillInfoBean;
 import com.jason.avengers.skill.presenters.SkillPresenter;
+import com.jason.avengers.skill.test.TestUtils;
 import com.jason.avengers.skill.views.SkillView;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 
@@ -127,19 +133,20 @@ public class SkillFragment extends BaseFragment implements SkillView, BaseItemVi
         // Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
 
         if (mUltimateViewAdapter != null) {
-//            List<BaseItemBean> datas = TestUtils.initSkillTestData();
-//            mUltimateViewAdapter.notifyData(datas);
+            List<BaseItemBean> datas = TestUtils.initSkillTestData();
+            mUltimateViewAdapter.notifyData(datas);
         }
     }
 
     @Override
     public void doAction(View view, BaseItemBean baseItemBean) {
-//        switch (view.getId()) {
-//            case R.id.skill_info_points:
-//                SkillInfoBean skillInfoBean = (SkillInfoBean) baseItemBean;
-//                GlobalRouter.startSkillTab(getActivity(), skillInfoBean);
-//                Toast.makeText(getContext(), skillInfoBean.getCurrentClickedPoint(), Toast.LENGTH_SHORT).show();
-//                break;
-//        }
+        int i = view.getId();
+        if (i == R.id.skill_info_points) {
+            SkillInfoBean skillInfoBean = (SkillInfoBean) baseItemBean;
+            RouterBuilder.INSTANCE.build(RouterPath.OTHER_SKILLTAB)
+                    .withSerializable(SkillTabActivity.PARAM_SKILL, skillInfoBean)
+                    .navigation(getActivity());
+            Toast.makeText(getContext(), skillInfoBean.getCurrentClickedPoint(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -4,7 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -14,6 +21,9 @@ import com.jason.avengers.common.base.BasePresenter;
 import com.jason.avengers.common.base.BaseView;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.main.R;
+import com.jason.avengers.other.fragments.OtherFragment;
+import com.jason.avengers.resume.fragments.ResumeFragment;
+import com.jason.avengers.skill.fragments.SkillFragment;
 
 @Route(path = RouterPath.MAIN_MAIN)
 public class MainActivity extends BaseActivity implements
@@ -43,27 +53,27 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_main);
 
-//        mToolbar = findViewById(R.id.main_toolbar);
-//        setSupportActionBar(mToolbar);
-//        mToolbar.setTitle(R.string.author_name);
-//        mToolbar.setSubtitle(R.string.author_desc);
-//
-//        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar,
-//                R.string.nav_drawer_open, R.string.nav_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        mBottomNavigationView = findViewById(R.id.main_bottom_nav);
-//        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-//
-//        mNavigationView = findViewById(R.id.main_nav);
-//        mNavigationView.setNavigationItemSelectedListener(this);
-//
-//        mViewPager = findViewById(R.id.main_viewpager);
-//        mViewPager.addOnPageChangeListener(this);
-//        mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
-//
+        mToolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(R.string.author_name);
+        mToolbar.setSubtitle(R.string.author_desc);
+
+        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar,
+                R.string.nav_drawer_open, R.string.nav_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        mBottomNavigationView = findViewById(R.id.main_bottom_nav);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        mNavigationView = findViewById(R.id.main_nav);
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        mViewPager = findViewById(R.id.main_viewpager);
+        mViewPager.addOnPageChangeListener(this);
+        mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+
 //        mPresenter = new UserPresenter();
 //        mPresenter.attach(this);
 //        mPresenter.getUserData();
@@ -79,42 +89,33 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.nav_resume:
-//                mViewPager.setCurrentItem(0, false);
-//                return true;
-//            case R.id.nav_skill:
-//                mViewPager.setCurrentItem(1, false);
-//                return true;
-//            case R.id.nav_other:
-//                mViewPager.setCurrentItem(2, false);
-//                return true;
-//            case R.id.nav_camera:
-//                GlobalRouter.startSystemCamera(this);
-//                return true;
-//            case R.id.nav_gallery:
-//                return true;
-//            case R.id.nav_slideshow:
-//            case R.id.nav_manage:
-//            case R.id.nav_share:
-//            case R.id.nav_send:
-//                DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-//                drawer.closeDrawer(GravityCompat.START);
-//                return true;
-//        }
-        return false;
+        int i = item.getItemId();
+        if (i == R.id.nav_resume) {
+            mViewPager.setCurrentItem(0, false);
+            return true;
+        } else if (i == R.id.nav_skill) {
+            mViewPager.setCurrentItem(1, false);
+            return true;
+        } else if (i == R.id.nav_other) {
+            mViewPager.setCurrentItem(2, false);
+            return true;
+        } else {
+            DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        }
     }
 
     @Override
     public void onBackPressed() {
-//        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//                Snackbar.make(findViewById(R.id.main_bottom_nav), "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            super.onBackPressed();
-//        }
+        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            Snackbar.make(findViewById(R.id.main_bottom_nav), "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -123,17 +124,17 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onPageSelected(int position) {
-//        switch (position) {
-//            case 0:
-//                mBottomNavigationView.setSelectedItemId(R.id.nav_resume);
-//                break;
-//            case 1:
-//                mBottomNavigationView.setSelectedItemId(R.id.nav_skill);
-//                break;
-//            case 2:
-//                mBottomNavigationView.setSelectedItemId(R.id.nav_other);
-//                break;
-//        }
+        switch (position) {
+            case 0:
+                mBottomNavigationView.setSelectedItemId(R.id.nav_resume);
+                break;
+            case 1:
+                mBottomNavigationView.setSelectedItemId(R.id.nav_skill);
+                break;
+            case 2:
+                mBottomNavigationView.setSelectedItemId(R.id.nav_other);
+                break;
+        }
     }
 
     @Override
@@ -164,25 +165,25 @@ public class MainActivity extends BaseActivity implements
 //        // Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
 //        // getUserDataSuccess(TestUtils.initUserTestData());
 //    }
-//
-//    private class MainPagerAdapter extends FragmentPagerAdapter {
-//
-//        private Fragment[] mFragments = new Fragment[]
-//                {new ResumeFragment(), new SkillFragment(), new OtherFragment()};
-//
-//
-//        public MainPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            return mFragments[position];
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return mFragments.length;
-//        }
-//    }
+
+    private class MainPagerAdapter extends FragmentPagerAdapter {
+
+        private Fragment[] mFragments = new Fragment[]
+                {new ResumeFragment(), new SkillFragment(), new OtherFragment()};
+
+
+        public MainPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments[position];
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.length;
+        }
+    }
 }

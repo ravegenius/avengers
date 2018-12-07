@@ -3,14 +3,18 @@ package com.jason.avengers.resume.fragments;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jason.avengers.common.base.BaseFragment;
 import com.jason.avengers.common.base.BaseItemBean;
 import com.jason.avengers.common.base.BaseItemViewHolder;
+import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.resume.R;
 import com.jason.avengers.resume.adapters.ResumeAdapter;
 import com.jason.avengers.resume.presenters.ResumePresenter;
+import com.jason.avengers.resume.test.TestUtils;
 import com.jason.avengers.resume.views.ResumeView;
+import com.jason.avengers.user.beans.UserBean;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
@@ -130,23 +134,22 @@ public class ResumeFragment extends BaseFragment implements ResumeView, BaseItem
         // Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
 
         if (mUltimateViewAdapter != null) {
-            // List<BaseItemBean> datas = TestUtils.initResumeTestData();
-            // mUltimateViewAdapter.notifyData(datas);
+            List<BaseItemBean> datas = TestUtils.initResumeTestData();
+            mUltimateViewAdapter.notifyData(datas);
         }
     }
 
     @Override
     public void doAction(View view, final BaseItemBean baseItemBean) {
-//        switch (view.getId()) {
-//            case R.id.user_info_phone:
-//                GlobalRouter.startCall(ResumeFragment.this, view, (UserBean) baseItemBean);
-//                break;
-//            case R.id.user_info_email:
-//                GlobalRouter.startEmail(this, (UserBean) baseItemBean);
-//                break;
-//            case R.id.resume_info_layout:
-//                Toast.makeText(getContext(), "显示详细工作经历", Toast.LENGTH_SHORT).show();
-//                break;
-//        }
+        int i = view.getId();
+        if (i == R.id.user_info_phone) {
+            String phone = ((UserBean) baseItemBean).getPhone();
+            RouterBuilder.INSTANCE.startCall(ResumeFragment.this, view, phone);
+        } else if (i == R.id.user_info_email) {
+            String email = ((UserBean) baseItemBean).getPhone();
+            RouterBuilder.INSTANCE.startEmail(this, email);
+        } else if (i == R.id.resume_info_layout) {
+            Toast.makeText(getContext(), "显示详细工作经历", Toast.LENGTH_SHORT).show();
+        }
     }
 }
