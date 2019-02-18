@@ -25,8 +25,6 @@ public enum UserManager {
 
     INSTANCE;
 
-    private static final String USER_HOST_URL = "https://www.baidu.com/";
-
     private static final String SP_FILE_NAME = "user_info";
     private static final String SP_KEY_USERID = "user_id";
     private static final String SP_KEY_TOKEN = "user_token";
@@ -86,7 +84,7 @@ public enum UserManager {
                         ObservableSource<NetworkResult<UserBean>>>() {
                     @Override
                     public ObservableSource<NetworkResult<UserBean>> apply(Object o) throws Exception {
-                        return NetworkBuilder.build(USER_HOST_URL, UserService.class).login2GetToken(un, pwd, phone, email, code);
+                        return NetworkBuilder.build(UserService.class).login2GetToken(un, pwd, phone, email, code);
                     }
                 })
                 .flatMap(new Function<NetworkResult<UserBean>,
@@ -96,7 +94,7 @@ public enum UserManager {
                         if (NetworkTools.checkDataSuccess(result)
                                 && !StringUtils.isEmpty(result.getData().getToken())) {
                             String token = result.getData().getToken();
-                            return NetworkBuilder.build(USER_HOST_URL, UserService.class).getUser(token);
+                            return NetworkBuilder.build(UserService.class).getUser(token);
                         } else {
                             throw new Exception("Get token failure!");
                         }
@@ -150,7 +148,7 @@ public enum UserManager {
                         ObservableSource<NetworkResult<UserBean>>>() {
                     @Override
                     public ObservableSource<NetworkResult<UserBean>> apply(Object o) throws Exception {
-                        return NetworkBuilder.build(USER_HOST_URL, UserService.class).bind2GetToken(snsToken, snsType);
+                        return NetworkBuilder.build(UserService.class).bind2GetToken(snsToken, snsType);
                     }
                 })
                 .flatMap(new Function<NetworkResult<UserBean>,
@@ -160,7 +158,7 @@ public enum UserManager {
                         if (NetworkTools.checkDataSuccess(result)
                                 && !StringUtils.isEmpty(result.getData().getToken())) {
                             String token = result.getData().getToken();
-                            return NetworkBuilder.build(USER_HOST_URL, UserService.class).getUser(token);
+                            return NetworkBuilder.build(UserService.class).getUser(token);
                         } else {
                             throw new Exception("Get token failure!");
                         }
@@ -211,7 +209,7 @@ public enum UserManager {
                 .flatMap(new Function<String, ObservableSource<NetworkResult>>() {
                     @Override
                     public ObservableSource<NetworkResult> apply(String token) throws Exception {
-                        return NetworkBuilder.build(USER_HOST_URL, UserService.class).logout(token);
+                        return NetworkBuilder.build(UserService.class).logout(token);
                     }
                 })
                 .doOnNext(clearUserBean())

@@ -37,28 +37,39 @@ public class OtherFragment extends BaseFragment implements BaseItemViewHolder.Ac
         mUltimateRecyclerView.setAdapter(mOtherAdapter = new OtherAdapter().setBaseItemViewAction(this));
 
         List<BaseItemBean> beanList = new ArrayList<>();
+        beanList.add(new OtherBean(OtherBean.Type.Lable, "网易充电桩", new OtherBean.Action() {
+            @Override
+            public void doAction() {
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_CHARGINGSTATION)
+                        .navigation(getActivity());
+            }
+        }));
         beanList.add(new OtherBean(OtherBean.Type.Lable, "RichEditor", new OtherBean.Action() {
             @Override
             public void doAction() {
-                RouterBuilder.INSTANCE.build(RouterPath.OTHER_RICHEDITOR).navigation(getActivity());
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_RICHEDITOR)
+                        .navigation(getActivity());
             }
         }));
         beanList.add(new OtherBean(OtherBean.Type.Lable, "Drawer", new OtherBean.Action() {
             @Override
             public void doAction() {
-                RouterBuilder.INSTANCE.build(RouterPath.OTHER_DRAWER).navigation(getActivity());
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_DRAWER)
+                        .navigation(getActivity());
             }
         }));
         beanList.add(new OtherBean(OtherBean.Type.Lable, "ParallelAd", new OtherBean.Action() {
             @Override
             public void doAction() {
-                RouterBuilder.INSTANCE.build(RouterPath.OTHER_PARALLELAD).navigation(getActivity());
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_PARALLELAD)
+                        .navigation(getActivity());
             }
         }));
         beanList.add(new OtherBean(OtherBean.Type.Lable, "ObjectBox", new OtherBean.Action() {
             @Override
             public void doAction() {
-                RouterBuilder.INSTANCE.build(RouterPath.OTHER_OBJECTBOX).navigation(getActivity());
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_OBJECTBOX)
+                        .navigation(getActivity());
             }
         }));
         mOtherAdapter.notifyData(beanList);

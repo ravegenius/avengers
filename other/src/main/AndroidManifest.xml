@@ -3,6 +3,9 @@
 
     <application>
         <activity
+            android:name=".activities.ChargingStationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".activities.RichEditorActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

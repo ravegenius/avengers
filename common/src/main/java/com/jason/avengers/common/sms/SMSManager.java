@@ -9,6 +9,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
@@ -19,14 +20,12 @@ public enum SMSManager {
 
     INSTANCE;
 
-    private static final String SMS_HOST_URL = "https://www.baidu.com/";
-
     public void sendMessage(final String phone, final SMSCallback callback) {
         Observable.just(phone)
                 .flatMap(new Function<String, ObservableSource<NetworkResult>>() {
                     @Override
                     public ObservableSource<NetworkResult> apply(String phone) throws Exception {
-                        return NetworkBuilder.build(SMS_HOST_URL, SMSService.class).smsSendMessage(phone);
+                        return NetworkBuilder.build(SMSService.class).smsSendMessage(phone);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -35,9 +34,13 @@ public enum SMSManager {
                             @Override
                             public void accept(NetworkResult result) throws Exception {
                                 if (NetworkTools.checkNetworkSuccess(result)) {
-                                    if (callback != null) callback.onSMSResult(true);
+                                    if (callback != null) {
+                                        callback.onSMSResult(true);
+                                    }
                                 } else {
-                                    if (callback != null) callback.onSMSResult(false);
+                                    if (callback != null) {
+                                        callback.onSMSResult(false);
+                                    }
                                 }
                             }
                         },
@@ -56,6 +59,7 @@ public enum SMSManager {
 
     public interface SMSService {
 
+        @FormUrlEncoded
         @POST("smsSendMessage")
         Observable<NetworkResult> smsSendMessage(String phone);
     }

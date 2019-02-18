@@ -143,7 +143,7 @@ public class SkillFragment extends BaseFragment implements SkillView, BaseItemVi
         int i = view.getId();
         if (i == R.id.skill_info_points) {
             SkillInfoBean skillInfoBean = (SkillInfoBean) baseItemBean;
-            RouterBuilder.INSTANCE.build(RouterPath.OTHER_SKILLTAB)
+            RouterBuilder.INSTANCE.build(RouterPath.SKILL_TAB)
                     .withSerializable(SkillTabActivity.PARAM_SKILL, skillInfoBean)
                     .navigation(getActivity());
             Toast.makeText(getContext(), skillInfoBean.getCurrentClickedPoint(), Toast.LENGTH_SHORT).show();

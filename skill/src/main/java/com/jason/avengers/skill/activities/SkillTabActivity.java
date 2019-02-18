@@ -24,7 +24,7 @@ import java.util.List;
  * Created by jason on 2018/4/8.
  */
 
-@Route(path = RouterPath.OTHER_SKILLTAB)
+@Route(path = RouterPath.SKILL_TAB)
 public class SkillTabActivity extends BaseNoMVPActivity {
 
     public static final String PARAM_SKILL = "param_skill";
@@ -41,6 +41,9 @@ public class SkillTabActivity extends BaseNoMVPActivity {
 
         if (getIntent() != null) {
             mSkillInfoBean = (SkillInfoBean) getIntent().getSerializableExtra(PARAM_SKILL);
+            if (mSkillInfoBean == null) {
+                return;
+            }
             String point = mSkillInfoBean.getCurrentClickedPoint();
             ArrayList<String> points = (ArrayList<String>) mSkillInfoBean.getSkillPoints();
 
