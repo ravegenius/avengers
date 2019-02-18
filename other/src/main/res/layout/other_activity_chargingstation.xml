@@ -5,31 +5,63 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/other_chargingstation_login"
+    <ScrollView
+        android:id="@+id/other_chargingstation_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/other_chargingstation_login" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <Button
-        android:id="@+id/other_chargingstation_search"
+        <TextView
+            android:id="@+id/other_chargingstation_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp" />
+    </ScrollView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/other_chargingstation_search" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/other_chargingstation_apply"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="30dp"
-        android:text="@string/other_chargingstation_apply" />
+        <Button
+            android:id="@+id/other_chargingstation_rob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/other_chargingstation_rob" />
 
+        <Button
+            android:id="@+id/other_chargingstation_immediately_rob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/other_chargingstation_rob"
+            android:layout_alignBottom="@+id/other_chargingstation_rob"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/other_chargingstation_rob"
+            android:text="@string/other_chargingstation_immediately_rob" />
+
+        <Button
+            android:id="@+id/other_chargingstation_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/other_chargingstation_rob"
+            android:layout_alignBottom="@+id/other_chargingstation_rob"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/other_chargingstation_immediately_rob"
+            android:text="@string/other_chargingstation_stop" />
+
+        <Switch
+            android:id="@+id/other_chargingstation_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/other_chargingstation_rob"
+            android:layout_alignBottom="@+id/other_chargingstation_rob"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/other_chargingstation_stop"
+            android:checked="false"
+            android:padding="5dp"
+            android:text="@string/other_chargingstation_switch" />
+    </RelativeLayout>
 </LinearLayout>

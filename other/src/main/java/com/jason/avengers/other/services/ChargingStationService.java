@@ -1,5 +1,6 @@
 package com.jason.avengers.other.services;
 
+import com.jason.avengers.other.beans.ChargingStationBean;
 import com.jason.core.network.NetworkBuilder;
 
 import java.util.Map;
@@ -15,13 +16,17 @@ public interface ChargingStationService {
 
     @Headers({NetworkBuilder.BASE_URL_HEAD_NAME + ":" + BASE_URL})
     @POST("ichargeservice/rest/UserCheckWebc/1.0/F703")
-    Observable<String> loginChargingStations(@Body Map<String, String> map);
+    Observable<ChargingStationBean<ChargingStationBean.ChargingStationUser>> loginChargingStations(@Body Map<String, String> map);
 
     @Headers({NetworkBuilder.BASE_URL_HEAD_NAME + ":" + BASE_URL})
     @POST("ichargeservice/rest/ChargePileWebc/1.0/F103")
-    Observable<String> getChargingStations(@Body Map<String, String> map);
+    Observable<ChargingStationBean<ChargingStationBean.ChargingStationCollect>> getChargingStations(@Body Map<String, String> map);
 
     @Headers({NetworkBuilder.BASE_URL_HEAD_NAME + ":" + BASE_URL})
     @POST("ichargeservice/rest/ChargePileWebc/1.0/F105")
-    Observable<String> applyChargingStations(@Body Map<String, String> map);
+    Observable<ChargingStationBean> applyChargingStations(@Body Map<String, String> map);
+
+    @Headers({NetworkBuilder.BASE_URL_HEAD_NAME + ":" + BASE_URL})
+    @POST("ichargeservice/rest/ChargePileWebc/1.0/F106")
+    Observable<ChargingStationBean> cancelChargingStations(@Body Map<String, String> map);
 }
