@@ -6,5 +6,5 @@ public interface ChargingStationView extends BaseView {
 
     void showMsg(String msg);
 
-    void toggleChargingStationStatus(boolean isApply);
+    void onChangedChargingStationStatus(String termName);
 }

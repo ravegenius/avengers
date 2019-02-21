@@ -2,7 +2,9 @@ package com.jason.avengers.other.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,12 +28,14 @@ public class ChargingStationActivity extends BaseActivity<ChargingStationPresent
     private StringBuilder mMsgSB = new StringBuilder();
     private TextView mMsgTextView;
     private ScrollView mMsgScrollView;
-    private View mRobView, mImmediatelyRobView, mStopView;
+    private View mRobView, mImmediatelyRobView, mCancelView, mStopView;
     private Switch mSwitchView;
+    private TextView mStatusView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.other_activity_chargingstation);
         initViews();
     }
@@ -43,9 +47,13 @@ public class ChargingStationActivity extends BaseActivity<ChargingStationPresent
         mRobView.setOnClickListener(this);
         mImmediatelyRobView = findViewById(R.id.other_chargingstation_immediately_rob);
         mImmediatelyRobView.setOnClickListener(this);
+        mCancelView = findViewById(R.id.other_chargingstation_cancel);
+        mCancelView.setOnClickListener(this);
         mStopView = findViewById(R.id.other_chargingstation_stop);
         mStopView.setOnClickListener(this);
         mSwitchView = findViewById(R.id.other_chargingstation_switch);
+        mStatusView = findViewById(R.id.other_chargingstation_status);
+
 
     }
 
@@ -69,6 +77,9 @@ public class ChargingStationActivity extends BaseActivity<ChargingStationPresent
         } else if (id == R.id.other_chargingstation_immediately_rob) {
             getPresenter().immediatelyRobChargingStation(isSuper);
             toggleActionViews();
+        } else if (id == R.id.other_chargingstation_cancel) {
+            getPresenter().cancelChargingStation();
+            toggleActionViews();
         } else if (id == R.id.other_chargingstation_stop) {
             getPresenter().stopRobChargingStation();
             toggleActionViews();
@@ -78,12 +89,14 @@ public class ChargingStationActivity extends BaseActivity<ChargingStationPresent
     private void toggleActionViews() {
         mRobView.setEnabled(false);
         mImmediatelyRobView.setEnabled(false);
+        mCancelView.setEnabled(false);
         mStopView.setEnabled(false);
         mMsgTextView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mRobView.setEnabled(true);
                 mImmediatelyRobView.setEnabled(true);
+                mCancelView.setEnabled(true);
                 mStopView.setEnabled(true);
             }
         }, 2000);
@@ -101,6 +114,19 @@ public class ChargingStationActivity extends BaseActivity<ChargingStationPresent
     }
 
     @Override
-    public void toggleChargingStationStatus(boolean isApply) {
+    public void onChangedChargingStationStatus(String termName) {
+        if (TextUtils.isEmpty(termName)) {
+            mStatusView.setText(termName);
+        } else {
+            String statusText = mStatusView.getText().toString();
+            if (TextUtils.isEmpty(statusText)) {
+                mStatusView.setText(termName);
+            } else {
+                statusText += ";" + termName;
+                mStatusView.setText(statusText);
+            }
+
+        }
     }
+
 }

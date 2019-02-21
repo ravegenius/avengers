@@ -21,19 +21,22 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
 
     private static Map<String, Map<String, String>> sApplyParams = new HashMap<>();
     private static Map<String, Map<String, String>> sCancelParams = new HashMap<>();
+    private static final String sCustomNo = "1000031264";
 
     static {
         Map<String, String> params;
 
-        // 网易7号桩
-        // 预约 {"term_id":"1101081071100454","key":"8A3D10547423419837DBC06CADDB7F35","custom_no":"1000031264","timestamp":1550491580770,"gun_id":"467"}
+        /**
+         * 网易7号桩
+         *  预约 {"term_id":"1101081071100454","key":"8A3D10547423419837DBC06CADDB7F35","custom_no":"1000031264","timestamp":1550491580770,"gun_id":"467"}
+         *  取消 {"term_id":"1101081071100454","key":"E222BE2E517DC562D636E7A4DDE024E7","custom_no":"1000031264","timestamp":1550491836651,"gun_id":"467","cancel_reason":""}
+         */
         params = new HashMap<>();
         params.put("term_id", "1101081071100454");
         params.put("gun_id", "467");
         params.put("timestamp", "1550491580770");
         params.put("key", "8A3D10547423419837DBC06CADDB7F35");
         sApplyParams.put("网易7号桩", params);
-        // 取消 {"term_id":"1101081071100454","key":"E222BE2E517DC562D636E7A4DDE024E7","custom_no":"1000031264","timestamp":1550491836651,"gun_id":"467","cancel_reason":""}
         params = new HashMap<>();
         params.put("term_id", "1101081071100454");
         params.put("gun_id", "467");
@@ -42,31 +45,36 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
         params.put("key", "E222BE2E517DC562D636E7A4DDE024E7");
         sCancelParams.put("网易7号桩", params);
 
-        // 网易9号桩 1101081071101280 1294
+        /**
+         * 网易9号桩
+         *  预约 {"term_id":"1101081071101280","key":"B04134A8557B8F7327A5064333DE947E","custom_no":"1000031264","timestamp":1550566947306,"gun_id":"1294"}
+         *  取消 {"term_id":"1101081071101280","key":"503759518FE35761A76E8F4A03E2D194","custom_no":"1000031264","timestamp":1550567082076,"gun_id":"1294","cancel_reason":""}
+         */
         params = new HashMap<>();
         params.put("term_id", "1101081071101280");
         params.put("gun_id", "1294");
-        params.put("timestamp", "1550216059114");
-        params.put("key", "A733E7792BA026D187CE152921E138C1");
+        params.put("timestamp", "1550566947306");
+        params.put("key", "B04134A8557B8F7327A5064333DE947E");
         sApplyParams.put("网易9号桩", params);
-        // 取消 {"term_id":"1101081071100454","key":"E222BE2E517DC562D636E7A4DDE024E7","custom_no":"1000031264","timestamp":1550491836651,"gun_id":"467","cancel_reason":""}
         params = new HashMap<>();
         params.put("term_id", "1101081071101280");
         params.put("gun_id", "1294");
         params.put("cancel_reason", "");
-        params.put("timestamp", "1550491836651");
-        params.put("key", "E222BE2E517DC562D636E7A4DDE024E7");
+        params.put("timestamp", "1550567082076");
+        params.put("key", "503759518FE35761A76E8F4A03E2D194");
         sCancelParams.put("网易9号桩", params);
 
-        // 网易13号桩
-        // 预约 {"term_id":"1101081071101284","key":"19CA7C5E68947A37E693E9A18851EB8D","custom_no":"1000031264","timestamp":1550491471932,"gun_id":"1298"}
+        /**
+         * 网易13号桩
+         *  预约 {"term_id":"1101081071101284","key":"19CA7C5E68947A37E693E9A18851EB8D","custom_no":"1000031264","timestamp":1550491471932,"gun_id":"1298"}
+         *  取消 {"term_id":"1101081071101284","key":"52C8B5851389F18826C4D02660CE0BC6","custom_no":"1000031264","timestamp":1550491875924,"gun_id":"1298","cancel_reason":""}
+         */
         params = new HashMap<>();
         params.put("term_id", "1101081071101284");
         params.put("gun_id", "1298");
         params.put("timestamp", "1550491471932");
         params.put("key", "19CA7C5E68947A37E693E9A18851EB8D");
         sApplyParams.put("网易13号桩", params);
-        // 取消 {"term_id":"1101081071101284","key":"52C8B5851389F18826C4D02660CE0BC6","custom_no":"1000031264","timestamp":1550491875924,"gun_id":"1298","cancel_reason":""}
         params = new HashMap<>();
         params.put("term_id", "1101081071101284");
         params.put("gun_id", "1298");
@@ -75,15 +83,17 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
         params.put("key", "52C8B5851389F18826C4D02660CE0BC6");
         sCancelParams.put("网易13号桩", params);
 
-        // 网易4号桩
-        // 预约 {"term_id":"1101081071100452","key":"2D3420983BEFEEB194B020B68B43B4F3","custom_no":"1000031264","timestamp":1550491688271,"gun_id":"465"}
+        /**
+         * 网易4号桩
+         *  预约 {"term_id":"1101081071100452","key":"2D3420983BEFEEB194B020B68B43B4F3","custom_no":"1000031264","timestamp":1550491688271,"gun_id":"465"}
+         *  取消 {"term_id":"1101081071100452","key":"A2EB0990E00E805075BA282F666A0945","custom_no":"1000031264","timestamp":1550491714313,"gun_id":"465","cancel_reason":""}
+         */
         params = new HashMap<>();
         params.put("term_id", "1101081071100452");
         params.put("gun_id", "465");
         params.put("timestamp", "1550491688271");
         params.put("key", "2D3420983BEFEEB194B020B68B43B4F3");
         sApplyParams.put("网易4号桩", params);
-        // 取消 {"term_id":"1101081071100452","key":"A2EB0990E00E805075BA282F666A0945","custom_no":"1000031264","timestamp":1550491714313,"gun_id":"465","cancel_reason":""}
         params = new HashMap<>();
         params.put("term_id", "1101081071100452");
         params.put("gun_id", "465");
@@ -92,14 +102,17 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
         params.put("key", "A2EB0990E00E805075BA282F666A0945");
         sCancelParams.put("网易4号桩", params);
 
-        // 网易5号桩 1101081071100453 466
+        /**
+         * 网易5号桩
+         *  预约
+         *  取消
+         */
         params = new HashMap<>();
         params.put("term_id", "1101081071100453");
         params.put("gun_id", "466");
         params.put("timestamp", "1550216059114");
         params.put("key", "A733E7792BA026D187CE152921E138C1");
         sApplyParams.put("网易5号桩", params);
-        // 取消 {"term_id":"1101081071100452","key":"A2EB0990E00E805075BA282F666A0945","custom_no":"1000031264","timestamp":1550491714313,"gun_id":"465","cancel_reason":""}
         params = new HashMap<>();
         params.put("term_id", "1101081071100453");
         params.put("gun_id", "466");
@@ -344,7 +357,7 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
             Map<String, String> params = mApplyAvailableParams.get(term_name);
             showMsg(term_name + "==开始申请========");
             // {"term_id":"1101081071100453","key":"A733E7792BA026D187CE152921E138C1","custom_no":"1000031264","timestamp":1550216059114,"gun_id":"466"}
-            params.put("custom_no", TextUtils.isEmpty(mCustomNo) ? "1000031264" : mCustomNo);
+            params.put("custom_no", TextUtils.isEmpty(mCustomNo) ? sCustomNo : mCustomNo);
             // {"code":1,"msg":"枪离线","data":null}
             NetworkBuilder.build(ChargingStationService.class)
                     .applyChargingStations(params)
@@ -363,7 +376,7 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
                                             mHandler.removeCallbacksAndMessages(null);
                                         }
                                         if (null != mView) {
-                                            mView.toggleChargingStationStatus(true);
+                                            mView.onChangedChargingStationStatus(term_name);
                                         }
                                     } else {
                                         showMsg(term_name + "==申请失败(" + result.getMsg() + ")========");
@@ -397,7 +410,7 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
         for (final String term_name : mCancelAvailableParams.keySet()) {
             Map<String, String> params = mCancelAvailableParams.get(term_name);
             showMsg(term_name + "==开始取消========");
-            params.put("custom_no", TextUtils.isEmpty(mCustomNo) ? "1000031264" : mCustomNo);
+            params.put("custom_no", TextUtils.isEmpty(mCustomNo) ? sCustomNo : mCustomNo);
             NetworkBuilder.build(ChargingStationService.class)
                     .cancelChargingStations(params)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -415,7 +428,7 @@ public class ChargingStationPresenter extends BasePresenter<ChargingStationView>
                                             mHandler.removeCallbacksAndMessages(null);
                                         }
                                         if (null != mView) {
-                                            mView.toggleChargingStationStatus(false);
+                                            mView.onChangedChargingStationStatus(null);
                                         }
                                     } else {
                                         showMsg(term_name + "==取消失败(" + result.getMsg() + ")========");
