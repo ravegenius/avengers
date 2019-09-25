@@ -1,1 +1,1 @@
-include ':app', ':core', ':resume', ':skill', ':other', ':common', ':user', ':main'
+include ':app', ':core', ':resume', ':skill', ':other', ':common', ':user', ':main', ':processor'

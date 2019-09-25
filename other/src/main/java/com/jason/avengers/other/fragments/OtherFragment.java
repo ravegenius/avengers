@@ -72,6 +72,13 @@ public class OtherFragment extends BaseFragment implements BaseItemViewHolder.Ac
                         .navigation(getActivity());
             }
         }));
+        beanList.add(new OtherBean(OtherBean.Type.Lable, "MutilLabel", new OtherBean.Action() {
+            @Override
+            public void doAction() {
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_MUTILLABEL)
+                        .navigation(getActivity());
+            }
+        }));
         mOtherAdapter.notifyData(beanList);
     }
 

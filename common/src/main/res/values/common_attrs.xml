@@ -25,16 +25,18 @@
         <attr name="isSupportExit" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="FoldTextView">
-        <attr name="ftvMaxLine" format="integer"/>
-        <attr name="ftvRangeMaxLine" format="integer"/>
+        <attr name="ftvMaxLine" format="integer" />
+        <attr name="ftvRangeMaxLine" format="integer" />
 
-        <attr name="ftvExpandText" format="string"/>
-        <attr name="ftvExpandColor" format="color"/>
-        <attr name="ftvExpandable" format="boolean"/>
+        <attr name="ftvExpandText" format="string" />
+        <attr name="ftvExpandColor" format="color" />
+        <attr name="ftvExpandBold" format="boolean" />
+        <attr name="ftvExpandable" format="boolean" />
+        <attr name="ftvExpandShow" format="boolean" />
 
-        <attr name="ftvFoldText" format="string"/>
-        <attr name="ftvFoldColor" format="color"/>
-        <attr name="ftvFoldable" format="boolean"/>
-        <attr name="ftvFoldShow" format="boolean"/>
+        <attr name="ftvFoldText" format="string" />
+        <attr name="ftvFoldColor" format="color" />
+        <attr name="ftvFoldable" format="boolean" />
+        <attr name="ftvFoldShow" format="boolean" />
     </declare-styleable>
 </resources>

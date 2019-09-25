@@ -39,7 +39,9 @@ public class BaseAdapter<VH extends BaseItemViewHolder, D extends BaseItemBean> 
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
-        if (data == null || data.get(position) == null) return;
+        if (data == null || data.get(position) == null) {
+            return;
+        }
         data.get(position).onBindViewHolder(holder, position);
     }
 

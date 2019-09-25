@@ -2,21 +2,21 @@ package com.jason.avengers.common.widgets;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
@@ -31,12 +31,13 @@ public class FoldTextView extends AppCompatTextView {
 
     private static final String TAG = "FoldTextView";
     private static final String ELLIPSIZE_END = "...";
-    private static final String TIP_EXPAND_TEXT = "[展开]";
-    private static final String TIP_FOLD_TEXT = "[收起]";
+    protected static final String TIP_EXPAND_TEXT = "展开";
+    protected static final String TIP_ALL_TEXT = "全文";
+    private static final String TIP_FOLD_TEXT = "收起";
     private static final int DEFAULT_MAX_VALUE = 4;
 
     // 可视最大行数
-    private int mShowMaxLine;
+    protected int mShowMaxLine;
     private int mRangeMaxLine;
 
     // 折叠
@@ -46,15 +47,20 @@ public class FoldTextView extends AppCompatTextView {
     private boolean mFoldShow;
 
     // 展开
-    private String mExpandText;
+    protected String mExpandText;
     private ColorStateList mExpandColor;
-    private boolean mExpandable;
+    protected boolean mExpandable;
+    protected boolean mExpandShow;
+    // 展开文案是否加粗，默认不加粗
+    protected boolean mExpandBold;
     // 原始文本
     private CharSequence mOriginalText;
+    // 原始文本的行数
+    protected int mOriginalLineCount;
     // 提示文字坐标
-    private float minX, maxX, minY, maxY;
+    protected float minX, maxX, minY, maxY;
     // 收起全文不在一行显示时
-    private float middleY1, middleY2;
+    protected float middleY1, middleY2;
     // 点击时间
     private long clickTime;
     // 是否已执行PreDraw
@@ -63,8 +69,15 @@ public class FoldTextView extends AppCompatTextView {
     private boolean isOverMaxLine;
     // 当前状态是否已展开
     private boolean isExpanded;
-
+    // 是否直接显示文字
+    private boolean isImmediately;
+    // 是否需要计算 减少监听
+    private boolean isNeedCalculate;
     private OnTipClickListener onTipClickListener;
+    // 是否需要展开或收起的递归请求 不使用OnGlobalLayoutListener因为回调时间间隔过长
+    private Runnable mSetTextRunnable;
+    // 是否需要展开或收起的递归请求间隔时间
+    private long mSetTextRunnableDelayedTime = 100L;
 
     public FoldTextView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -79,7 +92,7 @@ public class FoldTextView extends AppCompatTextView {
         initTypedParams(context, attrs);
     }
 
-    private void initTypedParams(Context context, AttributeSet attrs) {
+    protected void initTypedParams(Context context, AttributeSet attrs) {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.FoldTextView);
         mShowMaxLine = arr.getInt(R.styleable.FoldTextView_ftvMaxLine, DEFAULT_MAX_VALUE);
         mRangeMaxLine = arr.getInt(R.styleable.FoldTextView_ftvRangeMaxLine, mShowMaxLine);
@@ -90,6 +103,8 @@ public class FoldTextView extends AppCompatTextView {
         mExpandText = arr.getString(R.styleable.FoldTextView_ftvExpandText);
         mExpandColor = arr.getColorStateList(R.styleable.FoldTextView_ftvExpandColor);
         mExpandable = arr.getBoolean(R.styleable.FoldTextView_ftvExpandable, false);
+        mExpandShow = arr.getBoolean(R.styleable.FoldTextView_ftvExpandShow, true);
+        mExpandBold = arr.getBoolean(R.styleable.FoldTextView_ftvExpandBold, false);
 
         mFoldText = arr.getString(R.styleable.FoldTextView_ftvFoldText);
         mFoldColor = arr.getColorStateList(R.styleable.FoldTextView_ftvFoldColor);
@@ -103,11 +118,34 @@ public class FoldTextView extends AppCompatTextView {
         if (TextUtils.isEmpty(mFoldText)) {
             mFoldText = TIP_FOLD_TEXT;
         }
+        if (!mExpandShow) {
+            mExpandText = "";
+        }
+    }
+
+    /**
+     * @param preDrawDone
+     * @deprecated 未解决跟贴盖楼宽度动态复用改变导致计算文字宽度出错
+     * 可能存在性能卡顿问题 需要修改成根据ItemType生成Holder实例来复用FoldTextView 不需要重新计算宽度
+     */
+    public void setPreDrawDone(boolean preDrawDone) {
+        isPreDrawDone = preDrawDone;
     }
 
     @Override
     public void setText(final CharSequence text, final BufferType type) {
-        mOriginalText = text;
+        if (isImmediately) {
+            super.setText(text, type);
+            return;
+        }
+        minX = maxX = minY = maxY = middleY1 = middleY2 = 0f;
+        mOriginalText = childCustomSpan(text);
+        isNeedCalculate = true;
+        if (TextUtils.isEmpty(mOriginalText)) {
+            isNeedCalculate = false;
+        } else if (mOriginalText.length() <= 15 * mShowMaxLine) {
+            isNeedCalculate = false;
+        }
         if (TextUtils.isEmpty(text) || mShowMaxLine == 0) {
             super.setText(text, type);
         } else if (isExpanded) {
@@ -126,6 +164,7 @@ public class FoldTextView extends AppCompatTextView {
                 setFoldText(type);
             }
         } else {
+            //文字未展开
             if (!isPreDrawDone) {
                 getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
@@ -142,8 +181,8 @@ public class FoldTextView extends AppCompatTextView {
         }
     }
 
-    private void setFoldText(final BufferType type) {
-        final SpannableStringBuilder spannable = new SpannableStringBuilder(mOriginalText);
+    protected void setFoldText(final BufferType type) {
+        SpannableStringBuilder spannable = new SpannableStringBuilder(mOriginalText);
         if (mFoldShow) {
             spannable.append(mFoldText);
             int color = mFoldColor == null ? getTextColors().getDefaultColor() : mFoldColor.getDefaultColor();
@@ -152,21 +191,19 @@ public class FoldTextView extends AppCompatTextView {
         super.setText(spannable, type);
         Layout layout = getLayout();
         if (layout == null) {
-            getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onGlobalLayout() {
-                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    setFoldText(getLayout(), type);
-                }
-            });
+            if (mSetTextRunnable == null) {
+                mSetTextRunnable = buildSetExpandTextRunnable(type);
+            }
+            postDelayed(mSetTextRunnable, mSetTextRunnableDelayedTime);
         } else {
             setFoldText(layout, type);
         }
     }
 
-    private void setFoldText(Layout layout, BufferType type) {
-        if (layout == null) return;
+    protected void setFoldText(Layout layout, BufferType type) {
+        if (layout == null) {
+            return;
+        }
         minX = getPaddingLeft() + layout.getPrimaryHorizontal(getText().toString().lastIndexOf(mFoldText.charAt(0)));
         maxX = getPaddingLeft() + layout.getSecondaryHorizontal(getText().toString().lastIndexOf(mFoldText.charAt(mFoldText.length() - 1)) + 1);
         Rect bound = new Rect();
@@ -178,7 +215,11 @@ public class FoldTextView extends AppCompatTextView {
             layout.getLineBounds(getLineCount() - 2, bound);
             minY = getPaddingTop() + bound.top;
             middleY1 = minY + getPaint().getFontMetrics().descent - getPaint().getFontMetrics().ascent;
-            middleY2 = middleY1 + getLineSpacingExtra();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                middleY2 = middleY1 + getLineSpacingExtra();
+            } else {
+                middleY2 = middleY1;
+            }
             maxY = middleY2 + getPaint().getFontMetrics().descent - getPaint().getFontMetrics().ascent;
         } else {
             if (getLineCount() < 1) {
@@ -191,83 +232,113 @@ public class FoldTextView extends AppCompatTextView {
         }
     }
 
-    private void setExpandText(final BufferType type) {
+    protected void setExpandText(final BufferType type) {
         Layout layout = getLayout();
         if (layout == null || !layout.getText().equals(mOriginalText)) {
             super.setText(mOriginalText, type);
             layout = getLayout();
         }
+        if (!isNeedCalculate) {
+            return;
+        }
         if (layout == null) {
-            getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onGlobalLayout() {
-                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    setExpandText(getLayout(), type);
-                }
-            });
+            if (mSetTextRunnable == null) {
+                mSetTextRunnable = buildSetExpandTextRunnable(type);
+            }
+            postDelayed(mSetTextRunnable, mSetTextRunnableDelayedTime);
         } else {
             setExpandText(layout, type);
         }
     }
 
-    private void setExpandText(Layout layout, BufferType type) {
-        if (layout == null) return;
+    protected Runnable buildSetExpandTextRunnable(final BufferType type) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                Layout layout = getLayout();
+                if (layout != null) {
+                    if (isExpanded) {
+                        setFoldText(layout, type);
+                    } else {
+                        setExpandText(layout, type);
+                    }
+                } else {
+                    postDelayed(this, mSetTextRunnableDelayedTime);
+                }
+            }
+        };
+    }
+
+    protected void setExpandText(Layout layout, BufferType type) {
+        if (layout == null || TextUtils.isEmpty(mOriginalText)) {
+            return;
+        }
+        mOriginalLineCount = layout.getLineCount();
         if (layout.getLineCount() > mShowMaxLine) {
             isOverMaxLine = true;
             SpannableStringBuilder spannable = new SpannableStringBuilder();
-
-            float viewWidth = getMeasuredWidth()
-                    - getPaddingLeft() - getCompoundPaddingLeft()
-                    - getPaddingRight() - getCompoundPaddingRight()
-                    - getTextSize();
-            float lineWidth = getLayout().getLineWidth(mRangeMaxLine - 1);
+            float viewWidth = layout.getWidth();
             int start = layout.getLineStart(mRangeMaxLine - 1);
             int end = layout.getLineEnd(mRangeMaxLine - 1);
             int length = mOriginalText.length();
             boolean isCalculated = false;
-            String calculateText = mOriginalText.toString();
-            StringBuilder builder = new StringBuilder(ELLIPSIZE_END).append(mExpandText);
-            float ellipsisWidth = getPaint().measureText(builder.toString());
+            int calculateEllipsisPosition = 0;
+            float ellipsisWidth = getTextWidth(ELLIPSIZE_END + mExpandText);
             String tempText;
             if (length > end) {
                 isCalculated = true;
                 tempText = mOriginalText.subSequence(start, end).toString().replace("\n", "");
-                calculateText = mOriginalText.subSequence(0, start).toString() + tempText;
-            } else {
+            } else if (length > start) {
                 tempText = mOriginalText.subSequence(start, length).toString();
+            } else {
+                tempText = "";
             }
 
-            float tempTextWidth = getPaint().measureText(tempText);
-            if (lineWidth == tempTextWidth && length <= end) {
+            float tempTextWidth = getTextWidth(tempText);
+            if (tempTextWidth <= viewWidth && length <= end) {
                 isCalculated = false;
-            } else if (tempTextWidth + (isCalculated ? ellipsisWidth : 0) > viewWidth) {
-                float remainWidth = (viewWidth - ellipsisWidth);
-                String calculateTempText = "";
-                tempTextWidth = 0f;
-                int calculateEllipsisPosition = 0;
-                while (remainWidth > 0
-                        && tempTextWidth < remainWidth
-                        && calculateEllipsisPosition + 1 <= tempText.length()) {
-                    calculateEllipsisPosition++;
-                    calculateTempText = tempText.subSequence(0, calculateEllipsisPosition).toString();
-                    tempTextWidth = getPaint().measureText(calculateTempText);
+            } else {
+                if (tempTextWidth + (isCalculated ? ellipsisWidth : 0) > viewWidth) {
+                    float remainWidth = viewWidth - ellipsisWidth;
+                    // 多余出一些位置可以保证文案不换行
+                    float extRemainWidth = 0.25f * ellipsisWidth;
+                    if (remainWidth > extRemainWidth) {
+                        remainWidth = remainWidth - extRemainWidth;
+                    }
+                    do {
+                        calculateEllipsisPosition = calculateEllipsisPosition + 1;
+                        if (!TextUtils.isEmpty(tempText) && tempText.length() > calculateEllipsisPosition) {
+                            tempTextWidth = getTextWidth(tempText.subSequence(0, calculateEllipsisPosition).toString());
+                        }
+                    } while (tempTextWidth < remainWidth
+                            && calculateEllipsisPosition + 1 < tempText.length());
+                    if (calculateEllipsisPosition > 0) {
+                        calculateEllipsisPosition -= 1;
+                    }
+                    isCalculated = calculateEllipsisPosition != 0;
+                } else {
+                    if (tempText.length() > 0) {
+                        calculateEllipsisPosition = tempText.length() - 1;
+                    }
                 }
-                calculateText = mOriginalText.subSequence(0, start).toString() + calculateTempText;
-                isCalculated = calculateEllipsisPosition != 0;
             }
 
             if (!isCalculated) {
                 spannable.append(mOriginalText);
             } else {
-                minX = getPaddingLeft() + tempTextWidth + getTextWidth(ELLIPSIZE_END);
+                minX = getPaddingLeft()
+                        + getTextWidth(tempText.subSequence(0, calculateEllipsisPosition).toString())
+                        + getTextWidth(ELLIPSIZE_END);
                 maxX = minX + getTextWidth(mExpandText);
 
-                spannable.append(calculateText);
+                spannable.append(mOriginalText.subSequence(0, start + calculateEllipsisPosition));
                 spannable.append(ELLIPSIZE_END);
                 spannable.append(mExpandText);
                 int color = mExpandColor == null ? getTextColors().getDefaultColor() : mExpandColor.getDefaultColor();
                 spannable.setSpan(new ForegroundColorSpan(color), spannable.length() - mExpandText.length(), spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                if (mExpandBold) {
+                    spannable.setSpan(new StyleSpan(Typeface.BOLD), spannable.length() - mFoldText.length(), spannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                }
             }
             super.setText(spannable, type);
         } else {
@@ -282,26 +353,28 @@ public class FoldTextView extends AppCompatTextView {
             minY = getHeight() - (getPaint().getFontMetrics().descent - getPaint().getFontMetrics().ascent) - getPaddingBottom();
             maxY = getHeight() - getPaddingBottom();
         }
-
-        Paint paint = new Paint();
-        paint.setColor(isExpanded ? Color.BLUE : Color.RED);
-        paint.setAlpha(100);
-        if (minX < maxX) {
-            canvas.drawRect(minX, minY, maxX, maxY, paint);
-        } else {
-            canvas.drawRect(minX, minY, getWidth() - getPaddingRight(), middleY1, paint);
-            canvas.drawRect(getPaddingLeft(), middleY2, maxX, maxY, paint);
-        }
-
         if ((isExpanded && !mFoldable) || (!isExpanded && !mExpandable)) {
             minX = maxX = minY = maxY = 0;
         }
-
+        /* 用于展示点击区域便于修改
+        if (BuildConfig.DEBUG) {
+            Paint paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setAlpha(80);
+            canvas.drawRect(minX, minY, maxX, maxY, paint);
+        }
+        */
     }
 
-    private float getTextWidth(String text) {
+    protected float getTextWidth(String text) {
         Paint paint = getPaint();
         return paint.measureText(text);
+    }
+
+    //可不可以展开
+    public FoldTextView setExpandable(boolean expandable) {
+        mExpandable = expandable;
+        return this;
     }
 
     @Override
@@ -309,25 +382,13 @@ public class FoldTextView extends AppCompatTextView {
         if ((mFoldable && isExpanded) || (mExpandable && !isExpanded)) {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    clickTime = System.currentTimeMillis();
-                    if (!isClickable()) {
-                        if (isInRange(event.getX(), event.getY())) {
-                            return true;
-                        }
+                    if (handleActionDown(event)) {
+                        return true;
                     }
                     break;
-
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    long delTime = System.currentTimeMillis() - clickTime;
-                    clickTime = 0L;
-                    if (delTime < 3 * ViewConfiguration.getTapTimeout() && isInRange(event.getX(), event.getY())) {
-                        isExpanded = !isExpanded;
-                        setText(mOriginalText);
-                        if (onTipClickListener != null) {
-                            Log.i(TAG, "FoldTextView onTipClick isExpanded:" + isExpanded);
-                            onTipClickListener.onTipClick(isExpanded);
-                        }
+                    if (handleActionCancelOrUp(event)) {
                         return true;
                     }
                     break;
@@ -338,7 +399,32 @@ public class FoldTextView extends AppCompatTextView {
         return super.onTouchEvent(event);
     }
 
-    private boolean isInRange(float x, float y) {
+    protected boolean handleActionDown(MotionEvent event) {
+        clickTime = System.currentTimeMillis();
+        if (!isClickable()) {
+            if (isInRange(event.getX(), event.getY())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean handleActionCancelOrUp(MotionEvent event) {
+        long delTime = System.currentTimeMillis() - clickTime;
+        clickTime = 0L;
+        if (delTime < 3 * ViewConfiguration.getTapTimeout() && isInRange(event.getX(), event.getY())) {
+            isExpanded = !isExpanded;
+            setText(mOriginalText);
+            cancelLongPress();
+            if (onTipClickListener != null) {
+                onTipClickListener.onTipClick(isExpanded);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isInRange(float x, float y) {
         if (minX < maxX) {
             return x >= minX && x <= maxX && y >= minY && y <= maxY;
         } else {
@@ -377,12 +463,41 @@ public class FoldTextView extends AppCompatTextView {
         return this;
     }
 
+    public FoldTextView setImmediately(boolean immediately) {
+        isImmediately = immediately;
+        return this;
+    }
+
     public FoldTextView setOnTipClickListener(FoldTextView.OnTipClickListener onTipClickListener) {
         this.onTipClickListener = onTipClickListener;
         return this;
     }
 
+    public String getExpandText() {
+        return mExpandText;
+    }
+
+    /**
+     * 交由子类实现
+     * 如需额外修改文本内容(例如在头部添加"精选"文案)，需在setText之前做处理
+     * <p>
+     * 调用时机：1、不添加"全文"时
+     * 2、添加"全文"后
+     * 3、点击"全文"展开后
+     *
+     * @param origin
+     */
+    protected CharSequence childCustomSpan(CharSequence origin) {
+        return origin;
+    }
+
     public interface OnTipClickListener {
         void onTipClick(boolean isExpanded);
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setText(mOriginalText);
     }
 }

@@ -48,4 +48,7 @@ dependencies {
     implementation project(':resume')
     implementation project(':skill')
     implementation project(':other')
+
+    implementation project(':processor')
+    annotationProcessor project(':processor')
 }
