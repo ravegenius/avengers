@@ -10,6 +10,6 @@ ext {
     ]
 
     libraries = [
-            supportVersion  : '27.0.2'
+            supportVersion      : '27.0.2'
     ]
 }

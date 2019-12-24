@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jason.avengers.common.annotations.TrackMethod;
+
 /**
  * Created by jason on 2018/3/15.
  */
@@ -17,7 +19,19 @@ public abstract class BaseFragment extends Fragment {
     public BaseFragment() {
     }
 
-    @Nullable
+    @TrackMethod
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @TrackMethod
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @TrackMethod
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getResourcesLayout(), container, false);
@@ -25,6 +39,7 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
+    @TrackMethod
     @Override
     public void onDestroyView() {
         destroy();

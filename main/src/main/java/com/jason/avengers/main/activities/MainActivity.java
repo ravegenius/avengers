@@ -1,5 +1,7 @@
 package com.jason.avengers.main.activities;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +22,7 @@ import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.common.base.BasePresenter;
 import com.jason.avengers.common.base.BaseView;
 import com.jason.avengers.common.router.RouterPath;
+import com.jason.avengers.common.service.OAAccessibilityService;
 import com.jason.avengers.main.R;
 import com.jason.avengers.other.fragments.OtherFragment;
 import com.jason.avengers.resume.fragments.ResumeFragment;
@@ -77,6 +80,36 @@ public class MainActivity extends BaseActivity implements
 //        mPresenter = new UserPresenter();
 //        mPresenter.attach(this);
 //        mPresenter.getUserData();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{"android.permission.BIND_ACCESSIBILITY_SERVICE"}, 0);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (isGrantedResult(grantResults)) {
+            onPermissionGranted(requestCode);
+        } else {
+            onPermissionDenied(requestCode);
+        }
+    }
+
+    private void onPermissionGranted(int requestCode) {
+    }
+
+    private void onPermissionDenied(int requestCode) {
+        OAAccessibilityService.openAccessibilityServiceSettings(this);
+    }
+
+    private static boolean isGrantedResult(int... grantResults) {
+        for (int result : grantResults) {
+            if (result == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

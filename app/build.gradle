@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: com.jason.shield.PlusPlugin
 
 def cfg = rootProject.ext.android
 def libs = rootProject.ext.libraries

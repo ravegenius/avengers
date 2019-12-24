@@ -1,8 +1,8 @@
 apply from: 'gradle/configuration.gradle'
 apply plugin: 'com.alibaba.arouter'
 
-
 buildscript {
+    ext.gradleVersion = '3.1.4'
     ext.objectboxVersion = '1.5.0'
 
     repositories {
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath "com.android.tools.build:gradle:${gradleVersion}"
 
         // objectbox 插件
         classpath "io.objectbox:objectbox-gradle-plugin:${objectboxVersion}"
