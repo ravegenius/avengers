@@ -75,4 +75,8 @@ public class BaseAdapter<VH extends BaseItemViewHolder, D extends BaseItemBean> 
     public List<D> getData() {
         return this.data;
     }
+
+    public void setData(List<D> data) {
+        this.data = data;
+    }
 }

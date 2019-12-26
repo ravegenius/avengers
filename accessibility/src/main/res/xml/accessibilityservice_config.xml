@@ -9,12 +9,11 @@ packageNames 这个属性 就是捕获什么app的行为的，比如我这里写
 description 这个就是对你那个申请服务的时候说明了，可以写的煽情一点 让用户打开这个服务的可能性更高一点。。。
 -->
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged|typeViewTextSelectionChanged|typeViewClicked"
+    android:accessibilityEventTypes="typeWindowStateChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
     android:canPerformGestures="true"
     android:canRequestTouchExplorationMode="true"
     android:canRetrieveWindowContent="true"
     android:description="@string/app_name"
-    android:notificationTimeout="100"
-    android:packageNames="com.netease.oa" />
+    android:notificationTimeout="100" />

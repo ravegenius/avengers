@@ -1,8 +1,4 @@
-package com.jason.avengers.common.service.common;
-
-import android.util.Log;
-
-import com.jason.avengers.common.service.OAAccessibilityService;
+package com.jason.avengers.accessibility.common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,7 @@ public enum AccountInfo {
         mPoints.add(6);
         mPoints.add(7);
         mPoints.add(8);
-        Log.wtf(OAAccessibilityService.TAG, "初始化 mPoints<" + mPoints + ">");
+        Utils.log("初始化 mPoints<" + mPoints + ">");
     }
 
     public void initClockTimes() {
@@ -98,7 +94,7 @@ public enum AccountInfo {
             }
         }
         mClockTimes = newRandomTimes;
-        Log.wtf(OAAccessibilityService.TAG, "初始化 mClockTimes<" + mClockTimes + ">");
+        Utils.log("初始化 mClockTimes<" + mClockTimes + ">");
     }
 
     private int random() {

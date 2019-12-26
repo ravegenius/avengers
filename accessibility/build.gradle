@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 def cfg = rootProject.ext.android
+def libs = rootProject.ext.libraries
 
 android {
     compileSdkVersion cfg.compileSdk
@@ -10,12 +11,6 @@ android {
         targetSdkVersion cfg.targetSdk
         versionCode 1
         versionName "1.0"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
-            }
-        }
     }
 
     buildTypes {
@@ -34,9 +29,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'jp.wasabeef:richeditor-android:1.2.2'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
-    implementation project(':common')
-    implementation project(':user')
-    implementation project(':accessibility')
+    api "com.android.support:appcompat-v7:${libs.supportVersion}"
+    api "com.android.support:support-v4:${libs.supportVersion}"
 }
