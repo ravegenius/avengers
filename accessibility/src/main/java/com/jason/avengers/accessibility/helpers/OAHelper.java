@@ -17,6 +17,11 @@ import com.jason.avengers.accessibility.common.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 解析 OA 监听
+ *
+ * @author jason
+ */
 public class OAHelper extends Helper {
 
     public static CharSequence PackageName = "com.netease.oa";
@@ -27,10 +32,10 @@ public class OAHelper extends Helper {
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         mClassName = accessibilityEvent.getClassName();
         if ("com.netease.oa.ui.security.LoginActivityV5".equals(mClassName)) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 账号登录");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 账号登录", true);
             mTargetInfo = deepLoginTargetInfo(accessibilityEvent.getSource(), "登 录");
         } else if ("com.netease.oa.ui.main.MainTabActivityV6".equals(mClassName)) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 主界面");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 主界面", true);
             if (AccountInfo.INFO.isClocked()) {
                 mTargetInfo = deepFindMainTargetInfo(accessibilityEvent.getSource(), "Rect(0, 0 - 105, 54)");
             } else {
@@ -38,37 +43,37 @@ public class OAHelper extends Helper {
             }
         } else if ("com.netease.oa.ui.security.GestureUnlcokActivity".equals(mClassName)
                 || "com.netease.oa.ui.security.TouchIdAndPatternActivity".equals(mClassName)) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 手势密码");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 手势密码", true);
             if (isN) {
                 mTargetInfo = deepFindGestureUnlcokTargetInfo(accessibilityEvent.getSource(), "Rect(0, 0 - 870, 870)");
             } else {
                 mTargetInfo = deepFindLoginTargetInfo(accessibilityEvent.getSource(), "账号密码登录");
             }
         } else if ("com.netease.oa.ui.submodules.moveclockin.MovingClockMainActivity".equals(mClassName)) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 移动打卡");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 移动打卡", true);
             if (AccountInfo.INFO.isClocked()) {
                 mTargetInfo = deepFindMoveclockinTargetInfo(accessibilityEvent.getSource(), "android.widget.ImageButton");
             } else {
                 mTargetInfo = deepFindMoveclockinTargetInfo(accessibilityEvent.getSource(), "打卡");
             }
         } else if ("com.netease.oa.ui.setting.SettingActivity".equals(mClassName)) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置退出");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置退出", true);
             mTargetInfo = deepFindLogoutTargetInfo(accessibilityEvent.getSource(), "退出登录");
         } else if ("com.netease.oa.ui.submodules.moveclockin.ClockInTipDialog".equals(mClassName)) {
             //无论成功失败只记录点击操作
             AccountInfo.INFO.setClocked(true);
             if (accessibilityEvent.getText().toString().contains("打卡成功")) {
-                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 打卡成功");
+                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 打卡成功", true);
             } else {
-                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 打卡失败");
+                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 打卡失败", true);
             }
             mTargetInfo = null;
         } else if ("android.support.v7.app.c".equals(mClassName)
                 && accessibilityEvent.getText().toString().contains("发现新版本")) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 发现新版本");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 发现新版本", true);
             mTargetInfo = deepFindUploadTargetInfo(accessibilityEvent.getSource(), "稍后");
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);
@@ -90,12 +95,12 @@ public class OAHelper extends Helper {
         } else {
             if (TextUtils.equals("android.widget.EditText", accessibilityNodeInfo.getClassName())) {
                 if (!accessibilityNodeInfo.isPassword()) {
-                    Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置账号");
+                    Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置账号", true);
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, AccountInfo.ACCOUNT);
                     accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                 } else {
-                    Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置密码");
+                    Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置密码", true);
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, AccountInfo.PASSWORD);
                     accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
@@ -294,7 +299,7 @@ public class OAHelper extends Helper {
                 Rect rect = new Rect();
                 mTargetInfo.getBoundsInScreen(rect);
                 Path path = buildPath(rect);
-                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 滑动解锁");
+                Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 滑动解锁", true);
                 service.dispatchGesture(new GestureDescription.Builder().addStroke(new GestureDescription.StrokeDescription
                         (path, 0, 800)).build(), null, null);
                 return;

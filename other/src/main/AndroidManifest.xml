@@ -20,5 +20,8 @@
         <activity
             android:name=".activities.MutilLabelActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.OAClockActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 </manifest>

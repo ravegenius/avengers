@@ -8,6 +8,11 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.accessibility.common.Utils;
 
+/**
+ * 解析 Settings 监听
+ *
+ * @author jason
+ */
 public class SettingsHelper extends Helper {
 
     public static CharSequence PackageName = "com.android.settings";
@@ -15,10 +20,10 @@ public class SettingsHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.android.settings.Settings$DevelopmentSettingsActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 关闭Debug");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 关闭Debug", true);
             mTargetInfo = deepFindDebugTargetInfo(accessibilityEvent.getSource(), "开启开发者选项");
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);

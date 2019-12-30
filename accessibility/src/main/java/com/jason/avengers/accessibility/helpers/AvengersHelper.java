@@ -9,6 +9,8 @@ import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.accessibility.common.Utils;
 
 /**
+ * 解析 Avengers 监听
+ *
  * @author jason
  */
 public class AvengersHelper extends Helper {
@@ -18,10 +20,10 @@ public class AvengersHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.jason.avengers.main.activities.MainActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 主界面");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 主界面", true);
             mTargetInfo = deepFindDevelopTargetInfo(accessibilityEvent.getSource(), "开发者模式");
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);

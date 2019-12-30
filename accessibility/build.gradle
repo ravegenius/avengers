@@ -31,4 +31,9 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api "com.android.support:appcompat-v7:${libs.supportVersion}"
     api "com.android.support:support-v4:${libs.supportVersion}"
+    // objectbox
+    debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
+    releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
+
+    implementation project(':common')
 }

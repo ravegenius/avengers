@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 用户信息
+ *
+ * @author Jason
+ */
 public enum AccountInfo {
     /**
      * 单例
@@ -53,7 +58,7 @@ public enum AccountInfo {
         mPoints.add(6);
         mPoints.add(7);
         mPoints.add(8);
-        Utils.log("初始化 mPoints<" + mPoints + ">");
+        Utils.log("初始化 mPoints<" + mPoints + ">", true);
     }
 
     public void initClockTimes() {
@@ -94,7 +99,7 @@ public enum AccountInfo {
             }
         }
         mClockTimes = newRandomTimes;
-        Utils.log("初始化 mClockTimes<" + mClockTimes + ">");
+        Utils.log("初始化 mClockTimes<" + mClockTimes + ">", true);
     }
 
     private int random() {

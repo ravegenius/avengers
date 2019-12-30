@@ -19,4 +19,5 @@ public class RouterPath {
     public static final String OTHER_PARALLELAD = "/other/parallelad";
     public static final String OTHER_RICHEDITOR = "/other/richeditor";
     public static final String OTHER_MUTILLABEL = "/other/mumu";
+    public static final String OTHER_OACLOCK = "/other/oaclock";
 }

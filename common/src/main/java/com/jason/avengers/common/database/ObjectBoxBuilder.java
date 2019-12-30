@@ -30,13 +30,13 @@ public enum ObjectBoxBuilder {
         if (!Utils.App.isMainProcess()) {
             return;
         }
-        Log.i(TAG, "ObjectBox build");
+        Log.wtf(TAG, "ObjectBox build");
         mBoxStore = MyObjectBox.builder().androidContext(application).build();
         if (isDebug && mBoxStore != null) {
             boolean started = new AndroidObjectBrowser(mBoxStore).start(application);
-            Log.i(TAG, "ObjectBoxBrowser Started: " + started);
+            Log.wtf(TAG, "ObjectBoxBrowser Started: " + started);
         }
-        Log.i(TAG, "ObjectBox " + BoxStore.getVersion() + " (" + BoxStore.getVersionNative() + ")");
+        Log.wtf(TAG, "ObjectBox " + BoxStore.getVersion() + " (" + BoxStore.getVersionNative() + ")");
     }
 
     public BoxStore getBoxStore() {

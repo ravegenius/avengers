@@ -22,8 +22,8 @@ public class Application extends BaseApplication {
     protected void initAfterCreate(android.app.Application application) {
         // First must init Utils context
         Utils.init(application);
-        SharedPrefUtils.init(application);
 
+        SharedPrefUtils.init(application);
         StethoUtils.init(application);
         ObjectBoxBuilder.INSTANCE.build(application, BuildConfig.DEBUG);
         RouterBuilder.INSTANCE.init(application, BuildConfig.DEBUG);

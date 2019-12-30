@@ -10,10 +10,19 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.jason.avengers.accessibility.OAAccessibilityService;
+import com.jason.avengers.common.database.ObjectBoxBuilder;
+import com.jason.avengers.common.database.entity.LogDBEntity;
 
 import java.util.Calendar;
 import java.util.List;
 
+import io.objectbox.Box;
+
+/**
+ * 工具
+ *
+ * @author Jason
+ */
 public class Utils {
 
     /**
@@ -68,7 +77,7 @@ public class Utils {
         //打卡时间
         List<Integer> clockTimes = AccountInfo.INFO.getClockTimes();
 
-        Utils.log(String.format("校验时间 >>>>>> 星期%d %d:%d %s", week - 1, hour, minute, clockTimes.toString()));
+        Utils.log(String.format("校验时间 >>>>>> 星期%d %d:%d %s", week - 1, hour, minute, clockTimes.toString()), false);
         //星期天和星期六返回false
         if (week == 1 || week == 7) {
             return false;
@@ -88,7 +97,7 @@ public class Utils {
         }
 
         clockTimes.remove((Integer) currentTime);
-        Utils.log(String.format("执行打卡 >>>>>> 星期%d %d:%d", week - 1, hour, minute));
+        Utils.log(String.format("执行打卡 >>>>>> 星期%d %d:%d", week - 1, hour, minute), true);
         return true;
     }
 
@@ -98,7 +107,7 @@ public class Utils {
      * @param service
      */
     public static void performGlobalActionBack(@NonNull AccessibilityService service) {
-        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Back");
+        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Back", false);
         service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
     }
 
@@ -108,7 +117,7 @@ public class Utils {
      * @param service
      */
     public static void performGlobalActionHome(@NonNull AccessibilityService service) {
-        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Home");
+        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Home", false);
         service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
     }
 
@@ -118,16 +127,41 @@ public class Utils {
      * @param targetInfo
      */
     public static void performTargetActionClick(@NonNull AccessibilityNodeInfo targetInfo) {
-        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Click");
+        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 点击Click", false);
         targetInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
     }
 
     /**
-     * 日志
+     * 日志 wtf
+     *
+     * @param msg
+     * @param saveable
+     */
+    public static void log(String msg, boolean saveable) {
+        Log.wtf("OAService", msg);
+        if (saveable) {
+            saveLog(msg);
+        }
+    }
+
+    /**
+     * 日志 info
      *
      * @param msg
      */
-    public static void log(String msg) {
-        Log.wtf("OAService", msg);
+    public static void logI(String msg) {
+        Log.i("OAService", msg);
+    }
+
+    /**
+     * 保存 log
+     *
+     * @param msg
+     */
+    private static void saveLog(String msg) {
+        LogDBEntity entity = new LogDBEntity();
+        entity.setMsg(msg);
+        Box<LogDBEntity> logBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(LogDBEntity.class);
+        logBox.put(entity);
     }
 }

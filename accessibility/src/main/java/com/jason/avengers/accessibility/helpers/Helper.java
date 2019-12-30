@@ -7,6 +7,11 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.accessibility.common.Utils;
 
+/**
+ * 解析 基础 监听
+ *
+ * @author jason
+ */
 public class Helper {
 
     protected AccessibilityNodeInfo mTargetInfo;
@@ -14,7 +19,7 @@ public class Helper {
 
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         mClassName = accessibilityEvent.getClassName();
-        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】找到目标 >>>>>> " + mTargetInfo);
+        Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】找到目标 >>>>>> " + mTargetInfo, false);
     }
 
     public void handle(AccessibilityService service) {

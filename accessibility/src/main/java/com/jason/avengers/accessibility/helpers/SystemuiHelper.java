@@ -8,6 +8,11 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.accessibility.common.Utils;
 
+/**
+ * 解析 Systemui 监听
+ *
+ * @author jason
+ */
 public class SystemuiHelper extends Helper {
 
     public static CharSequence PackageName = "com.android.systemui";
@@ -15,10 +20,10 @@ public class SystemuiHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.android.systemui.recents.RecentsActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 最近应用");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 最近应用", true);
             mTargetInfo = deepFindRecentsTargetInfo(accessibilityEvent.getSource(), "网易OA");
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);

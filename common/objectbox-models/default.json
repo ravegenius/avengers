@@ -96,9 +96,25 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:5737262899629340010",
+      "lastPropertyId": "2:131771673853399052",
+      "name": "LOG",
+      "properties": [
+        {
+          "id": "1:519458776687671143",
+          "name": "_ID"
+        },
+        {
+          "id": "2:131771673853399052",
+          "name": "MSG"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:3900600919523698707",
+  "lastEntityId": "3:5737262899629340010",
   "lastIndexId": "6:3530490121138929110",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

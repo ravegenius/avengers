@@ -2,9 +2,7 @@ package com.jason.avengers.other.fragments;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.TextView;
 
-import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.common.base.BaseFragment;
 import com.jason.avengers.common.base.BaseItemBean;
 import com.jason.avengers.common.base.BaseItemViewHolder;
@@ -77,22 +75,11 @@ public class OtherFragment extends BaseFragment implements BaseItemViewHolder.Ac
                         .navigation(getActivity());
             }
         }));
-        beanList.add(new OtherBean(OtherBean.Type.Lable, "开发者状态 <" + String.valueOf(OAAccessibilityService.IS_ADB_ENABLED).toUpperCase() + ">", new OtherBean.Action() {
+        beanList.add(new OtherBean(OtherBean.Type.Lable, "OA打卡", new OtherBean.Action() {
             @Override
             public void doAction() {
-                OAAccessibilityService.IS_ADB_ENABLED = !OAAccessibilityService.IS_ADB_ENABLED;
-            }
-        }));
-        beanList.add(new OtherBean(OtherBean.Type.Lable, "无障碍", new OtherBean.Action() {
-            @Override
-            public void doAction() {
-                OAAccessibilityService.startAccessibilityServiceSettings(getActivity());
-            }
-        }));
-        beanList.add(new OtherBean(OtherBean.Type.Lable, "开发者模式", new OtherBean.Action() {
-            @Override
-            public void doAction() {
-                OAAccessibilityService.startDevelopmentActivity(getActivity());
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_OACLOCK)
+                        .navigation(getActivity());
             }
         }));
 
@@ -111,9 +98,5 @@ public class OtherFragment extends BaseFragment implements BaseItemViewHolder.Ac
     public void doAction(View view, BaseItemBean baseItemBean) {
         OtherBean otherBean = (OtherBean) baseItemBean;
         otherBean.getAction().doAction();
-        if (otherBean.getTitle().contains("开发者状态")) {
-            otherBean.setTitle("开发者状态 <" + String.valueOf(OAAccessibilityService.IS_ADB_ENABLED).toUpperCase() + ">");
-            ((TextView) view.findViewById(R.id.other_info_title)).setText(otherBean.getTitle());
-        }
     }
 }

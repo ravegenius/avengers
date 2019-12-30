@@ -8,6 +8,11 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.accessibility.common.Utils;
 
+/**
+ * 解析 Launcher 监听
+ *
+ * @author jason
+ */
 public class LauncherHelper extends Helper {
 
     public static CharSequence PackageName = "com.miui.home";
@@ -15,14 +20,14 @@ public class LauncherHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.miui.home.launcher.Launcher".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> Launcher");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> Launcher", true);
             if (Utils.isAdbEnabled(service)) {
                 mTargetInfo = deepFindOpenTargetInfo(accessibilityEvent.getSource(), "Avengers");
             } else {
                 mTargetInfo = deepFindOpenTargetInfo(accessibilityEvent.getSource(), "网易OA");
             }
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件");
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);
