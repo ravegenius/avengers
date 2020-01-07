@@ -20,7 +20,7 @@ public class SystemuiHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.android.systemui.recents.RecentsActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 最近应用", true);
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 最近应用", false);
             mTargetInfo = deepFindRecentsTargetInfo(accessibilityEvent.getSource(), "网易OA");
         } else {
             Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);

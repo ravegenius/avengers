@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.jason.avengers.user">
 
+    <!--查看帐户需要权限-->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!--添加帐户需要权限-->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
     <application>
         <activity
             android:name=".activities.LoginActivity"

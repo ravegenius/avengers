@@ -12,4 +12,7 @@
     <string name="login_type_phone_rb_text">验证码登录</string>
     <string name="user_login_btn_text">登录</string>
     <string name="user_code_btn_text">发送验证码</string>
+
+    <string name="app_account_name">Jason</string>
+    <string name="app_account_type">com.jason.avengers.sync</string>
 </resources>

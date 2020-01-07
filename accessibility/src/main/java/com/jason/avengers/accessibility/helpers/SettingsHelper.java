@@ -20,7 +20,7 @@ public class SettingsHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.android.settings.Settings$DevelopmentSettingsActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 关闭Debug", true);
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 关闭Debug", false);
             mTargetInfo = deepFindDebugTargetInfo(accessibilityEvent.getSource(), "开启开发者选项");
         } else {
             Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);

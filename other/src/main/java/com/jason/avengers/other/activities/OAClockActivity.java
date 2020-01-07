@@ -34,16 +34,15 @@ public class OAClockActivity extends BaseNoMVPActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLogBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(LogDBEntity.class);
+        mQuery = mLogBox.query().orderDesc(LogDBEntity_.__ID_PROPERTY).build();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.other_activity_oaclock);
         initView();
     }
 
     private void initView() {
-        mLogBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(LogDBEntity.class);
-        mQuery = mLogBox.query().orderDesc(LogDBEntity_.__ID_PROPERTY).build();
-        List<LogDBEntity> data = mQuery.find(pageNo * LIMIT, LIMIT);
-
         TextView developerStateView = findViewById(R.id.oaclock_developer_state);
         developerStateView.setText("伪开发者状态 <" + String.valueOf(OAAccessibilityService.IS_ADB_ENABLED).toUpperCase() + ">");
         developerStateView.setOnClickListener(this);
@@ -62,7 +61,7 @@ public class OAClockActivity extends BaseNoMVPActivity implements View.OnClickLi
 
         RecyclerView logView = findViewById(R.id.oaclock_log);
         logView.setLayoutManager(mLogLayoutManager = new LinearLayoutManager(this));
-        logView.setAdapter(mLogAdapter = new LogAdapter(data));
+        logView.setAdapter(mLogAdapter = new LogAdapter(null));
         logView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -86,6 +85,13 @@ public class OAClockActivity extends BaseNoMVPActivity implements View.OnClickLi
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<LogDBEntity> data = mQuery.find(pageNo * LIMIT, LIMIT);
+        mLogAdapter.notifyData(data);
     }
 
     @Override

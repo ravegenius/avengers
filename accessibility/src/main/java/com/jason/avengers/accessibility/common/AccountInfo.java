@@ -1,8 +1,8 @@
 package com.jason.avengers.accessibility.common;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 /**
  * 用户信息
@@ -18,10 +18,39 @@ public enum AccountInfo {
     public static final String ACCOUNT = "13401073452";
     public static final String PASSWORD = "RGjason8513053";
 
-    private static final int CLICK_COUNT = 4;
-    private static final int START = 0;
-    private static final int END = 59;
-    private static final Random mRandom = new Random();
+    public static final List<Integer> WORK_DAYS = new ArrayList<>();
+
+    static {
+        WORK_DAYS.add(2);
+        WORK_DAYS.add(3);
+        WORK_DAYS.add(4);
+        WORK_DAYS.add(5);
+        WORK_DAYS.add(6);
+    }
+
+    public static final List<Integer> INIT_TIMES = new ArrayList<>();
+
+    static {
+        INIT_TIMES.add(100);
+        INIT_TIMES.add(102);
+        INIT_TIMES.add(104);
+    }
+
+    private static final int CLOCK_HOUR_8 = 8;
+    private static final int CLOCK_HOUR_9 = 9;
+    private static final int CLOCK_HOUR_20 = 20;
+    private static final int CLOCK_HOUR_21 = 21;
+    private static final int CLOCK_HOUR_22 = 22;
+
+    public static final List<Integer> CLOCK_HOUR = new ArrayList<>();
+
+    static {
+        CLOCK_HOUR.add(CLOCK_HOUR_8);
+        CLOCK_HOUR.add(CLOCK_HOUR_9);
+        CLOCK_HOUR.add(CLOCK_HOUR_20);
+        CLOCK_HOUR.add(CLOCK_HOUR_21);
+        CLOCK_HOUR.add(CLOCK_HOUR_22);
+    }
 
     private List<Integer> mPoints = new ArrayList<>();
     private List<Integer> mClockTimes = new ArrayList<>();
@@ -33,6 +62,18 @@ public enum AccountInfo {
 
     public List<Integer> getClockTimes() {
         return mClockTimes;
+    }
+
+    public String getClockTimesStr() {
+        if (mClockTimes == null || mClockTimes.isEmpty()) {
+            return "暂无";
+        }
+        StringBuilder clockTimesStr = new StringBuilder();
+        for (Integer clockTime : mClockTimes) {
+            clockTimesStr.append(Utils.buildclockTimesStr(clockTime));
+            clockTimesStr.append(", ");
+        }
+        return clockTimesStr.toString();
     }
 
     public boolean isClocked() {
@@ -58,52 +99,33 @@ public enum AccountInfo {
         mPoints.add(6);
         mPoints.add(7);
         mPoints.add(8);
-        Utils.log("初始化 mPoints<" + mPoints + ">", true);
+        Utils.log("初始化 mPoints<" + mPoints + ">", false);
     }
 
     public void initClockTimes() {
+        Calendar calendar = Calendar.getInstance();
+        //小时
+        int newHour = calendar.get(Calendar.HOUR_OF_DAY);
         mClockTimes.clear();
-        while (mClockTimes.size() < CLICK_COUNT) {
-            int random = random();
-            if (mClockTimes.contains(random)) {
+        for (int hour : CLOCK_HOUR) {
+            if (hour < newHour) {
                 continue;
             }
-            if (mClockTimes.isEmpty()) {
-                mClockTimes.add(random);
-            } else {
-                int addnessIndex = -1;
-                for (Integer randomTime : mClockTimes) {
-                    if (randomTime > random) {
-                        addnessIndex = mClockTimes.indexOf(randomTime);
-                        break;
-                    }
-                }
-                if (addnessIndex == -1) {
-                    mClockTimes.add(random);
-                } else {
-                    mClockTimes.add(addnessIndex, random);
-                }
+            int random = 0;
+            if (hour == CLOCK_HOUR_8) {
+                random = Utils.random(30, 55);
+            } else if (hour == CLOCK_HOUR_9) {
+                random = Utils.random(5, 30);
+            } else if (hour == CLOCK_HOUR_20) {
+                random = Utils.random(20, 40);
+            } else if (hour == CLOCK_HOUR_21) {
+                random = Utils.random(30, 55);
+            } else if (hour == CLOCK_HOUR_22) {
+                random = Utils.random(5, 30);
             }
+            mClockTimes.add(hour * 60 + random);
         }
-
-        List<Integer> newRandomTimes = new ArrayList<>();
-        for (int index = 0; index < CLICK_COUNT; index++) {
-            if (index == 0) {
-                newRandomTimes.add(9 * 100 + mClockTimes.get(index));
-            } else if (index == 1) {
-                newRandomTimes.add(22 * 100 + mClockTimes.get(index));
-            } else if (index == 2) {
-                newRandomTimes.add(21 * 100 + mClockTimes.get(index));
-            } else {
-                newRandomTimes.add(8 * 100 + mClockTimes.get(index));
-            }
-        }
-        mClockTimes = newRandomTimes;
-        Utils.log("初始化 mClockTimes<" + mClockTimes + ">", true);
-    }
-
-    private int random() {
-        return mRandom.nextInt(END - START + 1) + START;
+        Utils.log("初始化 mClockTimes<" + getClockTimesStr() + ">", true);
     }
 
     public void clear() {

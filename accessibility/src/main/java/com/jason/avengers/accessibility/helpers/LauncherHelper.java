@@ -20,12 +20,8 @@ public class LauncherHelper extends Helper {
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.miui.home.launcher.Launcher".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> Launcher", true);
-            if (Utils.isAdbEnabled(service)) {
-                mTargetInfo = deepFindOpenTargetInfo(accessibilityEvent.getSource(), "Avengers");
-            } else {
-                mTargetInfo = deepFindOpenTargetInfo(accessibilityEvent.getSource(), "网易OA");
-            }
+            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> Launcher", false);
+            mTargetInfo = deepFindOpenTargetInfo(accessibilityEvent.getSource(), "网易OA");
         } else {
             Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
             mTargetInfo = null;
@@ -59,9 +55,7 @@ public class LauncherHelper extends Helper {
 
     @Override
     public void handle(AccessibilityService service) {
-        if (Utils.isAdbEnabled(service)) {
-            super.handle(service);
-        } else if (Utils.checkClockTime()) {
+        if (Utils.checkClockTime(service)) {
             super.handle(service);
         }
     }

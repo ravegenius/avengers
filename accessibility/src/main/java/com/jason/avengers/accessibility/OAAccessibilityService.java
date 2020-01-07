@@ -12,9 +12,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.jason.avengers.accessibility.common.AccountInfo;
 import com.jason.avengers.accessibility.common.Utils;
 import com.jason.avengers.accessibility.helpers.AvengersHelper;
-import com.jason.avengers.accessibility.helpers.Helper;
 import com.jason.avengers.accessibility.helpers.LauncherHelper;
 import com.jason.avengers.accessibility.helpers.OAHelper;
+import com.jason.avengers.accessibility.helpers.OtherHelper;
 import com.jason.avengers.accessibility.helpers.SettingsHelper;
 import com.jason.avengers.accessibility.helpers.SystemuiHelper;
 
@@ -28,14 +28,14 @@ public class OAAccessibilityService extends AccessibilityService {
     public static CharSequence PACKAGENAME = "";
     public static boolean IS_ADB_ENABLED = false;
 
-    private static final long DELAY_MILLIS = 30 * 1000;
+    private static final long DELAY_MILLIS = 15 * 1000;
 
     private AvengersHelper mAvengersHelper = new AvengersHelper();
     private LauncherHelper mLauncherHelper = new LauncherHelper();
     private SystemuiHelper mSystemuiHelper = new SystemuiHelper();
     private SettingsHelper mSettingsHelper = new SettingsHelper();
+    private OtherHelper mOtherHelper = new OtherHelper();
     private OAHelper mOAHelper = new OAHelper();
-    private Helper mHelper = new Helper();
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -55,7 +55,7 @@ public class OAAccessibilityService extends AccessibilityService {
                 } else if (TextUtils.equals(OAHelper.PackageName, PACKAGENAME)) {
                     mOAHelper.handle(OAAccessibilityService.this);
                 } else {
-                    mHelper.handle(OAAccessibilityService.this);
+                    mOtherHelper.handle(OAAccessibilityService.this);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -77,17 +77,18 @@ public class OAAccessibilityService extends AccessibilityService {
         mSystemuiHelper.init();
         mSettingsHelper.init();
         mOAHelper.init();
+        mOtherHelper.init();
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendEmptyMessageDelayed(0, DELAY_MILLIS);
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
+        PACKAGENAME = accessibilityEvent.getPackageName();
+        Utils.log("【" + PACKAGENAME + "】监控事件 >>>>>> " + accessibilityEvent.toString(), false);
         if (accessibilityEvent.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return;
         }
-        PACKAGENAME = accessibilityEvent.getPackageName();
-        Utils.log("【" + PACKAGENAME + "】监控事件 >>>>>> " + accessibilityEvent.toString(), false);
         try {
             if (TextUtils.equals(AvengersHelper.PackageName, PACKAGENAME)) {
                 mAvengersHelper.onAccessibilityEvent(this, accessibilityEvent);
@@ -100,7 +101,7 @@ public class OAAccessibilityService extends AccessibilityService {
             } else if (TextUtils.equals(OAHelper.PackageName, PACKAGENAME)) {
                 mOAHelper.onAccessibilityEvent(this, accessibilityEvent);
             } else {
-                mHelper.onAccessibilityEvent(this, accessibilityEvent);
+                mOtherHelper.onAccessibilityEvent(this, accessibilityEvent);
             }
             dfs(accessibilityEvent.getSource());
         } catch (Exception e) {
@@ -142,6 +143,7 @@ public class OAAccessibilityService extends AccessibilityService {
         mSystemuiHelper.clear();
         mSettingsHelper.clear();
         mOAHelper.clear();
+        mOtherHelper.clear();
         mHandler.removeCallbacksAndMessages(null);
     }
 

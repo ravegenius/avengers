@@ -11,13 +11,11 @@ import com.jason.avengers.accessibility.common.Utils;
  *
  * @author jason
  */
-public class AvengersHelper extends Helper {
-
-    public static CharSequence PackageName = "com.jason.avengers";
+public class OtherHelper extends Helper {
 
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
-        Utils.log("操作界面 >>>>>> 暂无查找【" + OAAccessibilityService.PACKAGENAME + "】", false);
+        Utils.log("其他界面 >>>>>> 暂无查找【" + OAAccessibilityService.PACKAGENAME + "】", false);
         mTargetInfo = null;
         super.onAccessibilityEvent(service, accessibilityEvent);
     }
