@@ -45,7 +45,8 @@ dependencies {
     // 开发需要可以使用源码编辑
     api 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
     api 'com.alibaba:arouter-api:1.4.0'
-    // objectbox
+    // objectbox adb forward tcp:8090 tcp:8090
+    // http://localhost:8090/index.html
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:${objectboxVersion}"
     releaseImplementation "io.objectbox:objectbox-android:${objectboxVersion}"
 
@@ -53,6 +54,11 @@ dependencies {
     api 'com.sina.weibo.sdk:core:4.3.0:openDefaultRelease@aar'
 
     api project(':core')
+
+    // 使用monitor查看Hierarchy Viewer
+    implementation 'com.github.romainguy:ViewServer:10c563a0b6'
+    // PickerView
+    compile 'com.contrarywind:Android-PickerView:4.1.9'
 }
 
 // apply the plugin after the dependencies block

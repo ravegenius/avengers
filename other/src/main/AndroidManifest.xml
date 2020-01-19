@@ -23,5 +23,20 @@
         <activity
             android:name=".activities.OAClockActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".calendar.activities.CalendarActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".calendar.activities.OwnersActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".calendar.activities.OwnerDetailActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".calendar.activities.EventsActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".calendar.activities.EventAddActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 </manifest>

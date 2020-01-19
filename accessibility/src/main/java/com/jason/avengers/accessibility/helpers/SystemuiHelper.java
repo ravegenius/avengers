@@ -16,14 +16,15 @@ import com.jason.avengers.accessibility.common.Utils;
 public class SystemuiHelper extends Helper {
 
     public static CharSequence PackageName = "com.android.systemui";
+    private static final int MAX_HANDLE_TIMES = 3;
 
     @Override
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         if ("com.android.systemui.recents.RecentsActivity".equals(accessibilityEvent.getClassName())) {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 最近应用", false);
+            Utils.log("操作界面 >>>>>> 查找OA【" + OAAccessibilityService.PACKAGENAME + "】", false);
             mTargetInfo = deepFindRecentsTargetInfo(accessibilityEvent.getSource(), "网易OA");
         } else {
-            Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 未知事件", false);
+            Utils.log("操作界面 >>>>>> 暂无查找【" + OAAccessibilityService.PACKAGENAME + "】", false);
             mTargetInfo = null;
         }
         super.onAccessibilityEvent(service, accessibilityEvent);
@@ -51,5 +52,16 @@ public class SystemuiHelper extends Helper {
             }
         }
         return targetInfo;
+    }
+
+    @Override
+    public void handle(AccessibilityService service) {
+        if (mTargetInfo != null && checkHandleTimesIsOver(MAX_HANDLE_TIMES)) {
+            Utils.log("任何界面 >>>>>> 多次调起【" + OAAccessibilityService.PACKAGENAME + "】", true);
+            // 有时点击无动于衷......
+            Utils.performTargetActionClick(mTargetInfo);
+            return;
+        }
+        Utils.performGlobalActionBack(service);
     }
 }

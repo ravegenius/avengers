@@ -15,12 +15,13 @@ public enum AccountInfo {
      */
     INFO;
 
-    public static final String ACCOUNT = "13401073452";
+    public static final String PASSPORT = "13401073452";
     public static final String PASSWORD = "RGjason8513053";
 
     public static final List<Integer> WORK_DAYS = new ArrayList<>();
 
     static {
+        WORK_DAYS.add(1);
         WORK_DAYS.add(2);
         WORK_DAYS.add(3);
         WORK_DAYS.add(4);
@@ -31,9 +32,12 @@ public enum AccountInfo {
     public static final List<Integer> INIT_TIMES = new ArrayList<>();
 
     static {
-        INIT_TIMES.add(100);
-        INIT_TIMES.add(102);
-        INIT_TIMES.add(104);
+        INIT_TIMES.add(60);
+        INIT_TIMES.add(60 + 1);
+        INIT_TIMES.add(60 + 2);
+        INIT_TIMES.add(60 + 3);
+        INIT_TIMES.add(60 + 4);
+        INIT_TIMES.add(60 + 5);
     }
 
     private static final int CLOCK_HOUR_8 = 8;

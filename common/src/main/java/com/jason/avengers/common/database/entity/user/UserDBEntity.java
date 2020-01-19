@@ -1,4 +1,7 @@
-package com.jason.avengers.common.database.entity;
+package com.jason.avengers.common.database.entity.user;
+
+import com.jason.avengers.common.database.entity.BaseDBEntity;
+import com.jason.avengers.common.database.entity.resume.ResumeDBEntity;
 
 import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;

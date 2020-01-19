@@ -31,6 +31,8 @@ allprojects {
         google()
         jcenter()
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
+        // import ViewServer 使用monitor查看Hierarchy Viewer
+        maven { url 'https://jitpack.io' }
     }
 }
 

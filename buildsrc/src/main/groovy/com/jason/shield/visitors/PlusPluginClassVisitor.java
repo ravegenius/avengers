@@ -18,12 +18,12 @@ public class PlusPluginClassVisitor extends BaseClassVisitor {
         classes.add("com/jason/avengers/common/base/BaseFragment.class");
     }
 
-    public PlusPluginClassVisitor(ClassVisitor cv) {
-        super(cv);
-    }
-
     public static boolean checkClassFile(String className) {
         return classes.contains(className);
+    }
+
+    public PlusPluginClassVisitor(ClassVisitor cv) {
+        super(cv);
     }
 
     @Override

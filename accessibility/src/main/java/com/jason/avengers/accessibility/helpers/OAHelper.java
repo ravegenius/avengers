@@ -28,8 +28,6 @@ public class OAHelper extends Helper {
     private static final boolean isN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
     private static final int POINTS_SIZE = 9;
     private static final int MAX_HANDLE_TIMES = 10;
-    private CharSequence mLastClassName;
-    private int mHandleTimes;
 
 
     @Override
@@ -114,7 +112,7 @@ public class OAHelper extends Helper {
                 if (!accessibilityNodeInfo.isPassword()) {
                     Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置账号", false);
                     Bundle arguments = new Bundle();
-                    arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, AccountInfo.ACCOUNT);
+                    arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, AccountInfo.PASSPORT);
                     accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
                 } else {
                     Utils.log("【" + OAAccessibilityService.PACKAGENAME + "】处理事件 >>>>>> 设置密码", false);
@@ -304,14 +302,7 @@ public class OAHelper extends Helper {
 
     @Override
     public void handle(AccessibilityService service) {
-        if (TextUtils.isEmpty(mLastClassName) || !mLastClassName.equals(mClassName)) {
-            mLastClassName = mClassName;
-            mHandleTimes = 0;
-        } else {
-            mHandleTimes++;
-        }
-        if (mHandleTimes >= MAX_HANDLE_TIMES) {
-            mHandleTimes = 0;
+        if (checkHandleTimesIsOver(MAX_HANDLE_TIMES)) {
             Utils.log("任何界面 >>>>>> 停留太久【" + OAAccessibilityService.PACKAGENAME + "】", true);
             Utils.performGlobalActionHome(service);
             return;
@@ -343,7 +334,12 @@ public class OAHelper extends Helper {
                 }
             }
         }
-        super.handle(service);
+
+        if (mTargetInfo == null) {
+            Utils.performGlobalActionBack(service);
+            return;
+        }
+        Utils.performTargetActionClick(mTargetInfo);
     }
 
     private Path buildPath(Rect rect) {

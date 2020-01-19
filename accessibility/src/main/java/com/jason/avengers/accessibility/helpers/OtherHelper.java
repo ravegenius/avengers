@@ -19,8 +19,4 @@ public class OtherHelper extends Helper {
         mTargetInfo = null;
         super.onAccessibilityEvent(service, accessibilityEvent);
     }
-
-    @Override
-    public void handle(AccessibilityService service) {
-    }
 }

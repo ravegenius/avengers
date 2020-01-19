@@ -13,10 +13,10 @@ import java.util.HashMap;
 /**
  * 用于保持屏幕高亮的工具
  */
-public class ScreenLockUtil {
+public class ScreenLockUtils {
     private static final String TAG = "ScreenLockUtil";
 
-    private ScreenLockUtil() {
+    private ScreenLockUtils() {
         throw new UnsupportedOperationException("cannot be instantiated");
     }
 

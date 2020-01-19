@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/owner_name_label"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="right|end|center"
+        android:padding="10dp"
+        android:text="@string/other_owner_detail_name_label"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/owner_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/edit_text_bg"
+        android:padding="10dp"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/owner_name_label"
+        app:layout_constraintEnd_toStartOf="@+id/owner_location_label"
+        app:layout_constraintStart_toEndOf="@+id/owner_name_label"
+        app:layout_constraintTop_toTopOf="@+id/owner_name_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/owner_location_label"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="right|end|center"
+        android:padding="10dp"
+        android:text="@string/other_owner_detail_location_label"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/owner_name_label"
+        app:layout_constraintEnd_toStartOf="@+id/owner_location"
+        app:layout_constraintStart_toEndOf="@+id/owner_name"
+        app:layout_constraintTop_toTopOf="@+id/owner_name_label" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/owner_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/edit_text_bg"
+        android:padding="10dp"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/owner_name_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/owner_location_label"
+        app:layout_constraintTop_toTopOf="@+id/owner_name_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/owner_events_statistics"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/owner_name_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/owner_events"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/owner_events_statistics" />
+
+</android.support.constraint.ConstraintLayout>

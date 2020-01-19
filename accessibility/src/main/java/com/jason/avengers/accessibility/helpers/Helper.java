@@ -1,6 +1,7 @@
 package com.jason.avengers.accessibility.helpers;
 
 import android.accessibilityservice.AccessibilityService;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -16,6 +17,8 @@ public class Helper {
 
     protected AccessibilityNodeInfo mTargetInfo;
     protected CharSequence mClassName;
+    protected CharSequence mLastClassName;
+    protected int mHandleTimes;
 
     public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent accessibilityEvent) {
         mClassName = accessibilityEvent.getClassName();
@@ -23,11 +26,6 @@ public class Helper {
     }
 
     public void handle(AccessibilityService service) {
-        if (mTargetInfo == null) {
-            Utils.performGlobalActionBack(service);
-            return;
-        }
-        Utils.performTargetActionClick(mTargetInfo);
     }
 
     public void init() {
@@ -36,5 +34,19 @@ public class Helper {
 
     public void clear() {
         mTargetInfo = null;
+    }
+
+    public boolean checkHandleTimesIsOver(int maxTimes) {
+        if (TextUtils.isEmpty(mLastClassName) || !mLastClassName.equals(mClassName)) {
+            mLastClassName = mClassName;
+            mHandleTimes = 0;
+        } else {
+            mHandleTimes++;
+        }
+        if (mHandleTimes >= maxTimes) {
+            mHandleTimes = 0;
+            return true;
+        }
+        return false;
     }
 }

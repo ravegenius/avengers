@@ -112,17 +112,96 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:7258483857462749685",
+      "lastPropertyId": "5:2270868321189562059",
+      "name": "CALENDAROWNER",
+      "properties": [
+        {
+          "id": "1:1201302351681121478",
+          "name": "_ID"
+        },
+        {
+          "id": "2:2001663225981918441",
+          "indexId": "10:87903292996396516",
+          "name": "OWNER_ID"
+        },
+        {
+          "id": "3:4094750074433300281",
+          "indexId": "11:4862942863667843300",
+          "name": "OWNER"
+        },
+        {
+          "id": "4:45149845246884631",
+          "name": "COLOR"
+        },
+        {
+          "id": "5:2270868321189562059",
+          "name": "LOCALTION"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:6376270752592816585",
+      "lastPropertyId": "6:5140906394730812151",
+      "name": "CALENDAREVENT",
+      "properties": [
+        {
+          "id": "1:5062409477031929597",
+          "name": "_ID"
+        },
+        {
+          "id": "2:3451906869717392207",
+          "name": "START_TIME"
+        },
+        {
+          "id": "3:6700139309090960092",
+          "name": "END_TIME"
+        },
+        {
+          "id": "4:7020097768735745436",
+          "indexId": "12:4521675622253411479",
+          "name": "OWNER_ID"
+        },
+        {
+          "id": "5:8316537150494876913",
+          "name": "LEVEL"
+        },
+        {
+          "id": "6:5140906394730812151",
+          "name": "MONEY"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:5737262899629340010",
-  "lastIndexId": "6:3530490121138929110",
+  "lastEntityId": "7:6376270752592816585",
+  "lastIndexId": "12:4521675622253411479",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
-  "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredEntityUids": [
+    71978185913949505,
+    5205343781294722733
+  ],
+  "retiredIndexUids": [
+    5044148654367339308,
+    6658923680650497942,
+    3763885278031276312
+  ],
+  "retiredPropertyUids": [
+    4595742294452987510,
+    3223247855692866424,
+    2802118353454831315,
+    7760660365966681251,
+    8616819352786107113,
+    3641957741383735218,
+    1779603346016247760,
+    7707990784203322882
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

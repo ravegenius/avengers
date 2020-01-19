@@ -1,0 +1,39 @@
+apply plugin: 'com.android.library'
+
+def cfg = rootProject.ext.android
+
+android {
+    compileSdkVersion cfg.compileSdk
+
+    defaultConfig {
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            postprocessing {
+                removeUnusedCode false
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'proguard-rules.pro'
+            }
+        }
+    }
+
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.1'
+    implementation project(':common')
+}

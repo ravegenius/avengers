@@ -11,8 +11,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jason.avengers.accessibility.OAAccessibilityService;
 import com.jason.avengers.common.base.BaseNoMVPActivity;
 import com.jason.avengers.common.database.ObjectBoxBuilder;
-import com.jason.avengers.common.database.entity.LogDBEntity;
-import com.jason.avengers.common.database.entity.LogDBEntity_;
+import com.jason.avengers.common.database.entity.accessibility.LogDBEntity;
+import com.jason.avengers.common.database.entity.accessibility.LogDBEntity_;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
 
@@ -44,7 +44,7 @@ public class OAClockActivity extends BaseNoMVPActivity implements View.OnClickLi
 
     private void initView() {
         TextView developerStateView = findViewById(R.id.oaclock_developer_state);
-        developerStateView.setText("伪开发者状态 <" + String.valueOf(OAAccessibilityService.IS_ADB_ENABLED).toUpperCase() + ">");
+        developerStateView.setText("伪开发者状态 <" + String.valueOf(OAAccessibilityService.IS_CLOCK_ADB_ENABLED).toUpperCase() + ">");
         developerStateView.setOnClickListener(this);
 
         TextView logClearView = findViewById(R.id.oaclock_log_clear);
@@ -98,8 +98,8 @@ public class OAClockActivity extends BaseNoMVPActivity implements View.OnClickLi
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.oaclock_developer_state) {
-            OAAccessibilityService.IS_ADB_ENABLED = !OAAccessibilityService.IS_ADB_ENABLED;
-            ((TextView) view).setText("伪开发者状态 <" + String.valueOf(OAAccessibilityService.IS_ADB_ENABLED).toUpperCase() + ">");
+            OAAccessibilityService.IS_CLOCK_ADB_ENABLED = !OAAccessibilityService.IS_CLOCK_ADB_ENABLED;
+            ((TextView) view).setText("伪开发者状态 <" + String.valueOf(OAAccessibilityService.IS_CLOCK_ADB_ENABLED).toUpperCase() + ">");
         } else if (id == R.id.oaclock_log_clear) {
             pageNo = 0;
             mLogBox.removeAll();

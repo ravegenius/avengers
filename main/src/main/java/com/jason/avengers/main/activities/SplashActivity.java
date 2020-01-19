@@ -45,13 +45,20 @@ public class SplashActivity extends BaseNoMVPActivity {
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean isLogin) throws Exception {
-                        if (isLogin) {
-                            gotoMain();
-                        } else {
-                            gotoMain();
-                        }
+                        gotoMain();
                     }
                 }));
+    }
+
+    private void gotoCalendar() {
+        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR)
+                .navigation(this,
+                        new NavCallback() {
+                            @Override
+                            public void onArrival(Postcard postcard) {
+                                finish();
+                            }
+                        });
     }
 
     private void gotoMain() {

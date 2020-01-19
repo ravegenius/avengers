@@ -1,4 +1,6 @@
-package com.jason.avengers.common.database.entity;
+package com.jason.avengers.common.database.entity.accessibility;
+
+import com.jason.avengers.common.database.entity.BaseDBEntity;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.NameInDb;

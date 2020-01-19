@@ -20,4 +20,9 @@ public class RouterPath {
     public static final String OTHER_RICHEDITOR = "/other/richeditor";
     public static final String OTHER_MUTILLABEL = "/other/mumu";
     public static final String OTHER_OACLOCK = "/other/oaclock";
+    public static final String OTHER_CALENDAR = "/other/calendar";
+    public static final String OTHER_CALENDAR_OWNER = "/other/calendar/owner";
+    public static final String OTHER_CALENDAR_OWNER_DETAIL = "/other/calendar/owner/detail";
+    public static final String OTHER_CALENDAR_EVENT = "/other/calendar/event";
+    public static final String OTHER_CALENDAR_EVENT_ADD = "/other/calendar/event/add";
 }

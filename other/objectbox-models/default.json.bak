@@ -1,0 +1,70 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:7976712482258495903",
+      "lastPropertyId": "4:1061364944670276682",
+      "name": "CALENDAROWNER",
+      "properties": [
+        {
+          "id": "1:9126639971072455639",
+          "indexId": "1:2444026744656037346",
+          "name": "OWNER"
+        },
+        {
+          "id": "2:6979935385826159870",
+          "name": "COLOR"
+        },
+        {
+          "id": "4:1061364944670276682",
+          "indexId": "5:4321942876365161800",
+          "name": "OWNER_ID"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1630126242964257447",
+      "lastPropertyId": "6:3215356545373742229",
+      "name": "CALENDAREVENT",
+      "properties": [
+        {
+          "id": "1:489255465070435952",
+          "name": "START_TIME"
+        },
+        {
+          "id": "2:8389314448245723357",
+          "name": "END_TIME"
+        },
+        {
+          "id": "6:3215356545373742229",
+          "indexId": "6:2688236462591868162",
+          "name": "OWNER_ID"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:1630126242964257447",
+  "lastIndexId": "6:2688236462591868162",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [
+    3490019060537759607,
+    4942254140509658777,
+    3606474696601940177
+  ],
+  "retiredPropertyUids": [
+    2468177654515441356,
+    8786242593354462341,
+    2039778611008702707,
+    7103155234840913986
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

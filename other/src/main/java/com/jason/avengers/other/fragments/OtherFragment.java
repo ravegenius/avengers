@@ -82,6 +82,13 @@ public class OtherFragment extends BaseFragment implements BaseItemViewHolder.Ac
                         .navigation(getActivity());
             }
         }));
+        beanList.add(new OtherBean(OtherBean.Type.Lable, "日历", new OtherBean.Action() {
+            @Override
+            public void doAction() {
+                RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR)
+                        .navigation(getActivity());
+            }
+        }));
 
         mOtherAdapter = new OtherAdapter().setBaseItemViewAction(this);
         mOtherAdapter.setData(beanList);

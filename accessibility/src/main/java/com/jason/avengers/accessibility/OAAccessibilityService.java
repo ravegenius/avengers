@@ -13,6 +13,7 @@ import com.jason.avengers.accessibility.common.AccountInfo;
 import com.jason.avengers.accessibility.common.Utils;
 import com.jason.avengers.accessibility.helpers.AvengersHelper;
 import com.jason.avengers.accessibility.helpers.LauncherHelper;
+import com.jason.avengers.accessibility.helpers.NewsHelper;
 import com.jason.avengers.accessibility.helpers.OAHelper;
 import com.jason.avengers.accessibility.helpers.OtherHelper;
 import com.jason.avengers.accessibility.helpers.SettingsHelper;
@@ -26,7 +27,7 @@ import com.jason.avengers.accessibility.helpers.SystemuiHelper;
 public class OAAccessibilityService extends AccessibilityService {
 
     public static CharSequence PACKAGENAME = "";
-    public static boolean IS_ADB_ENABLED = false;
+    public static boolean IS_CLOCK_ADB_ENABLED = false;
 
     private static final long DELAY_MILLIS = 15 * 1000;
 
@@ -36,6 +37,7 @@ public class OAAccessibilityService extends AccessibilityService {
     private SettingsHelper mSettingsHelper = new SettingsHelper();
     private OtherHelper mOtherHelper = new OtherHelper();
     private OAHelper mOAHelper = new OAHelper();
+    private NewsHelper mNewsHelper = new NewsHelper();
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -54,6 +56,8 @@ public class OAAccessibilityService extends AccessibilityService {
                     mSettingsHelper.handle(OAAccessibilityService.this);
                 } else if (TextUtils.equals(OAHelper.PackageName, PACKAGENAME)) {
                     mOAHelper.handle(OAAccessibilityService.this);
+                } else if (TextUtils.equals(NewsHelper.PackageName, PACKAGENAME)) {
+                    mNewsHelper.handle(OAAccessibilityService.this);
                 } else {
                     mOtherHelper.handle(OAAccessibilityService.this);
                 }
@@ -77,6 +81,7 @@ public class OAAccessibilityService extends AccessibilityService {
         mSystemuiHelper.init();
         mSettingsHelper.init();
         mOAHelper.init();
+        mNewsHelper.init();
         mOtherHelper.init();
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendEmptyMessageDelayed(0, DELAY_MILLIS);
@@ -100,6 +105,8 @@ public class OAAccessibilityService extends AccessibilityService {
                 mSettingsHelper.onAccessibilityEvent(this, accessibilityEvent);
             } else if (TextUtils.equals(OAHelper.PackageName, PACKAGENAME)) {
                 mOAHelper.onAccessibilityEvent(this, accessibilityEvent);
+            } else if (TextUtils.equals(NewsHelper.PackageName, PACKAGENAME)) {
+                mNewsHelper.onAccessibilityEvent(this, accessibilityEvent);
             } else {
                 mOtherHelper.onAccessibilityEvent(this, accessibilityEvent);
             }
@@ -143,6 +150,7 @@ public class OAAccessibilityService extends AccessibilityService {
         mSystemuiHelper.clear();
         mSettingsHelper.clear();
         mOAHelper.clear();
+        mNewsHelper.clear();
         mOtherHelper.clear();
         mHandler.removeCallbacksAndMessages(null);
     }

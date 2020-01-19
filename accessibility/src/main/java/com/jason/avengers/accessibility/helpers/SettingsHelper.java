@@ -52,12 +52,4 @@ public class SettingsHelper extends Helper {
         }
         return targetInfo;
     }
-
-    @Override
-    public void handle(AccessibilityService service) {
-        if (Utils.isAdbEnabled(service)) {
-            super.handle(service);
-        }
-        Utils.performGlobalActionHome(service);
-    }
 }

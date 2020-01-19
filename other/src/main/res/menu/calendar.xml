@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_owners"
+        android:orderInCategory="100"
+        android:title="@string/other_calendar_menu_action_owners"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_events"
+        android:orderInCategory="100"
+        android:title="@string/other_calendar_menu_action_events"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_today"
+        android:orderInCategory="100"
+        android:title="@string/other_calendar_menu_action_today" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_day_view"
+            android:orderInCategory="100"
+            android:title="@string/other_calendar_menu_action_one_day" />
+        <item
+            android:id="@+id/action_three_day_view"
+            android:checked="true"
+            android:orderInCategory="100"
+            android:title="@string/other_calendar_menu_action_three_day" />
+        <item
+            android:id="@+id/action_week_view"
+            android:orderInCategory="100"
+            android:title="@string/other_calendar_menu_action_one_week" />
+    </group>
+    <item
+        android:id="@+id/action_cleanup"
+        android:orderInCategory="100"
+        android:title="@string/other_calendar_menu_action_cleanup" />
+    <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="100"
+        android:title="@string/other_calendar_menu_action_clear" />
+</menu>

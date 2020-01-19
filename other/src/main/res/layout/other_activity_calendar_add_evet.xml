@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_date_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_date_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_date_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_date_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_date_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_start_time_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_start_time_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@+id/calendar_event_start_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_date_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_start_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_start_time_label"
+        app:layout_constraintEnd_toStartOf="@+id/calendar_event_end_time_label"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_start_time_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_start_time_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_end_time_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_end_time_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_start_time_label"
+        app:layout_constraintEnd_toStartOf="@+id/calendar_event_end_time"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_start_time"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_start_time_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_start_time_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_end_time_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_start_time_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_owner_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_owner_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_start_time_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_owner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_owner_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_owner_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_owner_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_level_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_level_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_owner_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_level"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_level_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_level_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_level_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_money_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_money_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_level_label" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/calendar_event_money"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/edit_text_bg"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_money_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_money_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_money_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_cycle_switch_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_cycle_switch_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_money_label" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_cycle_switch_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_cycle_switch_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_cycle_switch_label">
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/calendar_event_cycle_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#323232"
+            android:textOff="@string/other_calendar_event_cycle_switch_off"
+            android:textOn="@string/other_calendar_event_cycle_switch_on"
+            android:textSize="15sp" />
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_cycle_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_cycle_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_cycle_switch_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_cycle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_cycle_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_cycle_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_cycle_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_times_label"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_times_label"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendar_event_cycle_label" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/calendar_event_times"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="#323232"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_event_times_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/calendar_event_times_label"
+        app:layout_constraintTop_toTopOf="@+id/calendar_event_times_label"
+        tools:text="@string/app_name" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/calendar_event_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/other_calendar_event_submit"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

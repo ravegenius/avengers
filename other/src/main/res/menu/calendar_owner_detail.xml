@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        app:actionLayout="@layout/other_layout_menu_switch_item"
+        app:showAsAction="always"
+        tools:ignore="MenuTitle" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_default_view"
+            android:checked="true"
+            android:orderInCategory="100"
+            android:title="@string/other_owner_detail_menu_action_default_view" />
+        <item
+            android:id="@+id/action_day_view"
+            android:orderInCategory="100"
+            android:title="@string/other_owner_detail_menu_action_day_view" />
+        <item
+            android:id="@+id/action_week_view"
+            android:orderInCategory="100"
+            android:title="@string/other_owner_detail_menu_action_week_view" />
+        <item
+            android:id="@+id/action_month_view"
+            android:orderInCategory="100"
+            android:title="@string/other_owner_detail_menu_action_month_view" />
+    </group>
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="100"
+        android:title="@string/other_owner_detail_menu_action_delete"
+        app:actionLayout="@layout/other_layout_menu_switch_item" />
+</menu>
