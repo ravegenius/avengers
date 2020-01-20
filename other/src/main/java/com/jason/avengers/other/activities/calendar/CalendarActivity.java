@@ -1,4 +1,4 @@
-package com.jason.avengers.other.calendar.activities;
+package com.jason.avengers.other.activities.calendar;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,9 +15,8 @@ import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.CalendarPresenter;
-import com.jason.avengers.other.calendar.CalendarView;
-import com.jason.core.utils.ToastUtils;
+import com.jason.avengers.other.presenters.CalendarPresenter;
+import com.jason.avengers.other.views.CalendarView;
 import com.jason.weekview.DateTimeInterpreter;
 import com.jason.weekview.MonthLoader;
 import com.jason.weekview.WeekView;
@@ -145,35 +144,29 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
             return true;
         } else if (id == R.id.action_cleanup) {
             new AlertDialog.Builder(CalendarActivity.this)
-                    .setTitle("提示")
-                    .setMessage("确认是否清理过期")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getPresenter().cleanupData();
                         }
-                    }).create().show();
+                    })
+                    .create().show();
             return true;
         } else if (id == R.id.action_clear) {
             new AlertDialog.Builder(CalendarActivity.this)
-                    .setTitle("提示")
-                    .setMessage("确认是否清理全部")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getPresenter().clearData();
                         }
-                    }).create().show();
+                    })
+                    .create().show();
             return true;
         } else if (id == R.id.action_today) {
             mWeekView.goToToday();
@@ -258,27 +251,32 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        ToastUtils.showShortToast(event.getName());
+        new AlertDialog.Builder(CalendarActivity.this)
+                .setTitle(R.string.other_dialog_title_alter)
+                .setMessage(event.getName())
+                .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create().show();
     }
 
     @Override
     public void onEventLongPress(final WeekViewEvent event, RectF eventRect) {
         new AlertDialog.Builder(CalendarActivity.this)
-                .setTitle("提示")
-                .setMessage("确认是否删除")
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.other_dialog_title_alter)
+                .setMessage(getString(R.string.other_dialog_msg, getString(R.string.app_delete)))
+                .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mEvents.remove(event);
                         mWeekView.notifyDatasetChanged();
                         getPresenter().remove(event);
                     }
-                }).create().show();
+                })
+                .create().show();
     }
 
     @Override

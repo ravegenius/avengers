@@ -1,10 +1,10 @@
-package com.jason.avengers.other.calendar;
+package com.jason.avengers.other.common;
 
 import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.beans.Event;
-import com.jason.avengers.other.calendar.beans.Owner;
+import com.jason.avengers.other.beans.EventBean;
+import com.jason.avengers.other.beans.OwnerBean;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,7 +35,7 @@ public class CalendarCommon {
 
     public static final DecimalFormat MONEY_DF = new DecimalFormat("#.00");
 
-    public static final Map<String, List<String>> OwnersMap = new HashMap<>();
+    public static final Map<String, List<String>> OwnersMap = new LinkedHashMap<>();
 
     static {
         List<String> Names;
@@ -96,10 +95,6 @@ public class CalendarCommon {
         Colors.add(R.color.event_color_14);
         Colors.add(R.color.event_color_15);
         Colors.add(R.color.event_color_16);
-        Colors.add(R.color.event_color_17);
-        Colors.add(R.color.event_color_18);
-        Colors.add(R.color.event_color_19);
-        Colors.add(R.color.event_color_20);
     }
 
     public static final String EACH_DAY = "每天";
@@ -159,14 +154,14 @@ public class CalendarCommon {
     public static final int QUERY_STYLE_WEEK = 2;
     public static final int QUERY_STYLE_MONTH = 3;
 
-    public static List<Event> buildEventsByEventEntities(List<CalendarEventDBEntity> eventEntities,
-                                                         List<CalendarOwnerDBEntity> ownerEntities,
-                                                         int queryStyle, Date now) {
+    public static List<EventBean> buildEventsByEventEntities(List<CalendarEventDBEntity> eventEntities,
+                                                             List<CalendarOwnerDBEntity> ownerEntities,
+                                                             int queryStyle, Date now) {
         if (eventEntities == null || eventEntities.isEmpty()) {
             return null;
         }
 
-        List<Event> events;
+        List<EventBean> eventBeans;
         Collections.sort(eventEntities, new Comparator<CalendarEventDBEntity>() {
             @Override
             public int compare(CalendarEventDBEntity o1, CalendarEventDBEntity o2) {
@@ -175,32 +170,32 @@ public class CalendarCommon {
         });
         switch (queryStyle) {
             case QUERY_STYLE_DAY:
-                events = buildDataInDay(eventEntities, ownerEntities, now);
+                eventBeans = buildDataInDay(eventEntities, ownerEntities, now);
                 break;
             case QUERY_STYLE_WEEK:
-                events = buildDataInWeek(eventEntities, ownerEntities, now);
+                eventBeans = buildDataInWeek(eventEntities, ownerEntities, now);
                 break;
             case QUERY_STYLE_MONTH:
-                events = buildDataInMonth(eventEntities, ownerEntities, now);
+                eventBeans = buildDataInMonth(eventEntities, ownerEntities, now);
                 break;
             default:
-                events = buildDataInDefault(eventEntities, ownerEntities, now);
+                eventBeans = buildDataInDefault(eventEntities, ownerEntities, now);
                 break;
         }
-        return events;
+        return eventBeans;
     }
 
-    private static List<Event> buildDataInDefault(List<CalendarEventDBEntity> eventEntities,
-                                                  List<CalendarOwnerDBEntity> ownerEntities,
-                                                  Date now) {
-        List<Event> events = new ArrayList<>();
+    private static List<EventBean> buildDataInDefault(List<CalendarEventDBEntity> eventEntities,
+                                                      List<CalendarOwnerDBEntity> ownerEntities,
+                                                      Date now) {
+        List<EventBean> eventBeans = new ArrayList<>();
         Date groupStartTime = null;
         Date groupEndTime = null;
         double groupTotalMoney = 0;
-        Event event;
+        EventBean eventBean;
         for (CalendarEventDBEntity eventEntity : eventEntities) {
-            event = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.yyMMdd_SDF, CalendarCommon.HHmm_SDF);
-            events.add(event);
+            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.yyMMdd_SDF, CalendarCommon.HHmm_SDF);
+            eventBeans.add(eventBean);
 
             if (groupStartTime == null || groupStartTime.after(eventEntity.getStartTime())) {
                 groupStartTime = eventEntity.getStartTime();
@@ -211,67 +206,67 @@ public class CalendarCommon {
             groupTotalMoney += eventEntity.getMoney();
         }
 
-        Event groupEvent = new Event();
-        groupEvent.setEventTime(String.format("%s-%s",
+        EventBean groupEventBean = new EventBean();
+        groupEventBean.setEventTime(String.format("%s-%s",
                 CalendarCommon.yyMMdd_SDF.format(groupStartTime),
                 CalendarCommon.yyMMdd_SDF.format(groupEndTime)));
-        groupEvent.setMoney(groupTotalMoney);
-        groupEvent.setGroup(true);
-        events.add(0, groupEvent);
-        return events;
+        groupEventBean.setMoney(groupTotalMoney);
+        groupEventBean.setGroup(true);
+        eventBeans.add(0, groupEventBean);
+        return eventBeans;
     }
 
-    private static List<Event> buildDataInDay(List<CalendarEventDBEntity> eventEntities,
-                                              List<CalendarOwnerDBEntity> ownerEntities,
-                                              Date now) {
-        Map<String, List<Event>> eventListMap = new LinkedHashMap<>();
-        List<Event> eventList;
-        Event groupEvent;
-        Event event;
+    private static List<EventBean> buildDataInDay(List<CalendarEventDBEntity> eventEntities,
+                                                  List<CalendarOwnerDBEntity> ownerEntities,
+                                                  Date now) {
+        Map<String, List<EventBean>> eventListMap = new LinkedHashMap<>();
+        List<EventBean> eventBeanList;
+        EventBean groupEventBean;
+        EventBean eventBean;
         for (CalendarEventDBEntity eventEntity : eventEntities) {
             String groupEventTime = CalendarCommon.yyMMddE_SDF.format(eventEntity.getStartTime());
 
             if (eventListMap.containsKey(groupEventTime)) {
-                eventList = eventListMap.get(groupEventTime);
+                eventBeanList = eventListMap.get(groupEventTime);
             } else {
-                eventList = new ArrayList<>();
+                eventBeanList = new ArrayList<>();
             }
 
-            if (!eventList.isEmpty()) {
-                groupEvent = eventList.get(0);
+            if (!eventBeanList.isEmpty()) {
+                groupEventBean = eventBeanList.get(0);
             } else {
-                groupEvent = new Event();
+                groupEventBean = new EventBean();
             }
-            groupEvent.setEventTime(groupEventTime);
-            groupEvent.setGroup(true);
-            groupEvent.setMoney(groupEvent.getMoney() + eventEntity.getMoney());
+            groupEventBean.setEventTime(groupEventTime);
+            groupEventBean.setGroup(true);
+            groupEventBean.setMoney(groupEventBean.getMoney() + eventEntity.getMoney());
 
 
-            if (!eventList.isEmpty()) {
-                eventList.set(0, groupEvent);
+            if (!eventBeanList.isEmpty()) {
+                eventBeanList.set(0, groupEventBean);
             } else {
-                eventList.add(groupEvent);
+                eventBeanList.add(groupEventBean);
             }
-            event = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.HHmm_SDF, CalendarCommon.HHmm_SDF);
-            eventList.add(event);
+            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.HHmm_SDF, CalendarCommon.HHmm_SDF);
+            eventBeanList.add(eventBean);
 
-            eventListMap.put(groupEventTime, eventList);
+            eventListMap.put(groupEventTime, eventBeanList);
         }
 
-        List<Event> events = new ArrayList<>();
-        for (Map.Entry<String, List<Event>> entry : eventListMap.entrySet()) {
-            events.addAll(entry.getValue());
+        List<EventBean> eventBeans = new ArrayList<>();
+        for (Map.Entry<String, List<EventBean>> entry : eventListMap.entrySet()) {
+            eventBeans.addAll(entry.getValue());
         }
-        return events;
+        return eventBeans;
     }
 
-    private static List<Event> buildDataInWeek(List<CalendarEventDBEntity> eventEntities,
-                                               List<CalendarOwnerDBEntity> ownerEntities,
-                                               Date now) {
-        Map<String, List<Event>> eventListMap = new LinkedHashMap<>();
-        List<Event> eventList;
-        Event groupEvent;
-        Event event;
+    private static List<EventBean> buildDataInWeek(List<CalendarEventDBEntity> eventEntities,
+                                                   List<CalendarOwnerDBEntity> ownerEntities,
+                                                   Date now) {
+        Map<String, List<EventBean>> eventListMap = new LinkedHashMap<>();
+        List<EventBean> eventBeanList;
+        EventBean groupEventBean;
+        EventBean eventBean;
         for (CalendarEventDBEntity eventEntity : eventEntities) {
             Calendar startCalendar = Calendar.getInstance();
             startCalendar.setTime(eventEntity.getStartTime());
@@ -286,110 +281,110 @@ public class CalendarCommon {
                     CalendarCommon.yyMMdd_SDF.format(endCalendar.getTime()));
 
             if (eventListMap.containsKey(groupEventTime)) {
-                eventList = eventListMap.get(groupEventTime);
+                eventBeanList = eventListMap.get(groupEventTime);
             } else {
-                eventList = new ArrayList<>();
+                eventBeanList = new ArrayList<>();
             }
 
-            if (!eventList.isEmpty()) {
-                groupEvent = eventList.get(0);
+            if (!eventBeanList.isEmpty()) {
+                groupEventBean = eventBeanList.get(0);
             } else {
-                groupEvent = new Event();
+                groupEventBean = new EventBean();
             }
-            groupEvent.setEventTime(groupEventTime);
-            groupEvent.setGroup(true);
-            groupEvent.setMoney(groupEvent.getMoney() + eventEntity.getMoney());
+            groupEventBean.setEventTime(groupEventTime);
+            groupEventBean.setGroup(true);
+            groupEventBean.setMoney(groupEventBean.getMoney() + eventEntity.getMoney());
 
 
-            if (!eventList.isEmpty()) {
-                eventList.set(0, groupEvent);
+            if (!eventBeanList.isEmpty()) {
+                eventBeanList.set(0, groupEventBean);
             } else {
-                eventList.add(groupEvent);
+                eventBeanList.add(groupEventBean);
             }
-            event = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.ddEHHmm_SDF, CalendarCommon.HHmm_SDF);
-            eventList.add(event);
+            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.ddEHHmm_SDF, CalendarCommon.HHmm_SDF);
+            eventBeanList.add(eventBean);
 
-            eventListMap.put(groupEventTime, eventList);
+            eventListMap.put(groupEventTime, eventBeanList);
         }
 
-        List<Event> events = new ArrayList<>();
-        for (Map.Entry<String, List<Event>> entry : eventListMap.entrySet()) {
-            events.addAll(entry.getValue());
+        List<EventBean> eventBeans = new ArrayList<>();
+        for (Map.Entry<String, List<EventBean>> entry : eventListMap.entrySet()) {
+            eventBeans.addAll(entry.getValue());
         }
-        return events;
+        return eventBeans;
     }
 
-    private static List<Event> buildDataInMonth(List<CalendarEventDBEntity> eventEntities,
-                                                List<CalendarOwnerDBEntity> ownerEntities,
-                                                Date now) {
-        Map<String, List<Event>> eventListMap = new LinkedHashMap<>();
-        List<Event> eventList;
-        Event groupEvent;
-        Event event;
+    private static List<EventBean> buildDataInMonth(List<CalendarEventDBEntity> eventEntities,
+                                                    List<CalendarOwnerDBEntity> ownerEntities,
+                                                    Date now) {
+        Map<String, List<EventBean>> eventListMap = new LinkedHashMap<>();
+        List<EventBean> eventBeanList;
+        EventBean groupEventBean;
+        EventBean eventBean;
         for (CalendarEventDBEntity eventEntity : eventEntities) {
             String groupEventTime = CalendarCommon.yyyyMM_SDF.format(eventEntity.getStartTime());
 
             if (eventListMap.containsKey(groupEventTime)) {
-                eventList = eventListMap.get(groupEventTime);
+                eventBeanList = eventListMap.get(groupEventTime);
             } else {
-                eventList = new ArrayList<>();
+                eventBeanList = new ArrayList<>();
             }
 
-            if (!eventList.isEmpty()) {
-                groupEvent = eventList.get(0);
+            if (!eventBeanList.isEmpty()) {
+                groupEventBean = eventBeanList.get(0);
             } else {
-                groupEvent = new Event();
+                groupEventBean = new EventBean();
             }
-            groupEvent.setEventTime(groupEventTime);
-            groupEvent.setGroup(true);
-            groupEvent.setMoney(groupEvent.getMoney() + eventEntity.getMoney());
+            groupEventBean.setEventTime(groupEventTime);
+            groupEventBean.setGroup(true);
+            groupEventBean.setMoney(groupEventBean.getMoney() + eventEntity.getMoney());
 
 
-            if (!eventList.isEmpty()) {
-                eventList.set(0, groupEvent);
+            if (!eventBeanList.isEmpty()) {
+                eventBeanList.set(0, groupEventBean);
             } else {
-                eventList.add(groupEvent);
+                eventBeanList.add(groupEventBean);
             }
-            event = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.ddEHHmm_SDF, CalendarCommon.HHmm_SDF);
-            eventList.add(event);
+            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.ddEHHmm_SDF, CalendarCommon.HHmm_SDF);
+            eventBeanList.add(eventBean);
 
-            eventListMap.put(groupEventTime, eventList);
+            eventListMap.put(groupEventTime, eventBeanList);
         }
 
-        List<Event> events = new ArrayList<>();
-        for (Map.Entry<String, List<Event>> entry : eventListMap.entrySet()) {
-            events.addAll(entry.getValue());
+        List<EventBean> eventBeans = new ArrayList<>();
+        for (Map.Entry<String, List<EventBean>> entry : eventListMap.entrySet()) {
+            eventBeans.addAll(entry.getValue());
         }
-        return events;
+        return eventBeans;
     }
 
-    private static Event buildEvent(CalendarEventDBEntity eventEntity,
-                                    List<CalendarOwnerDBEntity> ownerEntities,
-                                    Date now,
-                                    SimpleDateFormat startSdf,
-                                    SimpleDateFormat endSdf) {
-        Event event = new Event();
-        event.setEventTime(String.format("%s-%s",
+    private static EventBean buildEvent(CalendarEventDBEntity eventEntity,
+                                        List<CalendarOwnerDBEntity> ownerEntities,
+                                        Date now,
+                                        SimpleDateFormat startSdf,
+                                        SimpleDateFormat endSdf) {
+        EventBean eventBean = new EventBean();
+        eventBean.setEventTime(String.format("%s-%s",
                 startSdf.format(eventEntity.getStartTime()),
                 endSdf.format(eventEntity.getEndTime())));
-        event.setLevel(eventEntity.getLevel());
-        event.setMoney(eventEntity.getMoney());
-        event.setGroup(false);
-        event.setDone(eventEntity.getEndTime().before(now));
+        eventBean.setLevel(eventEntity.getLevel());
+        eventBean.setMoney(eventEntity.getMoney());
+        eventBean.setGroup(false);
+        eventBean.setDone(eventEntity.getEndTime().before(now));
         if (ownerEntities != null && !ownerEntities.isEmpty()
                 && eventEntity.getOwner() != null && eventEntity.getOwner().getTargetId() > 0) {
             for (CalendarOwnerDBEntity ownerEntity : ownerEntities) {
                 if (ownerEntity.getId() == eventEntity.getOwner().getTargetId()) {
-                    Owner owner = new Owner();
-                    owner.setId(ownerEntity.getId());
-                    owner.setName(ownerEntity.getOwner());
-                    owner.setColor(ownerEntity.getColor());
-                    event.setOwner(owner);
+                    OwnerBean ownerBean = new OwnerBean();
+                    ownerBean.setId(ownerEntity.getId());
+                    ownerBean.setName(ownerEntity.getOwner());
+                    ownerBean.setColor(ownerEntity.getColor());
+                    eventBean.setOwnerBean(ownerBean);
                     break;
                 }
             }
         }
-        return event;
+        return eventBean;
     }
 
     public static List<CalendarEventDBEntity> findOverdueEventEntities(List<CalendarEventDBEntity> eventEntities, Date now) {

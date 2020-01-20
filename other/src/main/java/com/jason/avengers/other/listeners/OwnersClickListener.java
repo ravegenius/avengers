@@ -1,8 +1,8 @@
-package com.jason.avengers.other.calendar.listeners;
+package com.jason.avengers.other.listeners;
 
 import android.view.View;
 
-import com.jason.avengers.other.calendar.holders.OwnersHolder;
+import com.jason.avengers.other.holders.OwnersHolder;
 
 /**
  * @author Jason

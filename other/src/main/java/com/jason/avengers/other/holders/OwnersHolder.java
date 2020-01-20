@@ -1,18 +1,20 @@
-package com.jason.avengers.other.calendar.holders;
+package com.jason.avengers.other.holders;
 
 import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.listeners.OwnersClickListener;
+import com.jason.avengers.other.listeners.OwnersClickListener;
 
 /**
  * @author Jason
@@ -25,8 +27,8 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
     public final TextView ownerColor;
     public final Button ownerDetail, ownerSave, ownerDelete;
 
-    public OwnersHolder(View itemView, final OwnersClickListener listener) {
-        super(itemView);
+    public OwnersHolder(LayoutInflater layoutInflater, ViewGroup parent, final OwnersClickListener listener) {
+        super(layoutInflater.inflate(R.layout.other_layout_item_owner, parent, false));
         ownerName = itemView.findViewById(R.id.owner_name);
         ownerLocation = itemView.findViewById(R.id.owner_location);
         ownerColor = itemView.findViewById(R.id.owner_color);
@@ -82,7 +84,25 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
         ownerSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onSaveClickListener(OwnersHolder.this, view);
+                if (ownerName.isFocusable()) {
+                    ownerName.setFocusable(false);
+                    ownerName.setFocusableInTouchMode(false);
+                    ownerLocation.setFocusable(false);
+                    ownerLocation.setFocusableInTouchMode(false);
+                    if (entity.getId() > 0) {
+                        ownerSave.setText(R.string.other_calendar_owners_action_update);
+                    } else {
+                        ownerSave.setText(R.string.other_calendar_owners_action_add);
+                    }
+
+                    listener.onSaveClickListener(OwnersHolder.this, view);
+                } else {
+                    ownerName.setFocusable(true);
+                    ownerName.setFocusableInTouchMode(true);
+                    ownerLocation.setFocusable(true);
+                    ownerLocation.setFocusableInTouchMode(true);
+                    ownerSave.setText(R.string.other_calendar_owners_action_save);
+                }
             }
         });
 
@@ -100,24 +120,25 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
         if (entity == null) {
             return;
         }
+
         ownerName.setText(entity.getOwner());
+        ownerName.setFocusable(false);
+        ownerName.setFocusableInTouchMode(false);
+
         ownerLocation.setText(entity.getLocaltion());
+        ownerLocation.setFocusable(false);
+        ownerLocation.setFocusableInTouchMode(false);
 
         Context context = itemView.getContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ownerName.setBackgroundColor(context.getResources().getColor(entity.getColor(), null));
-            ownerLocation.setBackgroundColor(context.getResources().getColor(entity.getColor(), null));
-            ownerColor.setBackgroundColor(context.getResources().getColor(entity.getColor(), null));
+            itemView.setBackgroundColor(context.getResources().getColor(entity.getColor(), null));
         } else {
-            ownerName.setBackgroundColor(context.getResources().getColor(entity.getColor()));
-            ownerLocation.setBackgroundColor(context.getResources().getColor(entity.getColor()));
-            ownerColor.setBackgroundColor(context.getResources().getColor(entity.getColor()));
+            itemView.setBackgroundColor(context.getResources().getColor(entity.getColor()));
         }
-
         if (entity.getId() > 0) {
             ownerSave.setText(R.string.other_calendar_owners_action_update);
         } else {
-            ownerSave.setText(R.string.other_calendar_owners_action_save);
+            ownerSave.setText(R.string.other_calendar_owners_action_add);
         }
     }
 }

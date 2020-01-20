@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="40dp"
+    android:background="@color/event_color"
     android:orientation="horizontal">
 
     <android.support.v7.widget.AppCompatTextView
@@ -15,6 +16,7 @@
         android:paddingLeft="10dp"
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         tools:text="@string/app_name" />
 
@@ -22,8 +24,10 @@
         android:id="@+id/event_owner"
         android:layout_width="60dp"
         android:layout_height="match_parent"
+        android:background="@color/event_color_01"
         android:gravity="center"
         android:lines="1"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         tools:text="@string/app_name" />
 
@@ -33,6 +37,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:lines="1"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         tools:text="@string/app_name" />
 
@@ -44,6 +49,7 @@
         android:lines="1"
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         tools:text="@string/app_name" />
 

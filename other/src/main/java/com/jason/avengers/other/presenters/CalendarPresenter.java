@@ -1,4 +1,4 @@
-package com.jason.avengers.other.calendar;
+package com.jason.avengers.other.presenters;
 
 import android.os.Build;
 
@@ -6,6 +6,9 @@ import com.jason.avengers.common.base.BasePresenter;
 import com.jason.avengers.common.database.ObjectBoxBuilder;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
+import com.jason.avengers.other.R;
+import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.views.CalendarView;
 import com.jason.weekview.WeekViewEvent;
 
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
     public void queryData() {
         if (mEventBox != null) {
             List<CalendarEventDBEntity> entities = mEventBox.query().build().find();
+            Date now = new Date();
 
             List<WeekViewEvent> weekViewEvents = new ArrayList<>();
             if (!entities.isEmpty()) {
@@ -64,10 +68,15 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                     String title = CalendarCommon.buildTitle(entity, ownerDBEntity);
                     weekViewEvent = new WeekViewEvent(id, title, startTime, endTime);
                     int colorInt;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        colorInt = mView.getContext().getResources().getColor(ownerDBEntity.getColor(), null);
+                    if (entity.getEndTime().before(now)) {
+                        colorInt = R.color.event_done_color;
                     } else {
-                        colorInt = mView.getContext().getResources().getColor(ownerDBEntity.getColor());
+                        colorInt = ownerDBEntity.getColor();
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        colorInt = mView.getContext().getResources().getColor(colorInt, null);
+                    } else {
+                        colorInt = mView.getContext().getResources().getColor(colorInt);
                     }
                     weekViewEvent.setColor(colorInt);
                     weekViewEvents.add(weekViewEvent);

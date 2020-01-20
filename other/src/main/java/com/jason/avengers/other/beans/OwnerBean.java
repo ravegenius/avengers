@@ -1,11 +1,11 @@
-package com.jason.avengers.other.calendar.beans;
+package com.jason.avengers.other.beans;
 
 import java.io.Serializable;
 
 /**
  * @author Jason
  */
-public class Owner implements Serializable {
+public class OwnerBean implements Serializable {
 
     private long id;
     private String name;

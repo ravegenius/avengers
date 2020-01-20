@@ -1,4 +1,4 @@
-package com.jason.avengers.other.calendar.activities;
+package com.jason.avengers.other.activities.calendar;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -19,9 +19,9 @@ import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBE
 import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.CalendarCommon;
-import com.jason.avengers.other.calendar.adapters.EventsAdapter;
-import com.jason.avengers.other.calendar.beans.Event;
+import com.jason.avengers.other.adapters.EventsAdapter;
+import com.jason.avengers.other.beans.EventBean;
+import com.jason.avengers.other.common.CalendarCommon;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -117,14 +117,10 @@ public class EventsActivity extends BaseActivity {
             return true;
         } else if (id == R.id.action_cleanup) {
             new AlertDialog.Builder(EventsActivity.this)
-                    .setTitle("提示")
-                    .setMessage("确认是否清理过期")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             List<CalendarEventDBEntity> eventEntities = mEventBox.query().build().find();
@@ -133,7 +129,8 @@ public class EventsActivity extends BaseActivity {
                             List<CalendarEventDBEntity> overdueEventEntities = CalendarCommon.findOverdueEventEntities(eventEntities, now);
                             mEventBox.remove(overdueEventEntities);
                         }
-                    }).create().show();
+                    })
+                    .create().show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -144,8 +141,8 @@ public class EventsActivity extends BaseActivity {
         List<CalendarOwnerDBEntity> ownerDBEntities = mOwnerBox.query().build().find();
 
         Date now = new Date();
-        List<Event> events = CalendarCommon.buildEventsByEventEntities(eventEntities, ownerDBEntities, mQueryStyle, now);
-        mEventsAdapter.notifyData(events);
+        List<EventBean> eventBeans = CalendarCommon.buildEventsByEventEntities(eventEntities, ownerDBEntities, mQueryStyle, now);
+        mEventsAdapter.notifyData(eventBeans);
     }
 
     @Override

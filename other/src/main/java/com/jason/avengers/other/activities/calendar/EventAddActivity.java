@@ -1,4 +1,4 @@
-package com.jason.avengers.other.calendar.activities;
+package com.jason.avengers.other.activities.calendar;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,9 +28,9 @@ import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBE
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.common.widgets.inputfilter.CashierInputFilter;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.CalendarCommon;
-import com.jason.avengers.other.calendar.CalendarPresenter;
-import com.jason.avengers.other.calendar.CalendarView;
+import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.presenters.CalendarPresenter;
+import com.jason.avengers.other.views.CalendarView;
 import com.jason.core.utils.ToastUtils;
 
 import java.util.ArrayList;

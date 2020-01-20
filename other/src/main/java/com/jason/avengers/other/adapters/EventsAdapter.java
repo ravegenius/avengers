@@ -1,12 +1,11 @@
-package com.jason.avengers.other.calendar.adapters;
+package com.jason.avengers.other.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.beans.Event;
-import com.jason.avengers.other.calendar.holders.EventHolder;
+import com.jason.avengers.other.beans.EventBean;
+import com.jason.avengers.other.holders.EventHolder;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class EventsAdapter extends RecyclerView.Adapter<EventHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private List<Event> mData;
+    private List<EventBean> mData;
 
     public EventsAdapter(LayoutInflater layoutInflater) {
         this.mLayoutInflater = layoutInflater;
@@ -24,7 +23,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventHolder> {
 
     @Override
     public EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventHolder(mLayoutInflater.inflate(R.layout.other_layout_item_event, parent, false));
+        return new EventHolder(mLayoutInflater, parent);
     }
 
     @Override
@@ -37,8 +36,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void notifyData(List<Event> events) {
-        this.mData = events;
+    public void notifyData(List<EventBean> eventBeans) {
+        this.mData = eventBeans;
         notifyDataSetChanged();
     }
 }

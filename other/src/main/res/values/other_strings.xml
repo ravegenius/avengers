@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">other</string>
     <string name="app_add">新增</string>
+    <string name="app_delete">删除</string>
     <string name="app_submit">提交</string>
     <string name="app_default_view">默认</string>
     <string name="app_day_view">按天分组</string>
@@ -45,8 +46,9 @@
 
     <string name="other_calendar_owners_menu_action_init">初始化</string>
     <string name="other_calendar_owners_menu_action_add">@string/app_add</string>
-    <string name="other_calendar_owners_action_save">存</string>
+    <string name="other_calendar_owners_action_add">增</string>
     <string name="other_calendar_owners_action_update">改</string>
+    <string name="other_calendar_owners_action_save">存</string>
     <string name="other_calendar_owners_action_detail">看</string>
     <string name="other_calendar_owners_action_delete">删</string>
 
@@ -56,9 +58,15 @@
     <string name="other_owner_detail_menu_action_day_view">@string/app_day_view</string>
     <string name="other_owner_detail_menu_action_week_view">@string/app_week_view</string>
     <string name="other_owner_detail_menu_action_month_view">@string/app_month_view</string>
-    <string name="other_owner_detail_menu_action_delete">删除</string>
+    <string name="other_owner_detail_menu_action_delete">@string/app_delete</string>
+    <string name="other_owner_detail_menu_action_add_event">增加课程</string>
     <string name="other_owner_detail_name_label">名称</string>
     <string name="other_owner_detail_location_label">地址</string>
+
+    <string name="other_dialog_title_alter">提示</string>
+    <string name="other_dialog_negative_btn_label">取消</string>
+    <string name="other_dialog_positive_btn_label">确认</string>
+    <string name="other_dialog_msg">确认是否%s</string>
 
 
 </resources>

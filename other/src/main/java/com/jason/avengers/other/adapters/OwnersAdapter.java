@@ -1,13 +1,12 @@
-package com.jason.avengers.other.calendar.adapters;
+package com.jason.avengers.other.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
-import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.holders.OwnersHolder;
-import com.jason.avengers.other.calendar.listeners.OwnersClickListener;
+import com.jason.avengers.other.holders.OwnersHolder;
+import com.jason.avengers.other.listeners.OwnersClickListener;
 
 import java.util.List;
 
@@ -20,15 +19,14 @@ public class OwnersAdapter extends RecyclerView.Adapter<OwnersHolder> {
     private List<CalendarOwnerDBEntity> mData;
     private OwnersClickListener mListener;
 
-    public OwnersAdapter(LayoutInflater layoutInflater,OwnersClickListener mListener) {
+    public OwnersAdapter(LayoutInflater layoutInflater, OwnersClickListener mListener) {
         this.mLayoutInflater = layoutInflater;
         this.mListener = mListener;
     }
 
     @Override
     public OwnersHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new OwnersHolder(mLayoutInflater.inflate(R.layout.other_layout_item_owner, parent, false)
-                , mListener);
+        return new OwnersHolder(mLayoutInflater, parent, mListener);
     }
 
     @Override

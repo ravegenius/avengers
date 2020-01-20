@@ -24,19 +24,19 @@
             android:name=".activities.OAClockActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".calendar.activities.CalendarActivity"
+            android:name=".activities.calendar.CalendarActivity"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".calendar.activities.OwnersActivity"
+            android:name=".activities.calendar.OwnersActivity"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".calendar.activities.OwnerDetailActivity"
+            android:name=".activities.calendar.OwnerDetailActivity"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".calendar.activities.EventsActivity"
+            android:name=".activities.calendar.EventsActivity"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".calendar.activities.EventAddActivity"
+            android:name=".activities.calendar.EventAddActivity"
             android:theme="@style/AppTheme"/>
     </application>
 </manifest>

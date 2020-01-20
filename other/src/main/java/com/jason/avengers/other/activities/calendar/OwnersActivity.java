@@ -1,10 +1,9 @@
-package com.jason.avengers.other.calendar.activities;
+package com.jason.avengers.other.activities.calendar;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,12 +19,13 @@ import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBE
 import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.CalendarCommon;
-import com.jason.avengers.other.calendar.CalendarPresenter;
-import com.jason.avengers.other.calendar.CalendarView;
-import com.jason.avengers.other.calendar.adapters.OwnersAdapter;
-import com.jason.avengers.other.calendar.holders.OwnersHolder;
-import com.jason.avengers.other.calendar.listeners.OwnersClickListener;
+import com.jason.avengers.other.adapters.OwnersAdapter;
+import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.holders.OwnersHolder;
+import com.jason.avengers.other.listeners.OwnersClickListener;
+import com.jason.avengers.other.presenters.CalendarPresenter;
+import com.jason.avengers.other.views.CalendarView;
+import com.jason.core.utils.SoftKeyboardUtils;
 import com.jason.core.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -57,7 +57,6 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
         mOwnersView = findViewById(R.id.calendar_owners_view);
 
         mOwnersView.setLayoutManager(new LinearLayoutManager(this));
-        mOwnersView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mOwnersView.setAdapter(mOwnersAdapter = new OwnersAdapter(getLayoutInflater(), new OwnersClickListener() {
             @Override
             public void onColorClickListener(OwnersHolder holder, View view) {
@@ -96,6 +95,7 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
                 }
                 mOwnerBox.put(entity);
                 mOwnersAdapter.notifyItemChanged(holder.getAdapterPosition());
+                SoftKeyboardUtils.hide(OwnersActivity.this);
             }
 
             @Override
@@ -105,14 +105,10 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
                     return;
                 }
                 new AlertDialog.Builder(OwnersActivity.this)
-                        .setTitle("提示")
-                        .setMessage("确认是否删除")
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.other_dialog_title_alter)
+                        .setMessage(getString(R.string.other_dialog_msg, getString(R.string.app_delete)))
+                        .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                        .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (entity.getId() > 0) {
@@ -120,7 +116,8 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
                                 }
                                 mOwnersAdapter.notifyRemove(holder.getAdapterPosition());
                             }
-                        }).create().show();
+                        })
+                        .create().show();
             }
         }));
     }
@@ -142,20 +139,17 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
         int id = item.getItemId();
         if (id == R.id.action_init) {
             new AlertDialog.Builder(OwnersActivity.this)
-                    .setTitle("提示")
-                    .setMessage("确认是否初始化")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             initData();
                             queryData();
                         }
-                    }).create().show();
+                    })
+                    .create().show();
             return true;
         } else if (id == R.id.action_add) {
             if (mOwnersAdapter != null) {
@@ -163,6 +157,7 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
                 int index = (int) (System.currentTimeMillis() % CalendarCommon.Colors.size());
                 entity.setColor(CalendarCommon.Colors.get(index));
                 mOwnersAdapter.notifyInserted(0, entity);
+                mOwnersView.scrollToPosition(0);
             }
             return true;
         }
@@ -172,7 +167,7 @@ public class OwnersActivity extends BaseActivity<CalendarPresenter, CalendarView
     private void initData() {
         mOwnerBox.removeAll();
         long ownerId = System.currentTimeMillis();
-        int index = (int) (ownerId % CalendarCommon.Colors.size());
+        int index = 0;
         List<CalendarOwnerDBEntity> entities = new ArrayList<>();
         CalendarOwnerDBEntity entity;
         for (Map.Entry<String, List<String>> entry : CalendarCommon.OwnersMap.entrySet()) {

@@ -1,16 +1,16 @@
-package com.jason.avengers.other.calendar.beans;
+package com.jason.avengers.other.beans;
 
 import java.io.Serializable;
 
 /**
  * @author Jason
  */
-public class Event implements Serializable {
+public class EventBean implements Serializable {
 
     private String eventTime;
     private String level;
     private double money;
-    private Owner owner;
+    private OwnerBean ownerBean;
 
     private boolean isGroup;
     private boolean isDone;
@@ -39,12 +39,12 @@ public class Event implements Serializable {
         this.money = money;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public OwnerBean getOwnerBean() {
+        return ownerBean;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setOwnerBean(OwnerBean ownerBean) {
+        this.ownerBean = ownerBean;
     }
 
     public boolean isGroup() {

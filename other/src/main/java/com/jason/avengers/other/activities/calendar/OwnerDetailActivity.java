@@ -1,4 +1,4 @@
-package com.jason.avengers.other.calendar.activities;
+package com.jason.avengers.other.activities.calendar;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -21,15 +22,17 @@ import com.jason.avengers.common.base.BaseActivity;
 import com.jason.avengers.common.database.ObjectBoxBuilder;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
+import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.calendar.CalendarCommon;
-import com.jason.avengers.other.calendar.CalendarPresenter;
-import com.jason.avengers.other.calendar.CalendarView;
-import com.jason.avengers.other.calendar.adapters.EventsAdapter;
-import com.jason.avengers.other.calendar.beans.Event;
+import com.jason.avengers.other.adapters.EventsAdapter;
+import com.jason.avengers.other.beans.EventBean;
+import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.presenters.CalendarPresenter;
+import com.jason.avengers.other.views.CalendarView;
 import com.jason.core.utils.SoftKeyboardUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,8 +51,10 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
 
     private long mId = 0;
     private int mQueryStyle = CalendarCommon.QUERY_STYLE_DEFAULT;
+
     private TextView mEditLabel;
     private Switch mEditSwitch;
+    private View mContentView;
     private EditText mNameView, mLocationView;
     private TextView mStatisticsView;
     private RecyclerView mEventsView;
@@ -102,6 +107,7 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
     };
 
     private void initView() {
+        mContentView = findViewById(R.id.owner_detail_content);
         mNameView = findViewById(R.id.owner_name);
         mNameView.setFocusable(false);
         mNameView.addTextChangedListener(textWatcher);
@@ -181,20 +187,32 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
             return true;
         } else if (id == R.id.action_delete) {
             new AlertDialog.Builder(OwnerDetailActivity.this)
-                    .setTitle("提示")
-                    .setMessage("确认是否删除")
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mOwnerBox.remove(mId);
                             finish();
                         }
-                    }).create().show();
+                    })
+                    .create().show();
+            return true;
+        } else if (id == R.id.action_add_event) {
+            Calendar startTime = Calendar.getInstance();
+            startTime.set(Calendar.MINUTE, 0);
+            startTime.set(Calendar.SECOND, 0);
+            startTime.set(Calendar.MILLISECOND, 0);
+            Calendar endTime = (Calendar) startTime.clone();
+            endTime.add(Calendar.HOUR, 1);
+            String owner = mOwnerEntity.getOwner();
+
+            RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_ADD)
+                    .withSerializable(EventAddActivity.PARAMS_START_TIME, startTime)
+                    .withSerializable(EventAddActivity.PARAMS_END_TIME, endTime)
+                    .withString(EventAddActivity.PARAMS_OWNER, owner)
+                    .navigation(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -203,17 +221,18 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
     private void queryData() {
         mTotalEventCount = mDoneEventCount = 0;
         mOwnerEntity = mOwnerBox.get(mId);
+        mContentView.setBackgroundResource(mOwnerEntity.getColor());
         mNameView.setText(mOwnerEntity.getOwner());
         mLocationView.setText(mOwnerEntity.getLocaltion());
         List<CalendarEventDBEntity> eventEntities = mOwnerEntity.getEvents();
 
         Date now = new Date();
-        List<Event> events = CalendarCommon.buildEventsByEventEntities(eventEntities, null, mQueryStyle, now);
-        if (events != null && !events.isEmpty()) {
-            for (Event event : events) {
-                if (!event.isGroup()) {
+        List<EventBean> eventBeans = CalendarCommon.buildEventsByEventEntities(eventEntities, null, mQueryStyle, now);
+        if (eventBeans != null && !eventBeans.isEmpty()) {
+            for (EventBean eventBean : eventBeans) {
+                if (!eventBean.isGroup()) {
                     mTotalEventCount++;
-                    if (event.isDone()) {
+                    if (eventBean.isDone()) {
                         mDoneEventCount++;
                     }
                 }
@@ -221,7 +240,7 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
         }
 
         mStatisticsView.setText(String.format("共计%d节课，已完成%d节课", mTotalEventCount, mDoneEventCount));
-        mEventsAdapter.notifyData(events);
+        mEventsAdapter.notifyData(eventBeans);
     }
 
     @Override
