@@ -151,6 +151,7 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getPresenter().cleanupData();
+                            getPresenter().queryData();
                         }
                     })
                     .create().show();
@@ -164,6 +165,7 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getPresenter().clearData();
+                            getPresenter().queryData();
                         }
                     })
                     .create().show();
@@ -287,9 +289,9 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
         endTime.set(Calendar.MINUTE, 0);
         endTime.add(Calendar.HOUR, 1);
 
-        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_ADD)
-                .withSerializable(EventAddActivity.PARAMS_START_TIME, startTime)
-                .withSerializable(EventAddActivity.PARAMS_END_TIME, endTime)
+        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
+                .withSerializable(EventDetailActivity.PARAMS_START_TIME, startTime)
+                .withSerializable(EventDetailActivity.PARAMS_END_TIME, endTime)
                 .navigation(this);
     }
 
@@ -299,7 +301,7 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
     }
 
     @Override
-    public void notifyData(List<WeekViewEvent> weekViewEventList) {
+    public void notifyView(List<WeekViewEvent> weekViewEventList) {
         mEvents = weekViewEventList;
         mWeekView.notifyDatasetChanged();
     }

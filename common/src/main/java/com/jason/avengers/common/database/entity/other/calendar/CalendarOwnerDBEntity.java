@@ -9,7 +9,7 @@ import io.objectbox.annotation.NameInDb;
 import io.objectbox.relation.ToMany;
 
 @Entity
-@NameInDb("CALENDAROWNER")
+@NameInDb("CALENDAR_OWNER")
 public class CalendarOwnerDBEntity extends BaseDBEntity {
 
     @Index
@@ -20,8 +20,8 @@ public class CalendarOwnerDBEntity extends BaseDBEntity {
     @NameInDb("OWNER")
     private String owner;
 
-    @NameInDb("LOCALTION")
-    private String localtion;
+    @NameInDb("LOCATION")
+    private String location;
 
     @NameInDb("COLOR")
     private int color;
@@ -45,12 +45,12 @@ public class CalendarOwnerDBEntity extends BaseDBEntity {
         this.owner = owner;
     }
 
-    public String getLocaltion() {
-        return localtion;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocaltion(String localtion) {
-        this.localtion = localtion;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getColor() {

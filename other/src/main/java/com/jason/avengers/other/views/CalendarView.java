@@ -14,5 +14,5 @@ public interface CalendarView extends BaseView {
 
     Context getContext();
 
-    void notifyData(List<WeekViewEvent> weekViewEventList);
+    void notifyView(List<WeekViewEvent> weekViewEventList);
 }

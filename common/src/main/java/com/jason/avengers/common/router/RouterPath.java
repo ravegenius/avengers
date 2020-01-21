@@ -24,5 +24,5 @@ public class RouterPath {
     public static final String OTHER_CALENDAR_OWNER = "/other/calendar/owner";
     public static final String OTHER_CALENDAR_OWNER_DETAIL = "/other/calendar/owner/detail";
     public static final String OTHER_CALENDAR_EVENT = "/other/calendar/event";
-    public static final String OTHER_CALENDAR_EVENT_ADD = "/other/calendar/event/add";
+    public static final String OTHER_CALENDAR_EVENT_DETAIL = "/other/calendar/event/detail";
 }

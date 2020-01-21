@@ -8,41 +8,33 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jason.avengers.common.base.BaseActivity;
-import com.jason.avengers.common.base.BasePresenter;
-import com.jason.avengers.common.base.BaseView;
-import com.jason.avengers.common.database.ObjectBoxBuilder;
-import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
-import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.common.router.RouterBuilder;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.other.R;
 import com.jason.avengers.other.adapters.EventsAdapter;
 import com.jason.avengers.other.beans.EventBean;
 import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.holders.EventHolder;
+import com.jason.avengers.other.listeners.EventClickListener;
+import com.jason.avengers.other.presenters.EventPresenter;
+import com.jason.avengers.other.views.EventView;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import io.objectbox.Box;
 
 /**
  * @author Jason
  */
 @Route(path = RouterPath.OTHER_CALENDAR_EVENT)
-public class EventsActivity extends BaseActivity {
-
-    private Box<CalendarEventDBEntity> mEventBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarEventDBEntity.class);
-    private Box<CalendarOwnerDBEntity> mOwnerBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarOwnerDBEntity.class);
+public class EventsActivity extends BaseActivity<EventPresenter, EventView> implements EventView {
 
     private int mQueryStyle = CalendarCommon.QUERY_STYLE_DEFAULT;
 
     private RecyclerView mEventsView;
     private EventsAdapter mEventsAdapter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +45,35 @@ public class EventsActivity extends BaseActivity {
     }
 
     private void initView() {
-        mEventsView = findViewById(R.id.calendar_events_view);
-
+        mEventsView = findViewById(R.id.events_view);
         mEventsView.setLayoutManager(new LinearLayoutManager(this));
-        mEventsView.setAdapter(mEventsAdapter = new EventsAdapter(getLayoutInflater()));
+        mEventsView.setAdapter(mEventsAdapter = new EventsAdapter(getLayoutInflater(),
+                new EventClickListener() {
+                    @Override
+                    public void onEventClickListener(EventHolder holder, View view) {
+                        if (holder == null
+                                || holder.eventBean == null
+                                || holder.eventBean.getId() <= 0) {
+                            return;
+                        }
+                        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
+                                .withLong(EventDetailActivity.PARAMS_ID, holder.eventBean.getId())
+                                .navigation(EventsActivity.this);
+                    }
+
+                    @Override
+                    public void onOwnerClickListener(EventHolder holder, View view) {
+                        if (holder == null
+                                || holder.eventBean == null
+                                || holder.eventBean.getOwnerBean() == null
+                                || holder.eventBean.getOwnerBean().getId() <= 0) {
+                            return;
+                        }
+                        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_OWNER_DETAIL)
+                                .withLong(OwnerDetailActivity.PARAMS_ID, holder.eventBean.getOwnerBean().getId())
+                                .navigation(EventsActivity.this);
+                    }
+                }));
     }
 
     @Override
@@ -75,16 +92,7 @@ public class EventsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.SECOND, 0);
-            startTime.set(Calendar.MILLISECOND, 0);
-            Calendar endTime = (Calendar) startTime.clone();
-            endTime.add(Calendar.HOUR, 1);
-
-            RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_ADD)
-                    .withSerializable(EventAddActivity.PARAMS_START_TIME, startTime)
-                    .withSerializable(EventAddActivity.PARAMS_END_TIME, endTime)
+            RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
                     .navigation(this);
             return true;
         } else if (id == R.id.action_default_view) {
@@ -123,11 +131,8 @@ public class EventsActivity extends BaseActivity {
                     .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            List<CalendarEventDBEntity> eventEntities = mEventBox.query().build().find();
-                            Date now = new Date();
-
-                            List<CalendarEventDBEntity> overdueEventEntities = CalendarCommon.findOverdueEventEntities(eventEntities, now);
-                            mEventBox.remove(overdueEventEntities);
+                            getPresenter().removeOverdue();
+                            queryData();
                         }
                     })
                     .create().show();
@@ -137,21 +142,23 @@ public class EventsActivity extends BaseActivity {
     }
 
     private void queryData() {
-        List<CalendarEventDBEntity> eventEntities = mEventBox.query().build().find();
-        List<CalendarOwnerDBEntity> ownerDBEntities = mOwnerBox.query().build().find();
+        if (getPresenter() != null) {
+            getPresenter().queryData(mQueryStyle);
+        }
+    }
 
-        Date now = new Date();
-        List<EventBean> eventBeans = CalendarCommon.buildEventsByEventEntities(eventEntities, ownerDBEntities, mQueryStyle, now);
+    @Override
+    protected EventPresenter initPresenter() {
+        return new EventPresenter();
+    }
+
+    @Override
+    protected EventView initAttachView() {
+        return this;
+    }
+
+    @Override
+    public void notifyView(List<EventBean> eventBeans) {
         mEventsAdapter.notifyData(eventBeans);
-    }
-
-    @Override
-    protected BasePresenter initPresenter() {
-        return null;
-    }
-
-    @Override
-    protected BaseView initAttachView() {
-        return null;
     }
 }

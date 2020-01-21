@@ -1,14 +1,17 @@
 package com.jason.avengers.other.activities.calendar;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -21,16 +24,15 @@ import com.bigkoo.pickerview.view.BasePickerView;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.jason.avengers.common.base.BaseActivity;
-import com.jason.avengers.common.database.ObjectBoxBuilder;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
-import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity_;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.common.router.RouterPath;
 import com.jason.avengers.common.widgets.inputfilter.CashierInputFilter;
 import com.jason.avengers.other.R;
 import com.jason.avengers.other.common.CalendarCommon;
-import com.jason.avengers.other.presenters.CalendarPresenter;
-import com.jason.avengers.other.views.CalendarView;
+import com.jason.avengers.other.presenters.EventPresenter;
+import com.jason.avengers.other.views.EventView;
+import com.jason.core.utils.SoftKeyboardUtils;
 import com.jason.core.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -38,29 +40,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import io.objectbox.Box;
-import io.objectbox.relation.ToOne;
-
 /**
  * @author Jason
  */
-@Route(path = RouterPath.OTHER_CALENDAR_EVENT_ADD)
-public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarView>
+@Route(path = RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
+public class EventDetailActivity extends BaseActivity<EventPresenter, EventView>
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     public static final String PARAMS_START_TIME = "start_time";
     public static final String PARAMS_END_TIME = "end_time";
     public static final String PARAMS_OWNER = "owner";
-    public static final String PARAMS_CYCLE = "cycle";
-    public static final String PARAMS_TIMES = "times";
-
-    private Box<CalendarOwnerDBEntity> mOwnerBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarOwnerDBEntity.class);
-    private Box<CalendarEventDBEntity> mEventBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarEventDBEntity.class);
+    public static final String PARAMS_ID = "id";
 
     private List<String> mOwnerList;
     private List<String> mLevelList;
     private List<String> mCycleList;
     private List<String> mTimesList;
+
+    private long mId;
+    private boolean isAddMode;
 
     private Calendar mDateTime;
     private Calendar mStartTime;
@@ -78,10 +76,9 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
     private TextView mOwnerView, mLevelView, mMoneyView;
 
     private SwitchCompat mCycleSwitch;
-    private View mCycleLabelView, mTimesLabelView;
+    private View mCycleSwitchLabelView, mCycleLabelView, mTimesLabelView;
     private TextView mCycleView, mTimesView;
-
-    private Button mSubmitView;
+    private BasePickerView mPickerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,33 +86,43 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
         if (getIntent() == null) {
             finish();
         }
-        setContentView(R.layout.other_activity_calendar_add_evet);
+        setContentView(R.layout.other_activity_calendar_evet_detail);
 
         initData();
         initView();
     }
 
     private void initData() {
+        mId = getIntent().getLongExtra(PARAMS_ID, 0);
+        isAddMode = mId == 0;
+
+        if (isAddMode) {
+            initEditModeData();
+        } else {
+            initDetailModeData();
+        }
+    }
+
+    private void initEditModeData() {
+        mStartTime = (Calendar) getIntent().getSerializableExtra(PARAMS_START_TIME);
+        mEndTime = (Calendar) getIntent().getSerializableExtra(PARAMS_END_TIME);
+        mOwner = getIntent().getStringExtra(PARAMS_OWNER);
+
         mOwnerList = new ArrayList<>();
         mOwnerList.add(CalendarCommon.EMPTY);
-        List<CalendarOwnerDBEntity> entities = mOwnerBox.query().build().find();
-        for (CalendarOwnerDBEntity entity : entities) {
-            mOwnerList.add(entity.getOwner());
-        }
+        mOwnerList.addAll(getPresenter().getOwnerList());
         mLevelList = CalendarCommon.Levels;
         mCycleList = CalendarCommon.Cycles;
         mTimesList = CalendarCommon.Times;
 
-        mStartTime = (Calendar) getIntent().getSerializableExtra(PARAMS_START_TIME);
-        mEndTime = (Calendar) getIntent().getSerializableExtra(PARAMS_END_TIME);
-        mOwner = getIntent().getStringExtra(PARAMS_OWNER);
-        mCycle = getIntent().getStringExtra(PARAMS_CYCLE);
-        mTimes = getIntent().getStringExtra(PARAMS_TIMES);
-
-        mDateTime = (Calendar) mStartTime.clone();
-        mDateTime.set(Calendar.HOUR_OF_DAY, 0);
-        mDateTime.set(Calendar.MINUTE, 0);
-        mDateTime.set(Calendar.SECOND, 0);
+        if (mStartTime == null || mEndTime == null) {
+            mStartTime = Calendar.getInstance();
+            mStartTime.set(Calendar.MINUTE, 0);
+            mStartTime.set(Calendar.SECOND, 0);
+            mStartTime.set(Calendar.MILLISECOND, 0);
+            mEndTime = (Calendar) mStartTime.clone();
+            mEndTime.add(Calendar.HOUR, 1);
+        }
 
         if (TextUtils.isEmpty(mOwner)) {
             mOwner = mOwnerList.get(0);
@@ -133,24 +140,50 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
         if (TextUtils.isEmpty(mTimes)) {
             mTimes = mTimesList.get(0);
         }
+
+        mDateTime = (Calendar) mStartTime.clone();
+        mDateTime.set(Calendar.HOUR_OF_DAY, 0);
+        mDateTime.set(Calendar.MINUTE, 0);
+        mDateTime.set(Calendar.SECOND, 0);
+    }
+
+    private void initDetailModeData() {
+        CalendarEventDBEntity mEventDBEntity = getPresenter().getEventDBEntity(mId);
+
+        mStartTime = Calendar.getInstance();
+        mStartTime.setTime(mEventDBEntity.getStartTime());
+        mEndTime = (Calendar) mStartTime.clone();
+        mEndTime.setTime(mEventDBEntity.getEndTime());
+        mLevel = mEventDBEntity.getLevel();
+        mMoney = mEventDBEntity.getMoney();
+
+        long ownerId = mEventDBEntity.getOwner().getTargetId();
+        CalendarOwnerDBEntity ownerDBEntity = getPresenter().getOwnerDBEntity(ownerId);
+        mOwner = ownerDBEntity.getOwner();
+
+        mLevelList = CalendarCommon.Levels;
+
+        mDateTime = (Calendar) mStartTime.clone();
+        mDateTime.set(Calendar.HOUR_OF_DAY, 0);
+        mDateTime.set(Calendar.MINUTE, 0);
+        mDateTime.set(Calendar.SECOND, 0);
     }
 
     private void initView() {
-        mDateView = findViewById(R.id.calendar_event_date);
-        mStartTimeView = findViewById(R.id.calendar_event_start_time);
-        mEndTimeView = findViewById(R.id.calendar_event_end_time);
+        mDateView = findViewById(R.id.event_detail_date);
+        mStartTimeView = findViewById(R.id.event_detail_start_time);
+        mEndTimeView = findViewById(R.id.event_detail_end_time);
 
-        mOwnerView = findViewById(R.id.calendar_event_owner);
-        mLevelView = findViewById(R.id.calendar_event_level);
-        mMoneyView = findViewById(R.id.calendar_event_money);
+        mOwnerView = findViewById(R.id.event_detail_owner);
+        mLevelView = findViewById(R.id.event_detail_level);
+        mMoneyView = findViewById(R.id.event_detail_money);
 
-        mCycleSwitch = findViewById(R.id.calendar_event_cycle_switch);
-        mCycleLabelView = findViewById(R.id.calendar_event_cycle_label);
-        mCycleView = findViewById(R.id.calendar_event_cycle);
-        mTimesLabelView = findViewById(R.id.calendar_event_times_label);
-        mTimesView = findViewById(R.id.calendar_event_times);
-
-        mSubmitView = findViewById(R.id.calendar_event_submit);
+        mCycleSwitchLabelView = findViewById(R.id.event_detail_cycle_switch_label);
+        mCycleSwitch = findViewById(R.id.event_detail_cycle_switch);
+        mCycleLabelView = findViewById(R.id.event_detail_cycle_label);
+        mCycleView = findViewById(R.id.event_detail_cycle);
+        mTimesLabelView = findViewById(R.id.event_detail_times_label);
+        mTimesView = findViewById(R.id.event_detail_times);
 
         setViewData();
         setViewListener();
@@ -165,19 +198,28 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
         mLevelView.setText(mLevel);
         mMoneyView.setText(String.valueOf(mMoney));
 
-        if (mCycleSwitch.isChecked()) {
-            mCycleView.setVisibility(View.VISIBLE);
-            mCycleLabelView.setVisibility(View.VISIBLE);
-            mTimesView.setVisibility(View.VISIBLE);
-            mTimesLabelView.setVisibility(View.VISIBLE);
+        if (isAddMode) {
+            if (mCycleSwitch.isChecked()) {
+                mCycleView.setVisibility(View.VISIBLE);
+                mCycleLabelView.setVisibility(View.VISIBLE);
+                mTimesView.setVisibility(View.VISIBLE);
+                mTimesLabelView.setVisibility(View.VISIBLE);
+            } else {
+                mCycleView.setVisibility(View.GONE);
+                mCycleLabelView.setVisibility(View.GONE);
+                mTimesView.setVisibility(View.GONE);
+                mTimesLabelView.setVisibility(View.GONE);
+            }
+            mCycleView.setText(mCycle);
+            mTimesView.setText(mTimes);
         } else {
+            mCycleSwitchLabelView.setVisibility(View.GONE);
+            mCycleSwitch.setVisibility(View.GONE);
             mCycleView.setVisibility(View.GONE);
             mCycleLabelView.setVisibility(View.GONE);
             mTimesView.setVisibility(View.GONE);
             mTimesLabelView.setVisibility(View.GONE);
         }
-        mCycleView.setText(mCycle);
-        mTimesView.setText(mTimes);
     }
 
     private void setViewListener() {
@@ -185,7 +227,10 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
         mStartTimeView.setOnClickListener(this);
         mEndTimeView.setOnClickListener(this);
 
-        mOwnerView.setOnClickListener(this);
+        if (isAddMode) {
+            mOwnerView.setOnClickListener(this);
+        }
+
         mLevelView.setOnClickListener(this);
         InputFilter[] filters = {new CashierInputFilter()};
         mMoneyView.setFilters(filters);
@@ -208,21 +253,83 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
             }
         });
 
-        mCycleSwitch.setOnCheckedChangeListener(this);
-        mCycleView.setOnClickListener(this);
-        mTimesView.setOnClickListener(this);
-
-        mSubmitView.setOnClickListener(this);
+        if (isAddMode) {
+            mCycleSwitch.setOnCheckedChangeListener(this);
+            mCycleSwitch.setOnClickListener(this);
+            mCycleView.setOnClickListener(this);
+            mTimesView.setOnClickListener(this);
+        }
     }
 
     @Override
-    protected CalendarPresenter initPresenter() {
-        return null;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.calendar_event_detail, menu);
+        if (isAddMode) {
+            menu.removeItem(R.id.action_delete);
+        }
+        return true;
     }
 
     @Override
-    protected CalendarView initAttachView() {
-        return null;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_submit) {
+            submit();
+            return true;
+        } else if (id == R.id.action_delete) {
+            new AlertDialog.Builder(EventDetailActivity.this)
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            delete();
+                        }
+                    })
+                    .create().show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void submit() {
+        if (isAddMode) {
+            addModeSubmit();
+        } else {
+            detailModeSubmit();
+        }
+    }
+
+    private void addModeSubmit() {
+        if (!checkOwner()) {
+            ToastUtils.showShortToast("请选择拥有者!");
+            return;
+        }
+
+        CalendarOwnerDBEntity sourceEntity = getPresenter().buildOwnerDBEntity(mOwner);
+        if (sourceEntity == null) {
+            ToastUtils.showShortToast("请选择拥有者!");
+            return;
+        }
+
+        getPresenter().addModeSubmit(sourceEntity, mDateTime, mStartTime, mEndTime,
+                mLevel, mMoney, mTimes, mCycle, mCycleSwitch.isChecked());
+        finish();
+    }
+
+    private boolean checkOwner() {
+        return mOwnerList.indexOf(mOwner) > 0;
+    }
+
+    private void detailModeSubmit() {
+        getPresenter().detailModeSubmit(mId, mDateTime, mStartTime, mEndTime, mLevel, mMoney);
+        finish();
+    }
+
+    private void delete() {
+        getPresenter().delete(mId);
+        finish();
     }
 
     @Override
@@ -242,29 +349,31 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
 
     @Override
     public void onClick(View v) {
-        BasePickerView pickerView = null;
+        SoftKeyboardUtils.hide(this);
+        if (mPickerView != null) {
+            mPickerView.dismiss();
+        }
         int vid = v.getId();
-        if (vid == R.id.calendar_event_date) {
-            pickerView = buildDateOptionsPickerBuilder();
-        } else if (vid == R.id.calendar_event_start_time) {
-            pickerView = buildStartTimePickerBuilder();
-        } else if (vid == R.id.calendar_event_end_time) {
-            pickerView = buildEndTimePickerBuilder();
-        } else if (vid == R.id.calendar_event_owner) {
-            pickerView = buildOwnerOptionsPickerBuilder();
-        } else if (vid == R.id.calendar_event_level) {
-            pickerView = buildLevelOptionsPickerBuilder();
-        } else if (vid == R.id.calendar_event_cycle) {
-            pickerView = buildCycleOptionsPickerBuilder();
-        } else if (vid == R.id.calendar_event_times) {
-            pickerView = buildTimesOptionsPickerBuilder();
-        } else if (vid == R.id.calendar_event_submit) {
-            submit();
-            return;
+        if (vid == R.id.event_detail_date) {
+            mPickerView = buildDateOptionsPickerBuilder();
+        } else if (vid == R.id.event_detail_start_time) {
+            mPickerView = buildStartTimePickerBuilder();
+        } else if (vid == R.id.event_detail_end_time) {
+            mPickerView = buildEndTimePickerBuilder();
+        } else if (vid == R.id.event_detail_owner) {
+            mPickerView = buildOwnerOptionsPickerBuilder();
+        } else if (vid == R.id.event_detail_level) {
+            mPickerView = buildLevelOptionsPickerBuilder();
+        } else if (vid == R.id.event_detail_cycle_switch) {
+            mPickerView = null;
+        } else if (vid == R.id.event_detail_cycle) {
+            mPickerView = buildCycleOptionsPickerBuilder();
+        } else if (vid == R.id.event_detail_times) {
+            mPickerView = buildTimesOptionsPickerBuilder();
         }
 
-        if (pickerView != null) {
-            pickerView.show();
+        if (mPickerView != null) {
+            mPickerView.show();
         }
     }
 
@@ -277,7 +386,6 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         mOwnerView.setText(mOwner);
                     }
                 })
-                .setItemVisibleCount(4)
                 .build();
         pickerView.setPicker(mOwnerList);
         if (mOwnerList.contains(mOwner)) {
@@ -295,7 +403,6 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         mLevelView.setText(mLevel);
                     }
                 })
-                .setItemVisibleCount(4)
                 .build();
         pickerView.setPicker(mLevelList);
         if (mLevelList.contains(mLevel)) {
@@ -309,16 +416,13 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        if (!checkDate(date, mEndTime.getTime())) {
-                            ToastUtils.showShortToast("开始时间不能晚于结束时间!");
-                            return;
-                        }
-
-                        if (mStartTime == null) {
-                            mStartTime = Calendar.getInstance();
-                        }
                         mStartTime.setTime(date);
                         mStartTimeView.setText(CalendarCommon.HHmm_SDF.format(mStartTime.getTime()));
+                        if (!checkDate(date, mEndTime.getTime())) {
+                            mEndTime = (Calendar) mStartTime.clone();
+                            mEndTime.add(Calendar.HOUR, 1);
+                            mEndTimeView.setText(CalendarCommon.HHmm_SDF.format(mEndTime.getTime()));
+                        }
                     }
                 })
                 .setType(new boolean[]{false, false, false, true, true, false})
@@ -332,15 +436,13 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        if (!checkDate(mStartTime.getTime(), date)) {
-                            ToastUtils.showShortToast("开始时间不能晚于结束时间!");
-                            return;
-                        }
-                        if (mEndTime == null) {
-                            mEndTime = Calendar.getInstance();
-                        }
                         mEndTime.setTime(date);
                         mEndTimeView.setText(CalendarCommon.HHmm_SDF.format(mEndTime.getTime()));
+                        if (!checkDate(mStartTime.getTime(), date)) {
+                            mStartTime = (Calendar) mEndTime.clone();
+                            mStartTime.add(Calendar.HOUR, -1);
+                            mStartTimeView.setText(CalendarCommon.HHmm_SDF.format(mStartTime.getTime()));
+                        }
                     }
                 })
                 .setType(new boolean[]{false, false, false, true, true, false})
@@ -358,7 +460,6 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         mCycleView.setText(mCycle);
                     }
                 })
-                .setItemVisibleCount(4)
                 .build();
         pickerView.setPicker(mCycleList);
         if (mCycleList.contains(mCycle)) {
@@ -376,7 +477,6 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
                         mTimesView.setText(mTimes);
                     }
                 })
-                .setItemVisibleCount(4)
                 .build();
         pickerView.setPicker(mTimesList);
         if (mTimesList.contains(mTimes)) {
@@ -415,94 +515,13 @@ public class EventAddActivity extends BaseActivity<CalendarPresenter, CalendarVi
         return start.before(end);
     }
 
-    private void submit() {
-        if (!checkOwner()) {
-            ToastUtils.showShortToast("请选择拥有者!");
-            return;
-        }
-
-        CalendarOwnerDBEntity sourceEntity = buildOwnerDBEntity();
-        if (sourceEntity == null) {
-            ToastUtils.showShortToast("请选择拥有者!");
-            return;
-        }
-
-        Calendar dateTime = (Calendar) mDateTime.clone();
-        if (mCycleSwitch.isChecked()) {
-            List<CalendarEventDBEntity> entities = createMany(sourceEntity, dateTime);
-            if (entities != null && !entities.isEmpty()) {
-                mEventBox.put(entities);
-            }
-        } else {
-            CalendarEventDBEntity entity = createOne(sourceEntity, dateTime);
-            if (entity != null) {
-                mEventBox.put(entity);
-            }
-        }
-        finish();
+    @Override
+    protected EventPresenter initPresenter() {
+        return new EventPresenter();
     }
 
-    private CalendarOwnerDBEntity buildOwnerDBEntity() {
-        List<CalendarOwnerDBEntity> entities = mOwnerBox.query().build().find();
-        CalendarOwnerDBEntity sourceEntity = null;
-        for (CalendarOwnerDBEntity entity : entities) {
-            if (TextUtils.equals(mOwner, entity.getOwner())) {
-                sourceEntity = entity;
-                break;
-            }
-        }
-        return sourceEntity;
-    }
-
-    private List<CalendarEventDBEntity> createMany(CalendarOwnerDBEntity sourceEntity, Calendar dateTime) {
-        int times = CalendarCommon.Times.indexOf(mTimes);
-        if (times < 0) {
-            return null;
-        }
-
-        times += 2;
-        List<CalendarEventDBEntity> entities = null;
-        CalendarEventDBEntity entity;
-        for (int index = 0; index < times; index++) {
-            if (index > 0) {
-                if (CalendarCommon.EACH_DAY.equals(mCycle)) {
-                    dateTime.add(Calendar.DAY_OF_MONTH, 1);
-                } else if (CalendarCommon.EACH_WEEK.equals(mCycle)) {
-                    dateTime.add(Calendar.WEEK_OF_MONTH, 1);
-                } else if (CalendarCommon.EACH_MONTH.equals(mCycle)) {
-                    dateTime.add(Calendar.MONTH, 1);
-                }
-            }
-            entity = createOne(sourceEntity, dateTime);
-            if (entities == null) {
-                entities = new ArrayList<>();
-            }
-            entities.add(entity);
-        }
-        return entities;
-    }
-
-    private CalendarEventDBEntity createOne(CalendarOwnerDBEntity sourceEntity, Calendar dateTime) {
-        Calendar startTime = (Calendar) dateTime.clone();
-        startTime.set(Calendar.HOUR_OF_DAY, mStartTime.get(Calendar.HOUR_OF_DAY));
-        startTime.set(Calendar.MINUTE, mStartTime.get(Calendar.MINUTE));
-
-        Calendar endTime = (Calendar) dateTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, mEndTime.get(Calendar.HOUR_OF_DAY));
-        endTime.set(Calendar.MINUTE, mEndTime.get(Calendar.MINUTE));
-
-        CalendarEventDBEntity entity = new CalendarEventDBEntity();
-        entity.setStartTime(startTime.getTime());
-        entity.setEndTime(endTime.getTime());
-        entity.setLevel(mLevel);
-        entity.setMoney(mMoney);
-        ToOne<CalendarOwnerDBEntity> toOne = new ToOne<>(entity, CalendarEventDBEntity_.owner);
-        toOne.setTarget(sourceEntity);
-        entity.setOwner(toOne);
-        return entity;
-    }
-
-    private boolean checkOwner() {
-        return mOwnerList.indexOf(mOwner) > 0;
+    @Override
+    protected EventView initAttachView() {
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.jason.avengers.other.R;
 import com.jason.avengers.other.beans.EventBean;
 import com.jason.avengers.other.common.CalendarCommon;
+import com.jason.avengers.other.listeners.EventClickListener;
 import com.jason.core.utils.DensityUtils;
 
 /**
@@ -22,12 +23,30 @@ public class EventHolder extends RecyclerView.ViewHolder {
     public final TextView eventMoneyView;
     public final TextView eventOwnerView;
 
-    public EventHolder(LayoutInflater layoutInflater, ViewGroup parent) {
+    public EventHolder(LayoutInflater layoutInflater, ViewGroup parent, final EventClickListener listener) {
         super(layoutInflater.inflate(R.layout.other_layout_item_event, parent, false));
         eventTimeView = itemView.findViewById(R.id.event_time);
+        eventOwnerView = itemView.findViewById(R.id.event_owner);
         eventLevelView = itemView.findViewById(R.id.event_level);
         eventMoneyView = itemView.findViewById(R.id.event_money);
-        eventOwnerView = itemView.findViewById(R.id.event_owner);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onEventClickListener(EventHolder.this, v);
+                }
+            }
+        });
+
+        eventOwnerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onOwnerClickListener(EventHolder.this, v);
+                }
+            }
+        });
     }
 
     public void bindView(EventBean eventBean) {
@@ -60,7 +79,7 @@ public class EventHolder extends RecyclerView.ViewHolder {
         } else {
             eventOwnerView.setVisibility(View.VISIBLE);
             eventOwnerView.setText(eventBean.getOwnerBean().getName());
-            eventOwnerView.setBackgroundResource(eventBean.getOwnerBean().getColor());
+            eventOwnerView.setBackgroundResource(eventBean.isDone() ? R.color.event_done_color : eventBean.getOwnerBean().getColor());
         }
     }
 }

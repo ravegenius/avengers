@@ -12,22 +12,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.other.R;
-import com.jason.avengers.other.listeners.OwnersClickListener;
+import com.jason.avengers.other.beans.OwnerBean;
+import com.jason.avengers.other.listeners.OwnerClickListener;
 
 /**
  * @author Jason
  */
-public class OwnersHolder extends RecyclerView.ViewHolder {
+public class OwnerHolder extends RecyclerView.ViewHolder {
 
-    public CalendarOwnerDBEntity entity;
+    public OwnerBean ownerBean;
     public final EditText ownerName;
     public final EditText ownerLocation;
     public final TextView ownerColor;
     public final Button ownerDetail, ownerSave, ownerDelete;
 
-    public OwnersHolder(LayoutInflater layoutInflater, ViewGroup parent, final OwnersClickListener listener) {
+    public OwnerHolder(LayoutInflater layoutInflater, ViewGroup parent, final OwnerClickListener listener) {
         super(layoutInflater.inflate(R.layout.other_layout_item_owner, parent, false));
         ownerName = itemView.findViewById(R.id.owner_name);
         ownerLocation = itemView.findViewById(R.id.owner_location);
@@ -47,7 +47,7 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void afterTextChanged(Editable s) {
-                entity.setOwner(ownerName.getText().toString());
+                ownerBean.setName(ownerName.getText().toString());
             }
         });
 
@@ -62,14 +62,14 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void afterTextChanged(Editable s) {
-                entity.setLocaltion(ownerLocation.getText().toString());
+                ownerBean.setLocation(ownerLocation.getText().toString());
             }
         });
 
         ownerColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onColorClickListener(OwnersHolder.this, view);
+                listener.onColorClickListener(OwnerHolder.this, view);
 
             }
         });
@@ -77,7 +77,7 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
         ownerDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onDetailClickListener(OwnersHolder.this, view);
+                listener.onDetailClickListener(OwnerHolder.this, view);
             }
         });
 
@@ -89,19 +89,19 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
                     ownerName.setFocusableInTouchMode(false);
                     ownerLocation.setFocusable(false);
                     ownerLocation.setFocusableInTouchMode(false);
-                    if (entity.getId() > 0) {
-                        ownerSave.setText(R.string.other_calendar_owners_action_update);
+                    if (ownerBean.getId() > 0) {
+                        ownerSave.setText(R.string.other_owners_action_update);
                     } else {
-                        ownerSave.setText(R.string.other_calendar_owners_action_add);
+                        ownerSave.setText(R.string.other_owners_action_add);
                     }
 
-                    listener.onSaveClickListener(OwnersHolder.this, view);
+                    listener.onSaveClickListener(OwnerHolder.this, view);
                 } else {
                     ownerName.setFocusable(true);
                     ownerName.setFocusableInTouchMode(true);
                     ownerLocation.setFocusable(true);
                     ownerLocation.setFocusableInTouchMode(true);
-                    ownerSave.setText(R.string.other_calendar_owners_action_save);
+                    ownerSave.setText(R.string.other_owners_action_save);
                 }
             }
         });
@@ -109,36 +109,36 @@ public class OwnersHolder extends RecyclerView.ViewHolder {
         ownerDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onDeleteClickListener(OwnersHolder.this, view);
+                listener.onDeleteClickListener(OwnerHolder.this, view);
             }
         });
     }
 
-    public void bindView(CalendarOwnerDBEntity entity) {
-        this.entity = entity;
+    public void bindView(OwnerBean ownerBean) {
+        this.ownerBean = ownerBean;
 
-        if (entity == null) {
+        if (ownerBean == null) {
             return;
         }
 
-        ownerName.setText(entity.getOwner());
+        ownerName.setText(ownerBean.getName());
         ownerName.setFocusable(false);
         ownerName.setFocusableInTouchMode(false);
 
-        ownerLocation.setText(entity.getLocaltion());
+        ownerLocation.setText(ownerBean.getLocation());
         ownerLocation.setFocusable(false);
         ownerLocation.setFocusableInTouchMode(false);
 
         Context context = itemView.getContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            itemView.setBackgroundColor(context.getResources().getColor(entity.getColor(), null));
+            itemView.setBackgroundColor(context.getResources().getColor(ownerBean.getColor(), null));
         } else {
-            itemView.setBackgroundColor(context.getResources().getColor(entity.getColor()));
+            itemView.setBackgroundColor(context.getResources().getColor(ownerBean.getColor()));
         }
-        if (entity.getId() > 0) {
-            ownerSave.setText(R.string.other_calendar_owners_action_update);
+        if (ownerBean.getId() > 0) {
+            ownerSave.setText(R.string.other_owners_action_update);
         } else {
-            ownerSave.setText(R.string.other_calendar_owners_action_add);
+            ownerSave.setText(R.string.other_owners_action_add);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.jason.avengers.other.beans.EventBean;
 import com.jason.avengers.other.holders.EventHolder;
+import com.jason.avengers.other.listeners.EventClickListener;
 
 import java.util.List;
 
@@ -15,15 +16,17 @@ import java.util.List;
 public class EventsAdapter extends RecyclerView.Adapter<EventHolder> {
 
     private final LayoutInflater mLayoutInflater;
+    private final EventClickListener mEventClickListener;
     private List<EventBean> mData;
 
-    public EventsAdapter(LayoutInflater layoutInflater) {
+    public EventsAdapter(LayoutInflater layoutInflater, EventClickListener listener) {
         this.mLayoutInflater = layoutInflater;
+        this.mEventClickListener = listener;
     }
 
     @Override
     public EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventHolder(mLayoutInflater, parent);
+        return new EventHolder(mLayoutInflater, parent, mEventClickListener);
     }
 
     @Override

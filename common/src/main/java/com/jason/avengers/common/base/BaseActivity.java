@@ -11,7 +11,6 @@ import com.jason.avengers.common.annotations.TrackMethod;
 /**
  * Created by jason on 2018/3/15.
  */
-
 public abstract class BaseActivity<P extends BasePresenter, V extends BaseView> extends AppCompatActivity {
 
     private P mPresenter;

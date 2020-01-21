@@ -8,7 +8,9 @@ import java.io.Serializable;
 public class OwnerBean implements Serializable {
 
     private long id;
+    private long ownerId;
     private String name;
+    private String location;
     private int color;
 
     public long getId() {
@@ -19,12 +21,28 @@ public class OwnerBean implements Serializable {
         this.id = id;
     }
 
+    public long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(long ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getColor() {

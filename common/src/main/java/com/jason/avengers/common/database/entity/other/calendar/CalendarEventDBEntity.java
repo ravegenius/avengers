@@ -10,7 +10,7 @@ import io.objectbox.annotation.TargetIdProperty;
 import io.objectbox.relation.ToOne;
 
 @Entity
-@NameInDb("CALENDAREVENT")
+@NameInDb("CALENDAR_EVENT")
 public class CalendarEventDBEntity extends BaseDBEntity {
 
     @NameInDb("START_TIME")

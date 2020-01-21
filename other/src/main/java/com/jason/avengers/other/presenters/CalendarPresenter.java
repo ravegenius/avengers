@@ -38,7 +38,6 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
 
         if (mEventBox != null) {
             mEventBox.closeThreadResources();
-            mEventBox = null;
         }
     }
 
@@ -82,7 +81,7 @@ public class CalendarPresenter extends BasePresenter<CalendarView> {
                     weekViewEvents.add(weekViewEvent);
                 }
             }
-            mView.notifyData(weekViewEvents);
+            mView.notifyView(weekViewEvents);
         }
     }
 

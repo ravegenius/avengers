@@ -7,13 +7,21 @@ import java.io.Serializable;
  */
 public class EventBean implements Serializable {
 
+    private long id;
     private String eventTime;
+    private OwnerBean ownerBean;
     private String level;
     private double money;
-    private OwnerBean ownerBean;
-
     private boolean isGroup;
     private boolean isDone;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getEventTime() {
         return eventTime;
@@ -21,6 +29,14 @@ public class EventBean implements Serializable {
 
     public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
+    }
+
+    public OwnerBean getOwnerBean() {
+        return ownerBean;
+    }
+
+    public void setOwnerBean(OwnerBean ownerBean) {
+        this.ownerBean = ownerBean;
     }
 
     public String getLevel() {
@@ -37,14 +53,6 @@ public class EventBean implements Serializable {
 
     public void setMoney(double money) {
         this.money = money;
-    }
-
-    public OwnerBean getOwnerBean() {
-        return ownerBean;
-    }
-
-    public void setOwnerBean(OwnerBean ownerBean) {
-        this.ownerBean = ownerBean;
     }
 
     public boolean isGroup() {

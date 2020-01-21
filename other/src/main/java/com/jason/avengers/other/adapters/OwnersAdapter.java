@@ -4,35 +4,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
-import com.jason.avengers.other.holders.OwnersHolder;
-import com.jason.avengers.other.listeners.OwnersClickListener;
+import com.jason.avengers.other.beans.OwnerBean;
+import com.jason.avengers.other.holders.OwnerHolder;
+import com.jason.avengers.other.listeners.OwnerClickListener;
 
 import java.util.List;
 
 /**
  * @author Jason
  */
-public class OwnersAdapter extends RecyclerView.Adapter<OwnersHolder> {
+public class OwnersAdapter extends RecyclerView.Adapter<OwnerHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private List<CalendarOwnerDBEntity> mData;
-    private OwnersClickListener mListener;
+    private final OwnerClickListener mOwnerClickListener;
+    private List<OwnerBean> mData;
 
-    public OwnersAdapter(LayoutInflater layoutInflater, OwnersClickListener mListener) {
+    public OwnersAdapter(LayoutInflater layoutInflater, OwnerClickListener mListener) {
         this.mLayoutInflater = layoutInflater;
-        this.mListener = mListener;
+        this.mOwnerClickListener = mListener;
     }
 
     @Override
-    public OwnersHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new OwnersHolder(mLayoutInflater, parent, mListener);
+    public OwnerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new OwnerHolder(mLayoutInflater, parent, mOwnerClickListener);
     }
 
     @Override
-    public void onBindViewHolder(OwnersHolder holder, int position) {
-        CalendarOwnerDBEntity entity = mData.get(position);
-        holder.bindView(entity);
+    public void onBindViewHolder(OwnerHolder holder, int position) {
+        OwnerBean ownerBean = mData.get(position);
+        holder.bindView(ownerBean);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class OwnersAdapter extends RecyclerView.Adapter<OwnersHolder> {
         return mData == null ? 0 : mData.size();
     }
 
-    public void notifyData(List<CalendarOwnerDBEntity> entities) {
+    public void notifyData(List<OwnerBean> entities) {
         this.mData = entities;
         notifyDataSetChanged();
     }
 
-    public void notifyInserted(int position, CalendarOwnerDBEntity emptyEntity) {
-        this.mData.add(position, emptyEntity);
+    public void notifyInserted(int position, OwnerBean ownerBean) {
+        this.mData.add(position, ownerBean);
         notifyItemInserted(position);
     }
 

@@ -24,12 +24,13 @@ import java.util.Map;
 public class CalendarCommon {
 
     public static final String EMPTY = "无";
-    public static final double DEFAULT_MONEY = 0;
+    public static final double DEFAULT_MONEY = 200.0;
 
     public static final SimpleDateFormat yyyyMMdd_SDF = new SimpleDateFormat("yyyy年MM月dd日");
     public static final SimpleDateFormat yyyyMM_SDF = new SimpleDateFormat("yyyy年MM月");
     public static final SimpleDateFormat yyMMddE_SDF = new SimpleDateFormat("yy年MM月dd日E");
     public static final SimpleDateFormat yyMMdd_SDF = new SimpleDateFormat("yy年MM月dd日");
+    public static final SimpleDateFormat MMddHHmm_SDF = new SimpleDateFormat("MM月dd日HH:mm");
     public static final SimpleDateFormat ddEHHmm_SDF = new SimpleDateFormat("dd日E HH:mm");
     public static final SimpleDateFormat HHmm_SDF = new SimpleDateFormat("HH:mm");
 
@@ -142,7 +143,7 @@ public class CalendarCommon {
     public static String buildTitle(CalendarEventDBEntity entity, CalendarOwnerDBEntity ownerDBEntity) {
         String title = String.format("%s_[%s]:%s-%s_%s",
                 ownerDBEntity.getOwner(),
-                ownerDBEntity.getLocaltion(),
+                ownerDBEntity.getLocation(),
                 simpleDateFormat.format(entity.getStartTime()),
                 simpleDateFormat.format(entity.getEndTime()),
                 entity.getLevel());
@@ -194,7 +195,7 @@ public class CalendarCommon {
         double groupTotalMoney = 0;
         EventBean eventBean;
         for (CalendarEventDBEntity eventEntity : eventEntities) {
-            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.yyMMdd_SDF, CalendarCommon.HHmm_SDF);
+            eventBean = buildEvent(eventEntity, ownerEntities, now, CalendarCommon.MMddHHmm_SDF, CalendarCommon.HHmm_SDF);
             eventBeans.add(eventBean);
 
             if (groupStartTime == null || groupStartTime.after(eventEntity.getStartTime())) {
@@ -364,6 +365,7 @@ public class CalendarCommon {
                                         SimpleDateFormat startSdf,
                                         SimpleDateFormat endSdf) {
         EventBean eventBean = new EventBean();
+        eventBean.setId(eventEntity.getId());
         eventBean.setEventTime(String.format("%s-%s",
                 startSdf.format(eventEntity.getStartTime()),
                 endSdf.format(eventEntity.getEndTime())));

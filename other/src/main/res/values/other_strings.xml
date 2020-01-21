@@ -24,33 +24,35 @@
     <string name="other_calendar_menu_action_cleanup">清理过期</string>
     <string name="other_calendar_menu_action_clear">清理全部</string>
 
-    <string name="other_calendar_events_menu_action_add">@string/app_add</string>
-    <string name="other_calendar_events_menu_action_default_view">@string/app_default_view</string>
-    <string name="other_calendar_events_menu_action_day_view">@string/app_day_view</string>
-    <string name="other_calendar_events_menu_action_week_view">@string/app_week_view</string>
-    <string name="other_calendar_events_menu_action_month_view">@string/app_month_view</string>
-    <string name="other_calendar_events_menu_action_cleanup">@string/app_cleanup</string>
+    <string name="other_event_detail_menu_action_submit">@string/app_submit</string>
+    <string name="other_event_detail_menu_action_delete">@string/app_delete</string>
+    <string name="other_event_detail_owner_label">学员名称</string>
+    <string name="other_event_detail_level_label">课程等级</string>
+    <string name="other_event_detail_money_label">课程金额</string>
+    <string name="other_event_detail_start_time_label">开始时间</string>
+    <string name="other_event_detail_end_time_label">结束时间</string>
+    <string name="other_event_detail_cycle_switch_label">周期开关</string>
+    <string name="other_event_detail_cycle_switch_off">关</string>
+    <string name="other_event_detail_cycle_switch_on">开</string>
+    <string name="other_event_detail_cycle_label">课程周期</string>
+    <string name="other_event_detail_times_label">课程次数</string>
+    <string name="other_event_detail_date_label">课程日期</string>
+    <string name="other_event_detail_submit">@string/app_submit</string>
 
-    <string name="other_calendar_event_owner_label">学员名称</string>
-    <string name="other_calendar_event_level_label">课程等级</string>
-    <string name="other_calendar_event_money_label">课程金额</string>
-    <string name="other_calendar_event_start_time_label">开始时间</string>
-    <string name="other_calendar_event_end_time_label">结束时间</string>
-    <string name="other_calendar_event_cycle_switch_label">周期开关</string>
-    <string name="other_calendar_event_cycle_switch_off">关</string>
-    <string name="other_calendar_event_cycle_switch_on">开</string>
-    <string name="other_calendar_event_cycle_label">课程周期</string>
-    <string name="other_calendar_event_times_label">课程次数</string>
-    <string name="other_calendar_event_date_label">课程日期</string>
-    <string name="other_calendar_event_submit">@string/app_submit</string>
+    <string name="other_events_menu_action_add">@string/app_add</string>
+    <string name="other_events_menu_action_default_view">@string/app_default_view</string>
+    <string name="other_events_menu_action_day_view">@string/app_day_view</string>
+    <string name="other_events_menu_action_week_view">@string/app_week_view</string>
+    <string name="other_events_menu_action_month_view">@string/app_month_view</string>
+    <string name="other_events_menu_action_cleanup">@string/app_cleanup</string>
 
-    <string name="other_calendar_owners_menu_action_init">初始化</string>
-    <string name="other_calendar_owners_menu_action_add">@string/app_add</string>
-    <string name="other_calendar_owners_action_add">增</string>
-    <string name="other_calendar_owners_action_update">改</string>
-    <string name="other_calendar_owners_action_save">存</string>
-    <string name="other_calendar_owners_action_detail">看</string>
-    <string name="other_calendar_owners_action_delete">删</string>
+    <string name="other_owners_menu_action_init">初始化</string>
+    <string name="other_owners_menu_action_add">@string/app_add</string>
+    <string name="other_owners_action_detail">看</string>
+    <string name="other_owners_action_delete">删</string>
+    <string name="other_owners_action_add">增</string>
+    <string name="other_owners_action_update">改</string>
+    <string name="other_owners_action_save">存</string>
 
     <string name="other_owner_detail_menu_action_edit_off">编辑[关]</string>
     <string name="other_owner_detail_menu_action_edit_on">编辑[开]</string>
@@ -67,6 +69,4 @@
     <string name="other_dialog_negative_btn_label">取消</string>
     <string name="other_dialog_positive_btn_label">确认</string>
     <string name="other_dialog_msg">确认是否%s</string>
-
-
 </resources>

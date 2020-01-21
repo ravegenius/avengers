@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jason.avengers.common.base.BaseActivity;
-import com.jason.avengers.common.database.ObjectBoxBuilder;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.common.router.RouterBuilder;
@@ -28,26 +27,22 @@ import com.jason.avengers.other.R;
 import com.jason.avengers.other.adapters.EventsAdapter;
 import com.jason.avengers.other.beans.EventBean;
 import com.jason.avengers.other.common.CalendarCommon;
-import com.jason.avengers.other.presenters.CalendarPresenter;
-import com.jason.avengers.other.views.CalendarView;
+import com.jason.avengers.other.holders.EventHolder;
+import com.jason.avengers.other.listeners.EventClickListener;
+import com.jason.avengers.other.presenters.OwnerPresenter;
+import com.jason.avengers.other.views.OwnerView;
 import com.jason.core.utils.SoftKeyboardUtils;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import io.objectbox.Box;
 
 /**
  * @author Jason
  */
 @Route(path = RouterPath.OTHER_CALENDAR_OWNER_DETAIL)
-public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, CalendarView> {
+public class OwnerDetailActivity extends BaseActivity<OwnerPresenter, OwnerView> {
 
     public static final String PARAMS_ID = "id";
-
-    private Box<CalendarOwnerDBEntity> mOwnerBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarOwnerDBEntity.class);
-    private CalendarOwnerDBEntity mOwnerEntity;
 
     private long mId = 0;
     private int mQueryStyle = CalendarCommon.QUERY_STYLE_DEFAULT;
@@ -60,22 +55,6 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
     private RecyclerView mEventsView;
     private EventsAdapter mEventsAdapter;
     private int mTotalEventCount, mDoneEventCount;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (!getIntent().hasExtra(PARAMS_ID)) {
-            finish();
-        }
-        mId = getIntent().getLongExtra(PARAMS_ID, 0);
-        if (mId == 0) {
-            finish();
-        }
-
-        setContentView(R.layout.other_activity_calendar_owner_detail);
-        initView();
-    }
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -94,17 +73,25 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
             if (TextUtils.isEmpty(mNameView.getText()) || TextUtils.isEmpty(mLocationView.getText())) {
                 return;
             }
-            if (TextUtils.equals(mOwnerEntity.getOwner(), mNameView.getText())
-                    && TextUtils.equals(mOwnerEntity.getLocaltion(), mLocationView.getText())) {
-                return;
-            }
-            if (mOwnerEntity != null) {
-                mOwnerEntity.setOwner(mNameView.getText().toString());
-                mOwnerEntity.setLocaltion(mLocationView.getText().toString());
-            }
-            mOwnerBox.put(mOwnerEntity);
+            getPresenter().saveData(mId, mNameView.getText().toString(), mLocationView.getText().toString());
         }
     };
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (!getIntent().hasExtra(PARAMS_ID)) {
+            finish();
+        }
+        mId = getIntent().getLongExtra(PARAMS_ID, 0);
+        if (mId == 0) {
+            finish();
+        }
+
+        setContentView(R.layout.other_activity_calendar_owner_detail);
+        initView();
+    }
 
     private void initView() {
         mContentView = findViewById(R.id.owner_detail_content);
@@ -117,7 +104,24 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
         mStatisticsView = findViewById(R.id.owner_events_statistics);
         mEventsView = findViewById(R.id.owner_events);
         mEventsView.setLayoutManager(new LinearLayoutManager(this));
-        mEventsView.setAdapter(mEventsAdapter = new EventsAdapter(getLayoutInflater()));
+        mEventsView.setAdapter(mEventsAdapter = new EventsAdapter(getLayoutInflater(),
+                new EventClickListener() {
+                    @Override
+                    public void onEventClickListener(EventHolder holder, View view) {
+                        if (holder == null
+                                || holder.eventBean == null
+                                || holder.eventBean.getId() <= 0) {
+                            return;
+                        }
+                        RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
+                                .withLong(EventDetailActivity.PARAMS_ID, holder.eventBean.getId())
+                                .navigation(OwnerDetailActivity.this);
+                    }
+
+                    @Override
+                    public void onOwnerClickListener(EventHolder holder, View view) {
+                    }
+                }));
     }
 
     @Override
@@ -193,25 +197,16 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
                     .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mOwnerBox.remove(mId);
+                            getPresenter().removeData(mId);
                             finish();
                         }
                     })
                     .create().show();
             return true;
         } else if (id == R.id.action_add_event) {
-            Calendar startTime = Calendar.getInstance();
-            startTime.set(Calendar.MINUTE, 0);
-            startTime.set(Calendar.SECOND, 0);
-            startTime.set(Calendar.MILLISECOND, 0);
-            Calendar endTime = (Calendar) startTime.clone();
-            endTime.add(Calendar.HOUR, 1);
-            String owner = mOwnerEntity.getOwner();
-
-            RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_ADD)
-                    .withSerializable(EventAddActivity.PARAMS_START_TIME, startTime)
-                    .withSerializable(EventAddActivity.PARAMS_END_TIME, endTime)
-                    .withString(EventAddActivity.PARAMS_OWNER, owner)
+            String owner = getPresenter().getOwnerName(mId);
+            RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
+                    .withString(EventDetailActivity.PARAMS_OWNER, owner)
                     .navigation(this);
             return true;
         }
@@ -220,11 +215,15 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
 
     private void queryData() {
         mTotalEventCount = mDoneEventCount = 0;
-        mOwnerEntity = mOwnerBox.get(mId);
-        mContentView.setBackgroundResource(mOwnerEntity.getColor());
-        mNameView.setText(mOwnerEntity.getOwner());
-        mLocationView.setText(mOwnerEntity.getLocaltion());
-        List<CalendarEventDBEntity> eventEntities = mOwnerEntity.getEvents();
+        CalendarOwnerDBEntity entity = getPresenter().queryData(mId);
+        if (entity == null) {
+            finish();
+            return;
+        }
+        mContentView.setBackgroundResource(entity.getColor());
+        mNameView.setText(entity.getOwner());
+        mLocationView.setText(entity.getLocation());
+        List<CalendarEventDBEntity> eventEntities = entity.getEvents();
 
         Date now = new Date();
         List<EventBean> eventBeans = CalendarCommon.buildEventsByEventEntities(eventEntities, null, mQueryStyle, now);
@@ -244,12 +243,12 @@ public class OwnerDetailActivity extends BaseActivity<CalendarPresenter, Calenda
     }
 
     @Override
-    protected CalendarPresenter initPresenter() {
+    protected OwnerPresenter initPresenter() {
         return null;
     }
 
     @Override
-    protected CalendarView initAttachView() {
+    protected OwnerView initAttachView() {
         return null;
     }
 }
