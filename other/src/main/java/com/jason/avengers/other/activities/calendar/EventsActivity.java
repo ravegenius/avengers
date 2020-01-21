@@ -131,7 +131,21 @@ public class EventsActivity extends BaseActivity<EventPresenter, EventView> impl
                     .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            getPresenter().removeOverdue();
+                            getPresenter().cleanup();
+                            queryData();
+                        }
+                    })
+                    .create().show();
+            return true;
+        } else if (id == R.id.action_clear) {
+            new AlertDialog.Builder(EventsActivity.this)
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getPresenter().clear();
                             queryData();
                         }
                     })

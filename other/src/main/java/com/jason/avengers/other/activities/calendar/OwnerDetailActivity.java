@@ -203,11 +203,39 @@ public class OwnerDetailActivity extends BaseActivity<OwnerPresenter, OwnerView>
                     })
                     .create().show();
             return true;
-        } else if (id == R.id.action_add_event) {
+        } else if (id == R.id.action_event_add) {
             String owner = getPresenter().getOwnerName(mId);
             RouterBuilder.INSTANCE.build(RouterPath.OTHER_CALENDAR_EVENT_DETAIL)
                     .withString(EventDetailActivity.PARAMS_OWNER, owner)
                     .navigation(this);
+            return true;
+        } else if (id == R.id.action_event_cleanup) {
+            new AlertDialog.Builder(OwnerDetailActivity.this)
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getPresenter().cleanupEventsById(mId);
+                            queryData();
+                        }
+                    })
+                    .create().show();
+            return true;
+        } else if (id == R.id.action_event_clear) {
+            new AlertDialog.Builder(OwnerDetailActivity.this)
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getPresenter().clearEventsById(mId);
+                            queryData();
+                        }
+                    })
+                    .create().show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -244,7 +272,7 @@ public class OwnerDetailActivity extends BaseActivity<OwnerPresenter, OwnerView>
 
     @Override
     protected OwnerPresenter initPresenter() {
-        return null;
+        return new OwnerPresenter();
     }
 
     @Override

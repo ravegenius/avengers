@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.jason.avengers.common.base.BasePresenter;
 import com.jason.avengers.common.database.ObjectBoxBuilder;
+import com.jason.avengers.common.database.entity.other.calendar.CalendarEventDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity;
 import com.jason.avengers.common.database.entity.other.calendar.CalendarOwnerDBEntity_;
 import com.jason.avengers.other.beans.OwnerBean;
@@ -11,6 +12,7 @@ import com.jason.avengers.other.common.CalendarCommon;
 import com.jason.avengers.other.views.OwnerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ public class OwnerPresenter extends BasePresenter<OwnerView> {
 
     private OwnerView mView;
     private Box<CalendarOwnerDBEntity> mOwnerBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarOwnerDBEntity.class);
+    private Box<CalendarEventDBEntity> mEventBox = ObjectBoxBuilder.INSTANCE.getBoxStore().boxFor(CalendarEventDBEntity.class);
 
     @Override
     protected void attach(OwnerView view) {
@@ -132,5 +135,28 @@ public class OwnerPresenter extends BasePresenter<OwnerView> {
 
     public CalendarOwnerDBEntity queryData(long id) {
         return mOwnerBox.get(id);
+    }
+
+    public void clear() {
+        mOwnerBox.removeAll();
+    }
+
+    public void cleanupEventsById(long id) {
+        CalendarOwnerDBEntity entity = mOwnerBox.get(id);
+        if (entity == null) {
+            return;
+        }
+        Date now = new Date();
+        List<CalendarEventDBEntity> overdueEventEntities = CalendarCommon.findOverdueEventEntities(entity.getEvents(), now);
+        mEventBox.remove(overdueEventEntities);
+    }
+
+    public void clearEventsById(long id) {
+        CalendarOwnerDBEntity entity = mOwnerBox.get(id);
+        if (entity == null) {
+            return;
+        }
+        List<CalendarEventDBEntity> eventEntities = entity.getEvents();
+        mEventBox.remove(eventEntities);
     }
 }

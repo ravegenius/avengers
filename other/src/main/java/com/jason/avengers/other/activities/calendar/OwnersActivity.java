@@ -119,7 +119,10 @@ public class OwnersActivity extends BaseActivity<OwnerPresenter, OwnerView> impl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_init) {
+        if (id == R.id.action_add) {
+            getPresenter().addData(0);
+            return true;
+        } else if (id == R.id.action_init) {
             new AlertDialog.Builder(OwnersActivity.this)
                     .setTitle(R.string.other_dialog_title_alter)
                     .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
@@ -133,8 +136,19 @@ public class OwnersActivity extends BaseActivity<OwnerPresenter, OwnerView> impl
                     })
                     .create().show();
             return true;
-        } else if (id == R.id.action_add) {
-            getPresenter().addData(0);
+        } else if (id == R.id.action_clear) {
+            new AlertDialog.Builder(OwnersActivity.this)
+                    .setTitle(R.string.other_dialog_title_alter)
+                    .setMessage(getString(R.string.other_dialog_msg, item.getTitle()))
+                    .setNegativeButton(R.string.other_dialog_negative_btn_label, null)
+                    .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getPresenter().clear();
+                            queryData();
+                        }
+                    })
+                    .create().show();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -248,7 +248,8 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
      * @return True if the event matches the year and month.
      */
     private boolean eventMatches(WeekViewEvent event, int year, int month) {
-        return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1) || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
+        return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1)
+                || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
     }
 
     @Override
@@ -256,11 +257,7 @@ public class CalendarActivity extends BaseActivity<CalendarPresenter, CalendarVi
         new AlertDialog.Builder(CalendarActivity.this)
                 .setTitle(R.string.other_dialog_title_alter)
                 .setMessage(event.getName())
-                .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
+                .setPositiveButton(R.string.other_dialog_positive_btn_label, null)
                 .create().show();
     }
 

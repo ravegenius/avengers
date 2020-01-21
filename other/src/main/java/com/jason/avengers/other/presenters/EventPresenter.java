@@ -52,11 +52,15 @@ public class EventPresenter extends BasePresenter<EventView> {
         mView.notifyView(eventBeans);
     }
 
-    public void removeOverdue() {
+    public void cleanup() {
         Date now = new Date();
         List<CalendarEventDBEntity> eventEntities = mEventBox.query().build().find();
         List<CalendarEventDBEntity> overdueEventEntities = CalendarCommon.findOverdueEventEntities(eventEntities, now);
         mEventBox.remove(overdueEventEntities);
+    }
+
+    public void clear() {
+        mEventBox.removeAll();
     }
 
     public List<String> getOwnerList() {

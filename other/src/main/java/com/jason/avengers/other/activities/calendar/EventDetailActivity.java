@@ -274,7 +274,11 @@ public class EventDetailActivity extends BaseActivity<EventPresenter, EventView>
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_submit) {
-            submit();
+            if (isAddMode) {
+                addModeSubmit();
+            } else {
+                detailModeSubmit();
+            }
             return true;
         } else if (id == R.id.action_delete) {
             new AlertDialog.Builder(EventDetailActivity.this)
@@ -284,21 +288,14 @@ public class EventDetailActivity extends BaseActivity<EventPresenter, EventView>
                     .setPositiveButton(R.string.other_dialog_positive_btn_label, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            delete();
+                            getPresenter().delete(mId);
+                            finish();
                         }
                     })
                     .create().show();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void submit() {
-        if (isAddMode) {
-            addModeSubmit();
-        } else {
-            detailModeSubmit();
-        }
     }
 
     private void addModeSubmit() {
@@ -324,11 +321,6 @@ public class EventDetailActivity extends BaseActivity<EventPresenter, EventView>
 
     private void detailModeSubmit() {
         getPresenter().detailModeSubmit(mId, mDateTime, mStartTime, mEndTime, mLevel, mMoney);
-        finish();
-    }
-
-    private void delete() {
-        getPresenter().delete(mId);
         finish();
     }
 

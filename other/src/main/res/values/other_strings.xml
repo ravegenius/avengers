@@ -7,7 +7,8 @@
     <string name="app_day_view">按天分组</string>
     <string name="app_week_view">按周分组</string>
     <string name="app_month_view">按月分组</string>
-    <string name="app_cleanup">清理过期</string>
+    <string name="app_cleanup">删除过期</string>
+    <string name="app_clear">删除全部</string>
 
     <string name="other_chargingstation_rob">开抢</string>
     <string name="other_chargingstation_stop">停止</string>
@@ -21,8 +22,16 @@
     <string name="other_calendar_menu_action_one_day">一天</string>
     <string name="other_calendar_menu_action_three_day">三天</string>
     <string name="other_calendar_menu_action_one_week">一周</string>
-    <string name="other_calendar_menu_action_cleanup">清理过期</string>
-    <string name="other_calendar_menu_action_clear">清理全部</string>
+    <string name="other_calendar_menu_action_cleanup">@string/app_cleanup</string>
+    <string name="other_calendar_menu_action_clear">@string/app_clear</string>
+
+    <string name="other_events_menu_action_add">@string/app_add</string>
+    <string name="other_events_menu_action_default_view">@string/app_default_view</string>
+    <string name="other_events_menu_action_day_view">@string/app_day_view</string>
+    <string name="other_events_menu_action_week_view">@string/app_week_view</string>
+    <string name="other_events_menu_action_month_view">@string/app_month_view</string>
+    <string name="other_events_menu_action_cleanup">@string/app_cleanup</string>
+    <string name="other_events_menu_action_clear">@string/app_clear</string>
 
     <string name="other_event_detail_menu_action_submit">@string/app_submit</string>
     <string name="other_event_detail_menu_action_delete">@string/app_delete</string>
@@ -39,15 +48,9 @@
     <string name="other_event_detail_date_label">课程日期</string>
     <string name="other_event_detail_submit">@string/app_submit</string>
 
-    <string name="other_events_menu_action_add">@string/app_add</string>
-    <string name="other_events_menu_action_default_view">@string/app_default_view</string>
-    <string name="other_events_menu_action_day_view">@string/app_day_view</string>
-    <string name="other_events_menu_action_week_view">@string/app_week_view</string>
-    <string name="other_events_menu_action_month_view">@string/app_month_view</string>
-    <string name="other_events_menu_action_cleanup">@string/app_cleanup</string>
-
-    <string name="other_owners_menu_action_init">初始化</string>
     <string name="other_owners_menu_action_add">@string/app_add</string>
+    <string name="other_owners_menu_action_init">初始化</string>
+    <string name="other_owners_menu_action_clear">@string/app_clear</string>
     <string name="other_owners_action_detail">看</string>
     <string name="other_owners_action_delete">删</string>
     <string name="other_owners_action_add">增</string>
@@ -61,7 +64,9 @@
     <string name="other_owner_detail_menu_action_week_view">@string/app_week_view</string>
     <string name="other_owner_detail_menu_action_month_view">@string/app_month_view</string>
     <string name="other_owner_detail_menu_action_delete">@string/app_delete</string>
-    <string name="other_owner_detail_menu_action_add_event">增加课程</string>
+    <string name="other_owner_detail_menu_action_event_add">课程增加</string>
+    <string name="other_owner_detail_menu_action_event_cleanup">@string/app_cleanup</string>
+    <string name="other_owner_detail_menu_action_event_clear">@string/app_clear</string>
     <string name="other_owner_detail_name_label">名称</string>
     <string name="other_owner_detail_location_label">地址</string>
 
